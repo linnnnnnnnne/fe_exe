@@ -279,7 +279,7 @@ export default function ExploreInflu() {
     <section className="w-full font-montserrat mt-0">
       <TopInfluencer onHighlight={(influ) => setHighlightInfluencer(influ)} />
 
-      <h1 className="text-3xl font-bold text-center text-teal mt-20 mb-8">
+      <h1 className="text-3xl font-bold text-center text-teal mt-14 mb-8">
         KHÁM PHÁ HỒ SƠ KHÁC
       </h1>
 
