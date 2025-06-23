@@ -32,7 +32,7 @@ export default function NotificationBellB({
     const fetchNotifications = async () => {
       try {
         const jobRes = await fetch(
-          `https://localhost:7035/api/jobs/get-job/by-business-id/${businessId}`,
+          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${businessId}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -48,7 +48,7 @@ export default function NotificationBellB({
 
         for (const job of jobList) {
           const res = await fetch(
-            `https://localhost:7035/api/freelance-jobs/${job.id}/list-influencers-apply-job`,
+            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/${job.id}/list-influencers-apply-job`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -100,7 +100,7 @@ export default function NotificationBellB({
 
     try {
       const res = await fetch(
-        `https://localhost:7035/api/freelance-jobs/approve-influencer-job`,
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/approve-influencer-job`,
         {
           method: "POST",
           headers: {

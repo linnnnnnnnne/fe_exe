@@ -58,7 +58,7 @@ export default function PlanBS() {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const res = await fetch("https://localhost:7035/api/MembershipType/Get-all-membershiptype-business");
+        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/MembershipType/Get-all-membershiptype-business");
         const data: Membership[] = await res.json();
 
         const mappedPlans: Plan[] = data.map((item) => ({
@@ -90,7 +90,7 @@ export default function PlanBS() {
       if (!userId || !token) return;
 
       try {
-        const res = await fetch(`https://localhost:7035/api/membership/user/${userId}`, {
+        const res = await fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -124,7 +124,7 @@ export default function PlanBS() {
 
     try {
       setIsSubmitting(true);
-      const res = await fetch("https://localhost:7035/api/MembershipRegistration/register-membership", {
+      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/MembershipRegistration/register-membership", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

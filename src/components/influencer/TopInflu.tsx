@@ -20,7 +20,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
         const accessToken = localStorage.getItem("accessToken");
         if (!accessToken) return;
 
-        const res = await fetch("https://localhost:7035/api/membership/influencers", {
+        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/influencers", {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
@@ -29,7 +29,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
           const userIds = data.data.map((item: any) => item.userId);
 
           const imagePromises = userIds.map(async (userId: string) => {
-            const res = await fetch(`https://localhost:7035/api/influ/get-influ-by-userId/${userId}`);
+            const res = await fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`);
             const json = await res.json();
             if (json?.isSuccess && json.data?.linkImage) {
               return json.data.linkImage;
@@ -66,13 +66,13 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
     if (!userId || !accessToken || !role) return;
 
     try {
-      const res = await fetch(`https://localhost:7035/api/membership/user/${userId}`, {
+      const res = await fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       const data = await res.json();
 
       if (res.ok && data?.isSuccess && data?.data) {
-        const infoRes = await fetch(`https://localhost:7035/api/influ/get-influ-by-userId/${userId}`);
+        const infoRes = await fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`);
         const infoJson = await infoRes.json();
 
         if (infoJson?.isSuccess && infoJson.data) {
@@ -82,7 +82,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
           let fieldNames: string[] = [];
           try {
             const fieldRes = await fetch(
-              `https://localhost:7035/api/field/get-all-field-of-influ/${influ.influId}`
+              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influ.influId}`
             );
             const fieldJson = await fieldRes.json();
             if (fieldJson.isSuccess && Array.isArray(fieldJson.data)) {

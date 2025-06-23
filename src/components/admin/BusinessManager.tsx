@@ -30,7 +30,7 @@ export default function BusinessManager() {
       }
 
       try {
-        const res = await fetch("https://localhost:7035/api/business/all", {
+        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/all", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${accessToken}`,

@@ -47,7 +47,7 @@ export default function ChatPopup({
 
     try {
       const res = await fetch(
-        `https://localhost:7035/api/message/send?senderId=${senderId}&conversationId=${conversationId}&content=${encodeURIComponent(content)}`,
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/message/send?senderId=${senderId}&conversationId=${conversationId}&content=${encodeURIComponent(content)}`,
         { method: "POST" }
       );
 

@@ -35,7 +35,7 @@ export default function RegisterBusinessForm() {
   const [showErrors, setShowErrors] = useState(false);
 
   useEffect(() => {
-    fetch("https://localhost:7035/api/field/get-all")
+    fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all")
       .then((res) => res.json())
       .then((res) => {
         if (Array.isArray(res.data)) {
@@ -137,7 +137,7 @@ export default function RegisterBusinessForm() {
     }
 
     try {
-      const res = await fetch("https://localhost:7035/api/business/create", {
+      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -86,7 +86,7 @@ export default function ProfileBusinessPage() {
     const accessToken = localStorage.getItem("accessToken");
 
     if (userId && accessToken) {
-      fetch(`https://localhost:7035/api/review/review-of-business/${userId}`, {
+      fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/review-of-business/${userId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -109,7 +109,7 @@ export default function ProfileBusinessPage() {
         influIds.map(async (id) => {
           try {
             const res = await fetch(
-              `https://localhost:7035/api/influ/get-influ-by-id/${id}`,
+              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-id/${id}`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               }
@@ -158,7 +158,7 @@ export default function ProfileBusinessPage() {
       };
 
       const res = await fetch(
-        `https://localhost:7035/api/business/update-by-user/${id}`,
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/update-by-user/${id}`,
         {
           method: "PUT",
           headers: {
@@ -204,7 +204,7 @@ export default function ProfileBusinessPage() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`https://localhost:7035/api/business/get-business-by-user-id/${id}`)
+    fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${id}`)
       .then((res) => res.json())
       .then((data) => {
         const businessData = data?.data;
@@ -214,7 +214,7 @@ export default function ProfileBusinessPage() {
         const userId = localStorage.getItem("userId");
         const token = localStorage.getItem("accessToken");
         if (userId && token) {
-          fetch(`https://localhost:7035/api/membership/user/${userId}`, {
+          fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           })
             .then((res) => res.json())
@@ -229,13 +229,13 @@ export default function ProfileBusinessPage() {
         const businessId = businessData?.id;
         if (businessId) {
           fetch(
-            `https://localhost:7035/api/business/${businessId}/representative`
+            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/${businessId}/representative`
           )
             .then((res) => res.json())
             .then((repData) => setRepresentative(repData?.data));
 
           fetch(
-            `https://localhost:7035/api/jobs/get-job/by-business-id/${businessId}`
+            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${businessId}`
           )
             .then((res) => res.json())
             .then(async (jobData) => {
@@ -252,7 +252,7 @@ export default function ProfileBusinessPage() {
                 fieldIds.map(async (fieldId) => {
                   try {
                     const res = await fetch(
-                      `https://localhost:7035/api/field/get-by-id/${fieldId}`
+                      `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-by-id/${fieldId}`
                     );
                     const data = await res.json();
                     if (data?.data?.name) fieldMap[fieldId] = data.data.name;
@@ -552,7 +552,7 @@ export default function ProfileBusinessPage() {
             }
 
             const res = await fetch(
-              `https://localhost:7035/api/jobs/update-job/${updatedJob.id}`,
+              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/update-job/${updatedJob.id}`,
               {
                 method: "PUT",
                 headers: {

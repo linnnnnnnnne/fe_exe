@@ -30,7 +30,7 @@ export default function FreelancerManager() {
       }
 
       try {
-        const res = await fetch("https://localhost:7035/api/influ/all", {
+        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/all", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${accessToken}`,

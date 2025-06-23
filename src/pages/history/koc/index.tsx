@@ -72,7 +72,7 @@ export default function InfluencerHistoryPage() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const baseUrl = "https://localhost:7035";
+        const baseUrl = "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net";
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,

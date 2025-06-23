@@ -27,7 +27,7 @@ export default function MembershipManager() {
       }
 
       try {
-        const res = await fetch("https://localhost:7035/api/transaction/all", {
+        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/transaction/all", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

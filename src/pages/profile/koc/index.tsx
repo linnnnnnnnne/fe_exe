@@ -65,7 +65,7 @@ export default function ProfileKOC() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`https://localhost:7035/api/review/review-of-influ/${id}`)
+    fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/review-of-influ/${id}`)
       .then((res) => res.json())
       .then(async (data) => {
         if (data?.isSuccess && Array.isArray(data.data)) {
@@ -84,7 +84,7 @@ export default function ProfileKOC() {
           const fetchJobs = uniqueBusinessIds.map(async (bid: string) => {
             try {
               const res = await fetch(
-                `https://localhost:7035/api/jobs/get-job/by-business-id/${bid}`
+                `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${bid}`
               );
               const json = await res.json();
               if (json?.isSuccess && Array.isArray(json.data)) {
@@ -112,7 +112,7 @@ export default function ProfileKOC() {
   }, [id]);
 
   if (userId && token) {
-    fetch(`https://localhost:7035/api/membership/user/${userId}`, {
+    fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -155,7 +155,7 @@ export default function ProfileKOC() {
 
     try {
       const res = await fetch(
-        `https://localhost:7035/api/influ/update-by-user/${id}`,
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/update-by-user/${id}`,
         {
           method: "PUT",
           headers: {
@@ -192,7 +192,7 @@ export default function ProfileKOC() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`https://localhost:7035/api/influ/get-influ-by-userId/${id}`)
+    fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (data?.data) setKoc(data.data);

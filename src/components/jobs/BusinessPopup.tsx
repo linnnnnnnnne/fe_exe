@@ -31,7 +31,7 @@ export default function BusinessPopup({
     const fetchRepresentative = async () => {
       try {
         const res = await fetch(
-          `https://localhost:7035/api/business/${businessId}/representative`
+          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/${businessId}/representative`
         );
         const json = await res.json();
         if (json?.data) {
