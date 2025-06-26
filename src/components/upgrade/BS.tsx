@@ -130,7 +130,6 @@ export default function PlanBS() {
         body: JSON.stringify(body),
       });
 
-      const responseText = await res.text();
       if (!res.ok) {
         toast.error("Đăng ký thất bại!");
         return;

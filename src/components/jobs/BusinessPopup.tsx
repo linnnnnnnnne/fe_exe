@@ -40,16 +40,6 @@ interface Representative {
   phoneNumber: string;
 }
 
-interface Job {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  budget: number;
-  startTime: string;
-  endTime: string;
-  status: number;
-}
 
 export default function BusinessPopup({
   businessId,

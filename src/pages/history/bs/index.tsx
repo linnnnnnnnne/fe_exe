@@ -37,7 +37,6 @@ export default function BusinessHistoryPage() {
   const [reviewedInfluencerIds, setReviewedInfluencerIds] = useState<string[]>(
     []
   );
-  const [reviewedJobIds, setReviewedJobIds] = useState<string[]>([]);
   const [inProgressJobs, setInProgressJobs] = useState<Job[]>([]);
   const [completedJobs, setCompletedJobs] = useState<Job[]>([]);
   const [cancelledJobs, setCancelledJobs] = useState<Job[]>([]);
@@ -190,7 +189,7 @@ export default function BusinessHistoryPage() {
     setOpenJob(jobId);
   };
 
-  const confirmComplete = async (freelanceJobId: string, jobId: string) => {
+const confirmComplete = async (freelanceJobId: string) => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       alert("Bạn chưa đăng nhập hoặc token đã hết hạn.");
@@ -337,7 +336,7 @@ export default function BusinessHistoryPage() {
                               {sectionKey === "inProgress" && (
                                 <button
                                   onClick={() =>
-                                    confirmComplete(influ.id, job.id)
+                                    confirmComplete(influ.id)
                                   }
                                   className="ml-auto text-sm bg-teal text-white px-3 py-1 rounded hover:bg-green-700"
                                 >

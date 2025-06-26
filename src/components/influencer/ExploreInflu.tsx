@@ -318,7 +318,6 @@ export default function ExploreInflu() {
       ]
     : currentItems;
 
-  const [movedUserIds, setMovedUserIds] = useState<string[]>([]);
   const handleMoveToEndNoPageChange = (userId: string) => {
     setInfluencers((prev) => {
       const newList = [...prev];

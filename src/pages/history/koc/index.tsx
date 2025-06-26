@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Headerrr from "../../../components/share/Headerrr";
 import Footer from "../../../components/share/Footer";
 import ReviewPopup from "../../../components/history/ReviewPopup";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import {
@@ -177,7 +177,7 @@ export default function InfluencerHistoryPage() {
 
       const data = await res.json();
       if (data?.isSuccess && Array.isArray(data.data)) {
-        const reviewed = data.data.map((r: any) => r.jobId); // Lấy jobId đã đánh giá
+        const reviewed = data.data.map((r: any) => r.jobId); 
         setReviewedJobIds(reviewed);
       }
     } catch (err) {
@@ -224,7 +224,6 @@ export default function InfluencerHistoryPage() {
                         {job.job.title || "Không có tiêu đề"}
                       </span>
 
-                      {/* 👉 Chỉ hiển thị khi ở mục đã hoàn thành */}
                       {sectionKey === "completed" &&
                         (reviewedJobIds.includes(job.job.id) ? (
                           <span className="ml-auto text-sm text-gray-500 italic">

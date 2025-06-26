@@ -38,7 +38,6 @@ export default function InfluList({
   items,
   currentPage,
   totalPages,
-  itemsPerPage,
   onPageChange,
   onConnect,
   onMoveToEnd,
