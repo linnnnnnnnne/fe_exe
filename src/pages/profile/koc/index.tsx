@@ -178,10 +178,6 @@ export default function ProfileKOC() {
     setIsEditing(true);
   };
 
-  const handleAvatarUpload = (url: string) => {
-    setEditedKoc((prev) => (prev ? { ...prev, linkImage: url } : prev));
-  };
-
   const handleSave = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {

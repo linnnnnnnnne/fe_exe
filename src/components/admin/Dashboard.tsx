@@ -69,14 +69,6 @@ export default function Dashboard() {
       }
 
       const headers = { Authorization: `Bearer ${accessToken}` };
-      let role = "";
-      try {
-        const decoded: any = jwtDecode(accessToken);
-        const roleKey = Object.keys(decoded).find(k => k.toLowerCase().includes("role"));
-        role = roleKey ? decoded[roleKey] : "";
-      } catch {
-        console.warn("Không thể giải mã token");
-      }
 
       try {
         const [influRes, businessRes, jobsRes] = await Promise.all([

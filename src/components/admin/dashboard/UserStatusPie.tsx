@@ -40,7 +40,7 @@ export default function UserStatusPie({
                 percent !== undefined ? `${(percent * 100).toFixed(0)}%` : ""
               }
             >
-              {data.map((entry, index) => (
+              {data.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}
