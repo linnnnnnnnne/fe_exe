@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { jwtDecode } from "jwt-decode";
 import StatsCards from "./dashboard/StatsCards";
 import JobOverviewChart from "./dashboard/JobOverviewChart";
 import UserStatusPie from "./dashboard/UserStatusPie";
