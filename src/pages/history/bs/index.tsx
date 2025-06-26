@@ -63,6 +63,18 @@ export default function BusinessHistoryPage() {
     influencer: any | null;
   }>({ open: false, influencer: null });
 
+  useEffect(() => {
+    if (openReviewPopup.open) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [openReviewPopup.open]);
+
   const businessId =
     typeof window !== "undefined"
       ? localStorage.getItem("businessId") || ""
@@ -139,7 +151,7 @@ export default function BusinessHistoryPage() {
   useEffect(() => {
     if (businessId && accessToken) {
       fetchJobs();
-      fetchReviewedJobs(); 
+      fetchReviewedJobs();
     }
   }, [businessId, accessToken]);
 
@@ -346,7 +358,7 @@ export default function BusinessHistoryPage() {
                                         open: true,
                                         influencer: {
                                           ...influ,
-                                          jobId: job.id, 
+                                          jobId: job.id,
                                         },
                                       })
                                     }

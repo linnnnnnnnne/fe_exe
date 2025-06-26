@@ -17,10 +17,15 @@ export interface Job {
   status?: number;
   budget?: number;
   fieldName?: string;
+  kolBenefits?: string;
+  require?: string;
+  gender?: number;
+  follower?: number;
   business?: {
     name?: string;
     logo?: string;
     address?: string;
+    userId?: string;
   };
   businessField?: {
     fieldId?: string;
@@ -67,6 +72,7 @@ export default function ListJobs({
     name: string;
     address?: string;
     logo?: string;
+    userId?: string;
   } | null>(null);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -119,6 +125,18 @@ export default function ListJobs({
     fetchJobs();
   }, [searchJobs, searchLoading]);
 
+  useEffect(() => {
+    if (showPopup || showJobDetail) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showPopup, showJobDetail]);
+
   const totalPages = Math.ceil(jobs.length / jobsPerPage);
   const currentJobs = jobs.slice((page - 1) * jobsPerPage, page * jobsPerPage);
 
@@ -128,6 +146,7 @@ export default function ListJobs({
       name: job.business?.name || "Không rõ",
       address: job.business?.address,
       logo: job.business?.logo,
+      userId: job.business?.userId, 
     });
     setShowPopup(true);
   };
@@ -236,19 +255,24 @@ export default function ListJobs({
         </div>
       ))}
 
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={(p) => setPage(p)}
-      />
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(p) => setPage(p)}
+        />
+      )}
 
       {showPopup && selectedBusiness && (
         <BusinessPopup
           businessId={selectedBusiness.businessId}
           businessName={selectedBusiness.name}
+          businessUserId={selectedBusiness.userId}
           businessAddress={selectedBusiness.address}
           businessLogo={selectedBusiness.logo}
           onClose={() => setShowPopup(false)}
+          reviews={[]} 
+          getStatusLabel={getStatusLabel}
         />
       )}
 

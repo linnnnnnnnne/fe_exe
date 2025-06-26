@@ -304,7 +304,7 @@ export default function ProfileKOC() {
     <div className="bg-[#FBFBFB] min-h-screen font-montserrat">
       <Headerrr />
 
-      <div className="bg-white shadow-sm py-10 px-2 md:px-[200px] flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-white shadow py-10 px-2 md:px-[200px] flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           {isEditing ? (
             <FileUploadAvatar

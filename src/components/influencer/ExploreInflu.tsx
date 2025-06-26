@@ -5,6 +5,7 @@ import InfluList from "../../components/influencer/InfluList";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import TopInfluencer from "../../components/influencer/TopInflu";
+import InfluencerPopup from "./InfluencerPopup";
 
 const locationOptions = [
   { label: "Tất cả", value: "Tất cả" },
@@ -42,6 +43,9 @@ export default function ExploreInflu() {
   const [selectedConv, setSelectedConv] = useState<any>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
+  const [selectedInfluencer, setSelectedInfluencer] = useState<any | null>(
+    null
+  );
 
   const MAX_FOLLOWER_LIMIT = 2147483647;
   const [minFollower, setMinFollower] = useState(0);
@@ -149,6 +153,11 @@ export default function ExploreInflu() {
                 linkImage: i.linkImage,
                 fieldNames,
                 linkmxh,
+                dateOfBirth: i.dateOfBirth,
+                gender: i.gender,
+                phoneNumber: i.phoneNumber,
+                portfolio_link: i.portfolio_link,
+                follower: i.follower,
               };
             })
           );
@@ -162,6 +171,18 @@ export default function ExploreInflu() {
 
     fetchInfluencers();
   }, [minFollower, maxFollower]);
+
+  useEffect(() => {
+    if (selectedInfluencer) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [selectedInfluencer]);
 
   useEffect(() => {
     if (highlightInfluencer && listRef.current) {
@@ -434,7 +455,54 @@ export default function ExploreInflu() {
             onConnect={handleConnect}
             onMoveToEnd={handleMoveToEndNoPageChange}
             highlightMembershipUserIds={membershipUserIds}
+            onClickCard={async (influencer) => {
+              try {
+                const res = await fetch(
+                  `https://localhost:7035/api/influ/get-influ-by-userId/${influencer.userId}`
+                );
+                const json = await res.json();
+                const full = json.data;
+
+                const [completed, inProgress] = await Promise.all([
+                  fetch(
+                    `https://localhost:7035/api/freelance-jobs/influencer/${full.influId}/jobs/completed`
+                  ).then((r) => r.json()),
+                  fetch(
+                    `https://localhost:7035/api/freelance-jobs/influencer/${full.influId}/jobs/in-progress`
+                  ).then((r) => r.json()),
+                ]);
+
+                const jobs = [
+                  ...(completed?.data || []).map((j: any) => j.job),
+                  ...(inProgress?.data || []).map((j: any) => j.job),
+                ];
+
+                setSelectedInfluencer({
+                  name: influencer.name,
+                  nickName: influencer.nickName,
+                  area: influencer.area,
+                  linkImage: influencer.linkImage,
+                  dateOfBirth: full?.dateOfBirth,
+                  gender: full?.gender,
+                  phoneNumber: full?.phoneNumber,
+                  portfolio_link: full?.portfolio_link,
+                  linkmxh: full?.linkmxh || [],
+                  follower: full?.follower || 0,
+                  bio: full?.bio || influencer.description,
+                  jobs,
+                });
+              } catch (err) {
+                console.error("Lỗi khi lấy dữ liệu đầy đủ:", err);
+              }
+            }}
           />
+
+          {selectedInfluencer && (
+            <InfluencerPopup
+              data={selectedInfluencer}
+              onClose={() => setSelectedInfluencer(null)}
+            />
+          )}
 
           {filteredInfluencers.length === 0 && (
             <p className="text-center text-darkgray mt-10">

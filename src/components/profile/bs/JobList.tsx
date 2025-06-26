@@ -172,7 +172,7 @@ export default function JobList({
           </div>
 
           {job.status === 2 && (
-            <div className="mt-3 bg-white border p-3 rounded-lg shadow-sm text-sm space-y-1">
+            <div className="mt-3 bg-white border p-3 rounded-lg shadow text-sm space-y-1">
               <strong>Đánh giá từ đối tác:</strong>
               {(() => {
                 const review = reviews.find((r) => r.jobId === job.id);

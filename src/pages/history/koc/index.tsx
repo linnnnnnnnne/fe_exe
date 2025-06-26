@@ -60,6 +60,18 @@ export default function InfluencerHistoryPage() {
     businessAvatar: string;
   }>(null);
 
+  useEffect(() => {
+    if (reviewingJob) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [reviewingJob]);
+
   const toggleSection = (section: keyof typeof openSections) => {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };

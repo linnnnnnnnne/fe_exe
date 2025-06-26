@@ -31,6 +31,7 @@ interface InfluListProps {
   onConnect: (influencer: Influencer) => void;
   onMoveToEnd: (userId: string) => void;
   highlightMembershipUserIds?: string[];
+  onClickCard?: (influencer: Influencer) => void;
 }
 
 export default function InfluList({
@@ -42,6 +43,7 @@ export default function InfluList({
   onConnect,
   onMoveToEnd,
   highlightMembershipUserIds = [],
+  onClickCard,
 }: InfluListProps) {
   return (
     <div>
@@ -49,11 +51,15 @@ export default function InfluList({
         {items.map((influencer, index) => (
           <div
             key={index}
-            className="relative bg-white text-center p-4 rounded-2xl border border-gray-200 shadow-[0_6px_20px_rgba(0,0,0,0.12)] transform transition-all duration-300 ease-in-out hover:scale-[1.03] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] flex flex-col"
+            className="relative bg-white text-center p-4 rounded-2xl border border-gray-200 shadow-[0_6px_20px_rgba(0,0,0,0.12)] transform transition-all duration-300 ease-in-out hover:scale-[1.03] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] flex flex-col cursor-pointer"
+            onClick={() => onClickCard?.(influencer)}
           >
             {/* Nút x */}
             <button
-  onClick={() => onMoveToEnd(influencer.userId)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onMoveToEnd(influencer.userId);
+              }}
               className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-lightgray text-teal hover:text-red-500 rounded-full shadow-sm"
             >
               <X size={18} />
@@ -108,35 +114,35 @@ export default function InfluList({
 
             {influencer.linkmxh && influencer.linkmxh.length > 0 ? (
               <div className="flex justify-center gap-3 mt-1">
-                {[
-                  { name: "facebook", Icon: FaFacebook },
-                  { name: "instagram", Icon: FaInstagram },
-                  { name: "youtube", Icon: FaYoutube },
-                  { name: "tiktok", Icon: FaTiktok },
-                  { name: "whatsapp", Icon: FaWhatsapp },
-                ]
-                  .filter(({ name }) =>
-                    influencer.linkmxh?.some((url) =>
-                      url.toLowerCase().includes(name)
-                    )
-                  )
-                  .map(({ name, Icon }) => {
+                {[FaFacebook, FaInstagram, FaYoutube, FaTiktok, FaWhatsapp].map(
+                  (Icon, idx) => {
+                    const platforms = [
+                      "facebook",
+                      "instagram",
+                      "youtube",
+                      "tiktok",
+                      "whatsapp",
+                    ];
+                    const name = platforms[idx];
                     const link = influencer.linkmxh?.find((url) =>
                       url.toLowerCase().includes(name)
                     );
                     return (
-                      <a
-                        key={name}
-                        href={link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={name}
-                        className="w-7 h-7 flex items-center justify-center text-gray-600 hover:text-teal200 transition"
-                      >
-                        <Icon size={22} />
-                      </a>
+                      link && (
+                        <a
+                          key={name}
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={name}
+                          className="w-7 h-7 flex items-center justify-center text-gray-600 hover:text-teal200 transition"
+                        >
+                          <Icon size={22} />
+                        </a>
+                      )
                     );
-                  })}
+                  }
+                )}
               </div>
             ) : (
               <p className="text-sm text-gray-500 mt-1 italic mb-1.5">
@@ -146,7 +152,10 @@ export default function InfluList({
 
             <button
               className="mt-3 text-sm text-gray-600 font-semibold rounded-full bg-[#C7D7D3] hover:bg-teal100 hover:text-white px-4 py-1 mx-auto flex items-center justify-center gap-1 leading-none transition-colors duration-200"
-              onClick={() => onConnect(influencer)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onConnect(influencer);
+              }}
             >
               <UserPlus size={16} />
               <span className="mt-[2px]">Kết nối</span>
