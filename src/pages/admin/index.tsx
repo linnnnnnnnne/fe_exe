@@ -39,7 +39,7 @@ export default function AdminLayout() {
     if (!userId) return alert("Không tìm thấy userId");
 
     try {
-      const res = await fetch("https://localhost:7035/api/user/logout", {
+      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

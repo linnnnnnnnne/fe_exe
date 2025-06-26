@@ -44,10 +44,10 @@ export default function FreelancerManager() {
 
       try {
         const [influRes, userStatusRes] = await Promise.all([
-          fetch("https://localhost:7035/api/influ/all", {
+          fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/all", {
             headers: { Authorization: `Bearer ${accessToken}` },
           }),
-          fetch("https://localhost:7035/api/user/all", {
+          fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/all", {
             headers: { Authorization: `Bearer ${accessToken}` },
           }),
         ]);
@@ -73,7 +73,7 @@ export default function FreelancerManager() {
 
               try {
                 const detailRes = await fetch(
-                  `https://localhost:7035/api/influ/get-influ-by-userId/${influ.userId}`,
+                  `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${influ.userId}`,
                   { headers: { Authorization: `Bearer ${accessToken}` } }
                 );
                 const detailData = await detailRes.json();
@@ -83,7 +83,7 @@ export default function FreelancerManager() {
 
               try {
                 const fieldRes = await fetch(
-                  `https://localhost:7035/api/field/get-all-field-of-influ/${influ.influId}`,
+                  `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influ.influId}`,
                   { headers: { Authorization: `Bearer ${accessToken}` } }
                 );
                 const fieldData = await fieldRes.json();
@@ -136,7 +136,7 @@ export default function FreelancerManager() {
 
     try {
       const res = await fetch(
-        `https://localhost:7035/api/admin/users/${userId}/block?isBlocked=${block}`,
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/admin/users/${userId}/block?isBlocked=${block}`,
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${accessToken}` },

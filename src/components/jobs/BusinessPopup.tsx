@@ -71,7 +71,7 @@ export default function BusinessPopup({
     const fetchData = async () => {
       try {
         const repRes = await fetch(
-          `https://localhost:7035/api/business/${businessId}/representative`
+          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/${businessId}/representative`
         );
         const repJson = await repRes.json();
         if (repJson?.data) {
@@ -85,7 +85,7 @@ export default function BusinessPopup({
 
         if (businessUserId) {
           const busRes = await fetch(
-            `https://localhost:7035/api/business/get-business-by-user-id/${businessUserId}`
+            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${businessUserId}`
           );
           const busJson = await busRes.json();
           if (busJson?.data?.description) {
@@ -94,7 +94,7 @@ export default function BusinessPopup({
         }
 
         const jobRes = await fetch(
-          `https://localhost:7035/api/jobs/get-job/by-business-id/${businessId}`
+          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${businessId}`
         );
         const jobJson = await jobRes.json();
         if (jobJson?.data) {

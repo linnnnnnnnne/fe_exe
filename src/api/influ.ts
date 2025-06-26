@@ -1,5 +1,5 @@
 //src/services/
-const BASE_URL = "https://localhost:7035/api/influ";
+const BASE_URL = "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ";
 
 export interface CreateInflu {
   email: string;
@@ -21,7 +21,7 @@ export interface CreateInflu {
 
 // Hàm lấy danh sách fieldIds từ field API
 export const getAllFieldIds = async (): Promise<string[]> => {
-  const res = await fetch("https://localhost:7035/api/field/get-all");
+  const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all");
   if (!res.ok) {
     const error = await res.text();
     throw new Error(`Lấy danh sách lĩnh vực thất bại: ${error}`);

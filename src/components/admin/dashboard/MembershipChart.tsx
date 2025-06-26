@@ -10,7 +10,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  Label,
 } from "recharts";
 
 interface ChartItem {
@@ -18,8 +17,6 @@ interface ChartItem {
   Business: number;
   Freelancer: number;
 }
-
-const COLORS = ["#34D399", "#60A5FA"];
 
 function getLast7Days(): string[] {
   const days: string[] = [];
@@ -59,8 +56,8 @@ export default function MembershipChart() {
         };
 
         const [resBusiness, resFreelancer] = await Promise.all([
-          fetch("https://localhost:7035/api/membership/businesses", { headers }),
-          fetch("https://localhost:7035/api/membership/influencers", { headers }),
+          fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/businesses", { headers }),
+          fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/influencers", { headers }),
         ]);
 
         const bizData = await resBusiness.json();

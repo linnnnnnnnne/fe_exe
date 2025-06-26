@@ -56,7 +56,7 @@ export default function ExploreInflu() {
     const fetchMembershipUsers = async () => {
       try {
         const res = await fetch(
-          "https://localhost:7035/api/membership/influencers"
+          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/influencers"
         );
         const json = await res.json();
 
@@ -76,7 +76,7 @@ export default function ExploreInflu() {
   useEffect(() => {
     const fetchFieldOptions = async () => {
       try {
-        const res = await fetch("https://localhost:7035/api/field/get-all");
+        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all");
         const json = await res.json();
         if (json.isSuccess && Array.isArray(json.data)) {
           const names = json.data
@@ -96,7 +96,7 @@ export default function ExploreInflu() {
     const fetchInfluencers = async () => {
       try {
         const res = await fetch(
-          `https://localhost:7035/api/influ/search-by-follower?minFollower=${minFollower}&maxFollower=${maxFollower}`
+          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/search-by-follower?minFollower=${minFollower}&maxFollower=${maxFollower}`
         );
         const json = await res.json();
 
@@ -109,7 +109,7 @@ export default function ExploreInflu() {
               // 🎯 Fetch lĩnh vực
               try {
                 const fieldRes = await fetch(
-                  `https://localhost:7035/api/field/get-all-field-of-influ/${i.influId}`
+                  `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${i.influId}`
                 );
                 const fieldJson = await fieldRes.json();
                 if (fieldJson.isSuccess && Array.isArray(fieldJson.data)) {
@@ -127,7 +127,7 @@ export default function ExploreInflu() {
               // ✅ Fetch linkmxh từ userId
               try {
                 const detailRes = await fetch(
-                  `https://localhost:7035/api/influ/get-influ-by-userId/${i.userId}`
+                  `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${i.userId}`
                 );
                 const detailJson = await detailRes.json();
                 if (
@@ -195,8 +195,8 @@ export default function ExploreInflu() {
     if (!creatorId) return alert("Bạn chưa đăng nhập");
 
     const [resBusiness, resInflu] = await Promise.all([
-      fetch("https://localhost:7035/api/business/all"),
-      fetch("https://localhost:7035/api/influ/all"),
+      fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/all"),
+      fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/all"),
     ]);
     const businessData = await resBusiness.json();
     const influData = await resInflu.json();
@@ -222,7 +222,7 @@ export default function ExploreInflu() {
 
     try {
       const resConv = await fetch(
-        `https://localhost:7035/api/conversation/user_conversations?userId=${creatorId}`
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/conversation/user_conversations?userId=${creatorId}`
       );
       const dataConv = await resConv.json();
       const existed = dataConv?.data?.find(
@@ -234,7 +234,7 @@ export default function ExploreInflu() {
 
         try {
           const msgRes = await fetch(
-            `https://localhost:7035/api/message/conversation_messages?conversationId=${convId}&pageNumber=1&pageSize=50`
+            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/message/conversation_messages?conversationId=${convId}&pageNumber=1&pageSize=50`
           );
           const msgData = await msgRes.json();
           const rawMessages = msgData?.data?.items || [];
@@ -265,7 +265,7 @@ export default function ExploreInflu() {
 
     try {
       const res = await fetch(
-        `https://localhost:7035/api/conversation/create?creatorId=${creatorId}&name=${conversationName}&isGroup=false`,
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/conversation/create?creatorId=${creatorId}&name=${conversationName}&isGroup=false`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -458,17 +458,17 @@ export default function ExploreInflu() {
             onClickCard={async (influencer) => {
               try {
                 const res = await fetch(
-                  `https://localhost:7035/api/influ/get-influ-by-userId/${influencer.userId}`
+                  `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${influencer.userId}`
                 );
                 const json = await res.json();
                 const full = json.data;
 
                 const [completed, inProgress] = await Promise.all([
                   fetch(
-                    `https://localhost:7035/api/freelance-jobs/influencer/${full.influId}/jobs/completed`
+                    `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/influencer/${full.influId}/jobs/completed`
                   ).then((r) => r.json()),
                   fetch(
-                    `https://localhost:7035/api/freelance-jobs/influencer/${full.influId}/jobs/in-progress`
+                    `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/influencer/${full.influId}/jobs/in-progress`
                   ).then((r) => r.json()),
                 ]);
 

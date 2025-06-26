@@ -80,9 +80,9 @@ export default function Dashboard() {
 
       try {
         const [influRes, businessRes, jobsRes] = await Promise.all([
-          fetch("https://localhost:7035/api/influ/all", { headers }),
-          fetch("https://localhost:7035/api/business/all", { headers }),
-          fetch("https://localhost:7035/api/jobs/get-all", { headers }),
+          fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/all", { headers }),
+          fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/all", { headers }),
+          fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all", { headers }),
         ]);
 
         if ([influRes, businessRes, jobsRes].some(checkTokenExpired)) return;
@@ -95,7 +95,7 @@ export default function Dashboard() {
         let usersData: any[] = [];
 
         try {
-          const membershipRes = await fetch("https://localhost:7035/api/membership/all", { headers });
+          const membershipRes = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/all", { headers });
           if (checkTokenExpired(membershipRes)) return;
           if (membershipRes.ok) {
             const json = await membershipRes.json();
@@ -108,7 +108,7 @@ export default function Dashboard() {
         }
 
         try {
-          const userRes = await fetch("https://localhost:7035/api/user/all", { headers });
+          const userRes = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/all", { headers });
           if (checkTokenExpired(userRes)) return;
           if (userRes.ok) {
             const json = await userRes.json();

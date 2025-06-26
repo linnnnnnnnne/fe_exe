@@ -85,7 +85,7 @@ export default function ListJobs({
     const fetchMemberships = async () => {
       try {
         const res = await fetch(
-          "https://localhost:7035/api/membership/businesses"
+          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/businesses"
         );
         const json = await res.json();
         if (json?.isSuccess && Array.isArray(json.data)) {
@@ -109,7 +109,7 @@ export default function ListJobs({
 
     const fetchJobs = async () => {
       try {
-        const res = await fetch("https://localhost:7035/api/jobs/get-all");
+        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all");
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         const jobList = Array.isArray(data) ? data : data.data || [];

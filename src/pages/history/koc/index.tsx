@@ -84,7 +84,7 @@ export default function InfluencerHistoryPage() {
       : "";
 
   const getBusinessInfo = async (id: string) => {
-    const baseUrl = "https://localhost:7035";
+    const baseUrl = "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net";
     try {
       const res = await fetch(
         `${baseUrl}/api/business/get-business-by-id/${id}`,
@@ -109,7 +109,7 @@ export default function InfluencerHistoryPage() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const baseUrl = "https://localhost:7035";
+        const baseUrl = "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net";
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -167,7 +167,7 @@ export default function InfluencerHistoryPage() {
   const fetchReviewedJobs = async () => {
     try {
       const res = await fetch(
-        "https://localhost:7035/api/review/rating-of-business",
+        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/rating-of-business",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
