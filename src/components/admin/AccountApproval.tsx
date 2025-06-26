@@ -45,7 +45,7 @@ export default function AccountApproval() {
       }
 
       try {
-        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/unverified", {
+        const res = await fetch("https://localhost:7035/api/user/unverified", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -80,9 +80,9 @@ export default function AccountApproval() {
       let endpoint = "";
 
       if (roleLower === "freelancer") {
-        endpoint = `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`;
+        endpoint = `https://localhost:7035/api/influ/get-influ-by-userId/${userId}`;
       } else if (roleLower === "business" || roleLower === "doanh nghiệp") {
-        endpoint = `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${userId}`;
+        endpoint = `https://localhost:7035/api/business/get-business-by-user-id/${userId}`;
       } else {
         return;
       }
@@ -151,7 +151,7 @@ export default function AccountApproval() {
 
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/admin/users/${userId}/verify-account?isVerified=true`,
+        `https://localhost:7035/api/admin/users/${userId}/verify-account?isVerified=true`,
         {
           method: "PUT",
           headers: {
@@ -201,9 +201,9 @@ export default function AccountApproval() {
               {/* Freelancer display */}
               {isFreelancer && freelancerDetails[user.userId] && (
                 <div className="border-t text-sm text-gray-800">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-14">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
                     {/* Cột 1: Avatar */}
-                    <div className="flex-shrink-0 ml-10 mt-3 flex justify-center sm:justify-start">
+                    <div className="flex-shrink-0 ml-2 mt-3 flex justify-center sm:justify-start">
                       <img
                         src={freelancerDetails[user.userId].linkImage}
                         alt="Avatar"
@@ -212,31 +212,31 @@ export default function AccountApproval() {
                     </div>
 
                     {/* Cột 2 + 3: Thông tin chia 2 cột ngang */}
-                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2">
-                      <p>
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1.5">
+                      <p className="mb-0 mt-2">
                         <b>Họ tên:</b> {userNames[user.userId]}
                       </p>
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>Email:</b> {user.email}
                       </p>
 
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>Ngày sinh:</b>{" "}
                         {new Date(
                           freelancerDetails[user.userId].dateOfBirth
                         ).toLocaleDateString()}
                       </p>
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>Vai trò:</b>{" "}
                         <span className="font-bold text-teal">
                           {user.role?.name}
                         </span>
                       </p>
 
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>SĐT:</b> {freelancerDetails[user.userId].phoneNumber}
                       </p>
-                      <p className="flex items-center gap-1">
+                      <p className="flex items-center gap-1 mb-0 mt-2">
                         <b>Đã xác minh:</b>{" "}
                         {user.isVerified ? (
                           <CheckCircle className="text-green-600 w-4 h-4" />
@@ -245,18 +245,18 @@ export default function AccountApproval() {
                         )}
                       </p>
 
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>Follower:</b>{" "}
                         {freelancerDetails[
                           user.userId
                         ].follower.toLocaleString()}
                       </p>
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>Trạng thái:</b>{" "}
                         {user.isBlocked ? "Đã khóa" : "Hoạt động"}
                       </p>
 
-                      <p className="col-span-2">
+                      <p className="col-span-2 mb-0 mt-2">
                         <b>Portfolio:</b>{" "}
                         <a
                           href={freelancerDetails[user.userId].portfolio_link}
@@ -286,9 +286,9 @@ export default function AccountApproval() {
               {/* Business display + approve button */}
               {isBusiness && businessDetails[user.userId] && (
                 <div className="border-t text-sm text-gray-800 ">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-14">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
                     {/* Cột 1: Logo */}
-                    <div className="flex-shrink-0 ml-10 mt-3 flex justify-center sm:justify-start">
+                    <div className="flex-shrink-0 ml-2 mt-3 flex justify-center sm:justify-start">
                       <img
                         src={businessDetails[user.userId].logo}
                         alt="Logo"
@@ -297,25 +297,25 @@ export default function AccountApproval() {
                     </div>
 
                     {/* Cột 2 + 3: Thông tin doanh nghiệp */}
-                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2">
-                      <p>
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1.5">
+                      <p className="mb-0 mt-2">
                         <b>Tên doanh nghiệp:</b> {userNames[user.userId]}
                       </p>
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>Email:</b> {user.email}
                       </p>
 
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>Địa chỉ:</b> {businessDetails[user.userId].address}
                       </p>
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>Vai trò:</b>{" "}
                         <span className="font-bold text-teal">
                           {user.role?.name}
                         </span>
                       </p>
 
-                      <p>
+                      <p className="mb-0 mt-2">
                         <b>Giấy phép KD:</b>{" "}
                         <a
                           href={businessDetails[user.userId].businessLicense}
@@ -327,7 +327,7 @@ export default function AccountApproval() {
                         </a>
                       </p>
 
-                      <p className="flex items-center gap-1">
+                      <p className="flex items-center gap-1 mb-0 mt-2">
                         <b>Đã xác minh:</b>{" "}
                         {user.isVerified ? (
                           <CheckCircle className="text-green-600 w-4 h-4" />
@@ -336,7 +336,7 @@ export default function AccountApproval() {
                         )}
                       </p>
 
-                      <p>
+                      <p className="mb-2 mt-2">
                         <b>Trạng thái:</b>{" "}
                         {user.isBlocked ? "Đã khóa" : "Hoạt động"}
                       </p>

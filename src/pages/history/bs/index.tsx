@@ -37,7 +37,7 @@ export default function BusinessHistoryPage() {
   const [reviewedInfluencerIds, setReviewedInfluencerIds] = useState<string[]>(
     []
   );
-
+  const [reviewedJobIds, setReviewedJobIds] = useState<string[]>([]);
   const [inProgressJobs, setInProgressJobs] = useState<Job[]>([]);
   const [completedJobs, setCompletedJobs] = useState<Job[]>([]);
   const [cancelledJobs, setCancelledJobs] = useState<Job[]>([]);
@@ -74,7 +74,7 @@ export default function BusinessHistoryPage() {
 
   const fetchJobs = async () => {
     try {
-      const baseUrl = "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net";
+      const baseUrl = "https://localhost:7035";
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -117,6 +117,32 @@ export default function BusinessHistoryPage() {
     if (businessId && accessToken) fetchJobs();
   }, [businessId, accessToken]);
 
+  const fetchReviewedJobs = async () => {
+    try {
+      const res = await fetch(
+        "https://localhost:7035/api/review/rating-of-influ",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const data = await res.json();
+      if (data?.isSuccess) {
+        const reviewedJobIds = data.data.map((r: any) => r.jobId);
+        setReviewedInfluencerIds(reviewedJobIds);
+      }
+    } catch (err) {
+      console.error("Lỗi lấy danh sách đánh giá:", err);
+    }
+  };
+  useEffect(() => {
+    if (businessId && accessToken) {
+      fetchJobs();
+      fetchReviewedJobs(); 
+    }
+  }, [businessId, accessToken]);
+
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleString("vi-VN", {
       dateStyle: "short",
@@ -129,7 +155,7 @@ export default function BusinessHistoryPage() {
   ) => {
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/${jobId}/list-influencers-apply-job`,
+        `https://localhost:7035/api/freelance-jobs/${jobId}/list-influencers-apply-job`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -161,7 +187,7 @@ export default function BusinessHistoryPage() {
 
     try {
       const res = await fetch(
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/confirm-complete-job",
+        "https://localhost:7035/api/freelance-jobs/confirm-complete-job",
         {
           method: "POST",
           headers: {
@@ -309,7 +335,7 @@ export default function BusinessHistoryPage() {
 
                               {sectionKey === "completed" &&
                                 influ.status === 2 &&
-                                (reviewedInfluencerIds.includes(influ.id) ? (
+                                (reviewedInfluencerIds.includes(job.id) ? (
                                   <span className="ml-auto text-sm text-gray-500 italic">
                                     Đã đánh giá
                                   </span>
@@ -318,7 +344,10 @@ export default function BusinessHistoryPage() {
                                     onClick={() =>
                                       setOpenReviewPopup({
                                         open: true,
-                                        influencer: { ...influ, jobId: job.id },
+                                        influencer: {
+                                          ...influ,
+                                          jobId: job.id, 
+                                        },
                                       })
                                     }
                                     className="ml-auto text-sm bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
@@ -399,7 +428,7 @@ export default function BusinessHistoryPage() {
           onReviewed={() => {
             setReviewedInfluencerIds((prev) => [
               ...prev,
-              openReviewPopup.influencer.id,
+              openReviewPopup.influencer.jobId,
             ]);
           }}
         />

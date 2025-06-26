@@ -1,12 +1,21 @@
-import ReviewCard from "../../../components/profile/koc/ReviewCard";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Headerrr from "../../../components/share/Headerrr";
 import Footer from "../../../components/share/Footer";
 import FileUploadAvatar from "../../../components/share/FileUploadAvatar";
+import ReviewCard from "../../../components/profile/koc/ReviewCard";
+import ActivityStats from "../../../components/share/ActivityStats";
 import { Phone, MapPin, Pencil, Save, XCircle } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import {
+  FaFacebook,
+  FaInstagram,
+  FaYoutube,
+  FaTiktok,
+  FaWhatsapp,
+} from "react-icons/fa";
 
 interface Review {
   id: string;
@@ -29,6 +38,26 @@ interface KOCProfile {
   portfolio_link: string;
   gender: number;
   dateOfBirth: string;
+  linkmxh: string[];
+}
+
+interface Job {
+  id: string;
+  title: string;
+  description: string;
+  kolBenefits: string;
+  location: string;
+  budget: number;
+  gender: number;
+  follower: number;
+  startTime: string;
+  endTime: string;
+  require: string;
+  status: number;
+  businessField?: {
+    fieldId: string;
+  };
+  fieldName?: string;
 }
 
 const getGenderLabel = (gender: number) => {
@@ -41,6 +70,23 @@ const getGenderLabel = (gender: number) => {
       return "Giới tính khác";
     default:
       return "Không rõ";
+  }
+};
+
+const getStatusLabel = (status: number) => {
+  switch (status) {
+    case 0:
+      return "Available";
+    case 1:
+      return "Đang thực hiện";
+    case 2:
+      return "Hoàn thành";
+    case 3:
+      return "Đã hủy";
+    case 4:
+      return "Hết hạn đăng ký";
+    default:
+      return "Không xác định";
   }
 };
 
@@ -61,11 +107,14 @@ export default function ProfileKOC() {
 
   const [reviewPage, setReviewPage] = useState(1);
   const totalPages = Math.ceil(reviews.length / 4);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [inProgressJobs, setInProgressJobs] = useState<Job[]>([]);
+  const [influId, setInfluId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
 
-    fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/review-of-influ/${id}`)
+    fetch(`https://localhost:7035/api/review/review-of-influ/${id}`)
       .then((res) => res.json())
       .then(async (data) => {
         if (data?.isSuccess && Array.isArray(data.data)) {
@@ -84,7 +133,7 @@ export default function ProfileKOC() {
           const fetchJobs = uniqueBusinessIds.map(async (bid: string) => {
             try {
               const res = await fetch(
-                `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${bid}`
+                `https://localhost:7035/api/jobs/get-job/by-business-id/${bid}`
               );
               const json = await res.json();
               if (json?.isSuccess && Array.isArray(json.data)) {
@@ -112,7 +161,7 @@ export default function ProfileKOC() {
   }, [id]);
 
   if (userId && token) {
-    fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
+    fetch(`https://localhost:7035/api/membership/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -149,13 +198,13 @@ export default function ProfileKOC() {
       linkImage: editedKoc?.linkImage || "",
       portfolio_link: editedKoc?.portfolio_link || "",
       area: editedKoc?.area || "",
-      linkmxh: [],
+      linkmxh: editedKoc?.linkmxh || [],
       fieldIds: [],
     };
 
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/update-by-user/${id}`,
+        `https://localhost:7035/api/influ/update-by-user/${id}`,
         {
           method: "PUT",
           headers: {
@@ -192,12 +241,62 @@ export default function ProfileKOC() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${id}`)
+    // 1. Lấy thông tin KOC & influId
+    fetch(`https://localhost:7035/api/influ/get-influ-by-userId/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data?.data) setKoc(data.data);
+        if (data?.data) {
+          setKoc(data.data);
+          setInfluId(data.data.influId); // ✅ Lưu influId
+        }
       });
+
+    // 2. Lấy membership
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("accessToken");
+    if (userId && token) {
+      fetch(`https://localhost:7035/api/membership/user/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((mem) => {
+          const userData = mem?.data?.user;
+          setIsVerified(userData?.isVerified || false);
+          setCurrentType(mem?.data?.membershipType?.type ?? null);
+        })
+        .catch((err) => console.error("Lỗi membership:", err));
+    }
   }, [id]);
+
+  useEffect(() => {
+    if (!influId) return;
+
+    const baseUrl = "https://localhost:7035";
+
+    // Jobs hoàn thành
+    fetch(`${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/completed`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.isSuccess && Array.isArray(data.data)) {
+          const mapped = data.data.map((wrapper: any) => wrapper.job);
+          setJobs(mapped);
+        }
+      })
+      .catch((err) => console.error("Lỗi job completed:", err));
+
+    // Jobs đang thực hiện
+    fetch(
+      `${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/in-progress`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.isSuccess && Array.isArray(data.data)) {
+          const mapped = data.data.map((wrapper: any) => wrapper.job);
+          setInProgressJobs(mapped);
+        }
+      })
+      .catch((err) => console.error("Lỗi job in-progress:", err));
+  }, [influId]);
 
   if (!koc) return <div className="text-center mt-10">Đang tải dữ liệu...</div>;
 
@@ -464,68 +563,162 @@ export default function ProfileKOC() {
                   </a>
                 )}
               </div>
+
+              {/* Mạng xã hội */}
+              <div className="flex items-start gap-2">
+                {isEditing ? (
+                  <div className="flex flex-col gap-2 w-full mt-1">
+                    {[
+                      { name: "facebook", Icon: FaFacebook },
+                      { name: "instagram", Icon: FaInstagram },
+                      { name: "youtube", Icon: FaYoutube },
+                      { name: "tiktok", Icon: FaTiktok },
+                      { name: "whatsapp", Icon: FaWhatsapp },
+                    ].map(({ name, Icon }) => {
+                      const link =
+                        editedKoc?.linkmxh?.find((url) =>
+                          url.toLowerCase().includes(name)
+                        ) || "";
+
+                      return (
+                        <div key={name} className="flex items-center gap-2">
+                          <Icon size={18} className="text-teal w-5" />
+                          <input
+                            type="url"
+                            placeholder={`Link ${name}`}
+                            value={link}
+                            onChange={(e) => {
+                              const value = e.target.value.trim();
+                              const newLinks = (
+                                editedKoc?.linkmxh || []
+                              ).filter(
+                                (url) => !url.toLowerCase().includes(name)
+                              );
+                              if (value !== "") newLinks.push(value);
+
+                              setEditedKoc({
+                                ...editedKoc!,
+                                linkmxh: newLinks,
+                              });
+                            }}
+                            className="border p-1 rounded w-full text-sm"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="flex gap-6 items-center mt-1">
+                    {[
+                      { name: "facebook", Icon: FaFacebook },
+                      { name: "instagram", Icon: FaInstagram },
+                      { name: "youtube", Icon: FaYoutube },
+                      { name: "tiktok", Icon: FaTiktok },
+                      { name: "whatsapp", Icon: FaWhatsapp },
+                    ]
+                      .filter(({ name }) =>
+                        (koc.linkmxh || []).some((url) =>
+                          url.toLowerCase().includes(name)
+                        )
+                      )
+                      .map(({ name, Icon }) => {
+                        const link = koc.linkmxh.find((url) =>
+                          url.toLowerCase().includes(name)
+                        );
+
+                        return (
+                          <a
+                            key={name}
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={name}
+                            className="w-8 h-8 flex items-center justify-center text-teal hover:text-teal200 transition"
+                          >
+                            <Icon size={28} />
+                          </a>
+                        );
+                      })}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
         <div className="col-span-2 space-y-6">
-          <div>
-            <h2 className="text-lg font-semibold mt-7 mb-4">
+          {/* Bọc card lớn cho toàn bộ phần đánh giá */}
+          <div className="bg-white rounded-xl p-6 shadow">
+            <h2 className="text-lg font-semibold mt-2 mb-0">
               Đánh giá từ doanh nghiệp
             </h2>
-            {reviews.length === 0 && (
-              <p className="text-gray-500 text-sm italic">
-                "Hãy nâng cấp tài khoản để xem đánh giá từ đối tác của bạn"
-              </p>
+
+            {reviews.length === 0 &&
+              (currentType && currentType > 0 ? (
+                <p className="text-gray-500 text-sm mt-3">
+                  Hiện tại chưa có review từ đối tác
+                </p>
+              ) : (
+                <p className="text-gray-500 text-sm italic mt-3">
+                  "Hãy nâng cấp tài khoản để xem đánh giá từ đối tác của bạn"
+                </p>
+              ))}
+
+            {reviews.length > 0 && (
+              <>
+                {/* Review card container */}
+                <div className="bg-[#F0FAFA] rounded-xl mt-3 shadow space-y-3 px-4 md:px-3 md:py-5 border border-gray-100 hover:shadow-md transition-shadow">
+                  {reviews
+                    .slice((reviewPage - 1) * 4, reviewPage * 4)
+                    .map((review) => {
+                      const business = businessMap[review.businessId];
+                      if (!business) return null;
+
+                      return (
+                        <ReviewCard
+                          key={review.id}
+                          name={business.name}
+                          avatar={business.logo}
+                          rating={review.rating}
+                          feedback={review.feedback}
+                          jobTitle={business.jobTitle}
+                        />
+                      );
+                    })}
+                </div>
+
+                {totalPages > 1 && (
+                  <div className="flex justify-center items-center gap-2 mt-4">
+                    {Array.from({ length: totalPages }, (_, i) => {
+                      const pageNum = i + 1;
+                      const isActive = pageNum === reviewPage;
+
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => setReviewPage(pageNum)}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
+                            isActive
+                              ? "bg-teal text-white font-semibold"
+                              : "text-gray-700 hover:text-teal"
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
             )}
           </div>
 
-          {reviews.length > 0 && (
-            <>
-              {/* Hiển thị 4 review mỗi lần */}
-              <div className="grid grid-cols-1 gap-6">
-                {reviews
-                  .slice((reviewPage - 1) * 4, reviewPage * 4)
-                  .map((review) => {
-                    const business = businessMap[review.businessId];
-                    if (!business) return null;
-
-                    return (
-                      <ReviewCard
-                        key={review.id}
-                        name={business.name}
-                        avatar={business.logo}
-                        rating={review.rating}
-                        feedback={review.feedback}
-                        jobTitle={business.jobTitle}
-                      />
-                    );
-                  })}
-              </div>
-
-              {/* Nút chuyển trang */}
-              <div className="flex justify-center items-center gap-2 mt-4">
-                {Array.from({ length: totalPages }, (_, i) => {
-                  const pageNum = i + 1;
-                  const isActive = pageNum === reviewPage;
-
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => setReviewPage(pageNum)}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                        isActive
-                          ? "bg-teal text-white font-semibold"
-                          : "text-gray-700 hover:text-teal"
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-              </div>
-            </>
-          )}
+          {/* Thống kê hoạt động */}
+          <ActivityStats
+            jobs={[...jobs, ...inProgressJobs]}
+            reviews={reviews}
+            getStatusLabel={getStatusLabel}
+          />
         </div>
       </div>
 

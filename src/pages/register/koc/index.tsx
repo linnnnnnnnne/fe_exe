@@ -41,7 +41,7 @@ export default function RegisterKOCForm() {
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all")
+    fetch("https://localhost:7035/api/field/get-all")
       .then((res) => res.json())
       .then((data) => setFields(data.data))
       .catch((err) => console.error("Failed to fetch fields:", err));

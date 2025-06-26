@@ -12,8 +12,8 @@ import {
   FileUser,
 } from "lucide-react";
 
-// import Dashboard from "../../../components/admin/Dashboard";
-// import ProjectManager from "../../../components/admin/ProjectManager";
+import Dashboard from "../../components/admin/Dashboard";
+import ProjectManager from "../../components/admin/ProjectManager";
 import AccountApproval from "../../components/admin/AccountApproval";
 import MembershipApproval from "../../components/admin/MembershipApproval";
 import FreelancerManager from "../../components/admin/FreelancerManager";
@@ -22,9 +22,9 @@ import MembershipManager from "../../components/admin/MembershipManager";
 
 const menuItems = [
   { label: "Tổng Quan", icon: <LayoutDashboard size={20} /> },
-  { label: "Quản Lí Dự Án", icon: <Briefcase size={20} /> },
-  { label: "Kiểm Duyệt Tài Khoản", icon: <ShieldCheck size={20} /> },
-  { label: "Kiểm Duyệt Membership", icon: <ShieldUser size={20} /> },
+  { label: "Quản Lí Công Việc", icon: <Briefcase size={20} /> },
+  { label: "Kiểm Duyệt Tài Khoản Mới", icon: <ShieldCheck size={20} /> },
+  { label: "Duyệt Membership", icon: <ShieldUser size={20} /> },
   { label: "Quản Lí Membership", icon: <FileUser size={20} /> },
   { label: "Quản Lí Freelancer", icon: <User size={20} /> },
   { label: "Quản Lí Doanh Nghiệp", icon: <Users size={20} /> },
@@ -39,7 +39,7 @@ export default function AdminLayout() {
     if (!userId) return alert("Không tìm thấy userId");
 
     try {
-      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/logout", {
+      const res = await fetch("https://localhost:7035/api/user/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,10 +63,10 @@ export default function AdminLayout() {
 
   const renderContent = () => {
   switch (activeIndex) {
-    // case 0:
-    //   return <Dashboard />;
-    // case 1:
-    //   return <ProjectManager />;
+    case 0:
+      return <Dashboard />;
+    case 1:
+      return <ProjectManager />;
     case 2:
       return <AccountApproval />;
     case 3:

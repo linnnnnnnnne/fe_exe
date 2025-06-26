@@ -35,6 +35,7 @@ interface JobWrapper {
     endTime: string;
     require: string;
     status: number;
+    businessId: string;
   };
 }
 
@@ -53,7 +54,8 @@ export default function InfluencerHistoryPage() {
   });
 
   const [reviewingJob, setReviewingJob] = useState<null | {
-    freelanceJobId: string; 
+    freelanceJobId: string;
+    jobId: string;
     businessName: string;
     businessAvatar: string;
   }>(null);
@@ -69,10 +71,33 @@ export default function InfluencerHistoryPage() {
       ? localStorage.getItem("accessToken") || ""
       : "";
 
+  const getBusinessInfo = async (id: string) => {
+    const baseUrl = "https://localhost:7035";
+    try {
+      const res = await fetch(
+        `${baseUrl}/api/business/get-business-by-id/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error("Lỗi khi lấy thông tin doanh nghiệp");
+
+      const json = await res.json();
+      return json?.data;
+    } catch (err) {
+      console.error("Lỗi fetch business:", err);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const baseUrl = "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net";
+        const baseUrl = "https://localhost:7035";
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -118,6 +143,7 @@ export default function InfluencerHistoryPage() {
     };
 
     if (influId && accessToken) fetchJobs();
+    fetchReviewedJobs();
   }, [influId, accessToken]);
 
   const formatDate = (iso: string) =>
@@ -125,6 +151,27 @@ export default function InfluencerHistoryPage() {
       dateStyle: "short",
       timeStyle: "short",
     });
+
+  const fetchReviewedJobs = async () => {
+    try {
+      const res = await fetch(
+        "https://localhost:7035/api/review/rating-of-business",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+      if (data?.isSuccess && Array.isArray(data.data)) {
+        const reviewed = data.data.map((r: any) => r.jobId); // Lấy jobId đã đánh giá
+        setReviewedJobIds(reviewed);
+      }
+    } catch (err) {
+      console.error("Lỗi lấy danh sách đánh giá:", err);
+    }
+  };
 
   const renderJobs = (
     jobs: JobWrapper[],
@@ -167,19 +214,27 @@ export default function InfluencerHistoryPage() {
 
                       {/* 👉 Chỉ hiển thị khi ở mục đã hoàn thành */}
                       {sectionKey === "completed" &&
-                        (reviewedJobIds.includes(job.id) ? (
-                          <span className="text-sm text-green-600 font-semibold">
+                        (reviewedJobIds.includes(job.job.id) ? (
+                          <span className="ml-auto text-sm text-gray-500 italic">
                             Đã đánh giá
                           </span>
                         ) : (
                           <button
-                            onClick={() =>
-                              setReviewingJob({
-                                freelanceJobId: job.id,
-                                businessName: job.job.title,
-                                businessAvatar: "/logo-placeholder.png",
-                              })
-                            }
+                            onClick={async () => {
+                              const business = await getBusinessInfo(
+                                job.job.businessId
+                              );
+                              if (business) {
+                                setReviewingJob({
+                                  freelanceJobId: job.id,
+                                  businessName:
+                                    business.name || "Tên doanh nghiệp",
+                                  businessAvatar:
+                                    business.logo || "/logo-placeholder.png",
+                                  jobId: job.job.id,
+                                });
+                              }
+                            }}
                             className="text-xs bg-teal text-white px-3 py-1 rounded hover:bg-teal-700"
                           >
                             Đánh giá
@@ -290,9 +345,11 @@ export default function InfluencerHistoryPage() {
           accessToken={accessToken}
           onClose={() => setReviewingJob(null)}
           onReviewed={() => {
-            setReviewingJob(null);
-            setReviewedJobIds((prev) => [...prev, reviewingJob.freelanceJobId]);
-            toast.success("Đánh giá thành công!");
+            setReviewedJobIds((prev) => [...prev, reviewingJob.jobId]);
+
+            setTimeout(() => {
+              setReviewingJob(null);
+            }, 500);
           }}
           type="business"
         />

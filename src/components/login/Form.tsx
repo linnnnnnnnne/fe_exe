@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { PasswordInput } from "./Pass";
 import PopAsk from "./PopAsk";
 import ResetPassword from "./ResetPassword";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 interface DecodedJWT {
   [key: string]: any;
@@ -40,7 +40,7 @@ export function LoginForm() {
     if (!validateInputs()) return;
     setLoading(true);
     try {
-      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/login", {
+      const res = await fetch("https://localhost:7035/api/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -81,28 +81,27 @@ export function LoginForm() {
       }
 
       // Thành công
-const accessToken = data.data.accessToken;
-const decoded: DecodedJWT = jwtDecode(accessToken);
-console.log("Decoded JWT:", decoded);
+      const accessToken = data.data.accessToken;
+      const decoded: DecodedJWT = jwtDecode(accessToken);
+      console.log("Decoded JWT:", decoded);
 
-const role =
-  decoded[
-    "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-  ] || "";
+      const role =
+        decoded[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ] || "";
 
-localStorage.setItem("accessToken", accessToken);
-localStorage.setItem("refreshToken", data.data.refreshToken);
-localStorage.setItem("userId", data.data.userId);
-localStorage.setItem("influId", data.data.influId || "");
-localStorage.setItem("businessId", data.data.businessId || "");
-localStorage.setItem("role", role); // ⬅ "Admin", "Business", "Freelancer".
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", data.data.refreshToken);
+      localStorage.setItem("userId", data.data.userId);
+      localStorage.setItem("influId", data.data.influId || "");
+      localStorage.setItem("businessId", data.data.businessId || "");
+      localStorage.setItem("role", role); // ⬅ "Admin", "Business", "Freelancer".
 
-if (role === "Admin") {
-  window.location.href = "/admin";
-} else {
-  window.location.href = "/home";
-}
-
+      if (role === "Admin") {
+        window.location.href = "/admin";
+      } else {
+        window.location.href = "/home";
+      }
     } catch (err) {
       toast.error("Không thể kết nối tới máy chủ. Vui lòng thử lại sau.", {
         position: "bottom-left",

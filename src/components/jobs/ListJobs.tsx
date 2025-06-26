@@ -22,6 +22,9 @@ export interface Job {
     logo?: string;
     address?: string;
   };
+  businessField?: {
+    fieldId?: string;
+  };
 }
 
 interface ListJobsProps {
@@ -46,13 +49,18 @@ const getStatusLabel = (status?: number) => {
   }
 };
 
-export default function ListJobs({ jobs: searchJobs, loading: searchLoading }: ListJobsProps) {
+export default function ListJobs({
+  jobs: searchJobs,
+  loading: searchLoading,
+}: ListJobsProps) {
   const [page, setPage] = useState(1);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [highlightMembershipUserIds, setHighlightMembershipUserIds] = useState<string[]>([]);
+  const [highlightMembershipUserIds, setHighlightMembershipUserIds] = useState<
+    string[]
+  >([]);
 
   const [selectedBusiness, setSelectedBusiness] = useState<{
     businessId: string;
@@ -70,14 +78,16 @@ export default function ListJobs({ jobs: searchJobs, loading: searchLoading }: L
   useEffect(() => {
     const fetchMemberships = async () => {
       try {
-        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/businesses");
+        const res = await fetch(
+          "https://localhost:7035/api/membership/businesses"
+        );
         const json = await res.json();
         if (json?.isSuccess && Array.isArray(json.data)) {
           const ids = json.data.map((m: any) => m.userId);
           setHighlightMembershipUserIds(ids);
         }
       } catch (err) {
-        console.error("❌ Lỗi khi fetch business membership:", err);
+        console.error("Lỗi khi fetch business membership:", err);
       }
     };
 
@@ -93,7 +103,7 @@ export default function ListJobs({ jobs: searchJobs, loading: searchLoading }: L
 
     const fetchJobs = async () => {
       try {
-        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all");
+        const res = await fetch("https://localhost:7035/api/jobs/get-all");
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         const jobList = Array.isArray(data) ? data : data.data || [];
@@ -122,10 +132,15 @@ export default function ListJobs({ jobs: searchJobs, loading: searchLoading }: L
     setShowPopup(true);
   };
 
-  if (loading) return <p className="text-center">Đang tải dữ liệu công việc...</p>;
+  if (loading)
+    return <p className="text-center">Đang tải dữ liệu công việc...</p>;
   if (error) return <p className="text-red-600 text-center">{error}</p>;
   if (jobs.length === 0)
-    return <p className="text-center text-gray-500">Không có công việc nào được hiển thị.</p>;
+    return (
+      <p className="text-center text-gray-500">
+        Không có công việc nào được hiển thị.
+      </p>
+    );
 
   return (
     <div className="space-y-6">
@@ -163,7 +178,9 @@ export default function ListJobs({ jobs: searchJobs, loading: searchLoading }: L
 
           <div className="flex-1">
             <div className="flex h-[32px] justify-between items-center">
-              <h2 className="font-semibold text-[19px] text-gray-800">{job.title}</h2>
+              <h2 className="font-semibold text-[19px] text-gray-800">
+                {job.title}
+              </h2>
               <span className="text-sm font-medium text-teal ml-4 whitespace-nowrap">
                 {getStatusLabel(job.status)}
               </span>
@@ -188,7 +205,9 @@ export default function ListJobs({ jobs: searchJobs, loading: searchLoading }: L
               )}
             </p>
 
-            {job.description && <p className="text-gray-500 text-sm mt-1">{job.description}</p>}
+            {job.description && (
+              <p className="text-gray-500 text-sm mt-1">{job.description}</p>
+            )}
 
             <div className="flex justify-between items-center mt-2 text-sm text-gray-500 flex-wrap gap-y-1">
               <div className="flex items-center gap-3 flex-wrap">
@@ -197,13 +216,18 @@ export default function ListJobs({ jobs: searchJobs, loading: searchLoading }: L
                   {job.location}
                 </span>
                 <span className="text-sm text-gray-500">|</span>
-                <span className="text-sm font-medium">{job.fieldName || "Chưa rõ lĩnh vực"}</span>
+                <span className="text-sm font-medium">
+                  {job.fieldName || "Chưa rõ lĩnh vực"}
+                </span>
               </div>
               <div className="flex items-center gap-6">
                 {job.startTime && (
                   <span className="flex items-center gap-1">
                     <Clock4 className="w-4 h-4" />
-                    {new Date(job.startTime).toLocaleDateString("vi-VN")} → {job.endTime ? new Date(job.endTime).toLocaleDateString("vi-VN") : "?"}
+                    {new Date(job.startTime).toLocaleDateString("vi-VN")} →{" "}
+                    {job.endTime
+                      ? new Date(job.endTime).toLocaleDateString("vi-VN")
+                      : "?"}
                   </span>
                 )}
               </div>
@@ -212,7 +236,11 @@ export default function ListJobs({ jobs: searchJobs, loading: searchLoading }: L
         </div>
       ))}
 
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={(p) => setPage(p)} />
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={(p) => setPage(p)}
+      />
 
       {showPopup && selectedBusiness && (
         <BusinessPopup
@@ -225,7 +253,10 @@ export default function ListJobs({ jobs: searchJobs, loading: searchLoading }: L
       )}
 
       {showJobDetail && selectedJobDetail && (
-        <JobDetail job={selectedJobDetail} onClose={() => setShowJobDetail(false)} />
+        <JobDetail
+          job={selectedJobDetail}
+          onClose={() => setShowJobDetail(false)}
+        />
       )}
     </div>
   );

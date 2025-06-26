@@ -1,5 +1,11 @@
 import React from "react";
-import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaTiktok,
+  FaWhatsapp,
+  FaYoutube,
+} from "react-icons/fa";
 import Input from "../../components/share/Input";
 import FieldCheckbox from "../../components/register/FieldCheckbox";
 import FileUpload from "../../components/share/FileUpload";
@@ -205,13 +211,23 @@ export default function InfoFields({
         />
 
         <div className="max-w-[832px]">
-          <div className="mb-1 text-sm font-medium text-black">Mạng xã hội:</div>
+          <div className="mb-1 text-sm font-medium text-black">
+            Mạng xã hội:
+          </div>
+
           {showErrors &&
-            !(formData.facebook || formData.instagram || formData.tiktok) && (
+            !(
+              formData.facebook ||
+              formData.instagram ||
+              formData.tiktok ||
+              formData.youtube ||
+              formData.whatsapp
+            ) && (
               <div className="text-red-500 text-sm mb-2">
                 Vui lòng nhập ít nhất một mạng xã hội
               </div>
             )}
+
           <div className="pl-8">
             <Input
               label="Facebook"
@@ -229,10 +245,24 @@ export default function InfoFields({
             />
             <Input
               label="TikTok"
-              placeholder="https://www.tiktok.com/abc"
+              placeholder="https://www.tiktok.com/@abc"
               icon={FaTiktok}
               value={formData.tiktok}
               onChange={handleChange("tiktok")}
+            />
+            <Input
+              label="YouTube"
+              placeholder="https://www.youtube.com/@abc"
+              icon={FaYoutube}
+              value={formData.youtube}
+              onChange={handleChange("youtube")}
+            />
+            <Input
+              label="WhatsApp"
+              placeholder="https://wa.me/84901234567"
+              icon={FaWhatsapp}
+              value={formData.whatsapp}
+              onChange={handleChange("whatsapp")}
             />
           </div>
         </div>

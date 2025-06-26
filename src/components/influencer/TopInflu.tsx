@@ -20,16 +20,21 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
         const accessToken = localStorage.getItem("accessToken");
         if (!accessToken) return;
 
-        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/influencers", {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const res = await fetch(
+          "https://localhost:7035/api/membership/influencers",
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
 
         const data = await res.json();
         if (res.ok && data?.isSuccess && Array.isArray(data.data)) {
           const userIds = data.data.map((item: any) => item.userId);
 
           const imagePromises = userIds.map(async (userId: string) => {
-            const res = await fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`);
+            const res = await fetch(
+              `https://localhost:7035/api/influ/get-influ-by-userId/${userId}`
+            );
             const json = await res.json();
             if (json?.isSuccess && json.data?.linkImage) {
               return json.data.linkImage;
@@ -66,13 +71,18 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
     if (!userId || !accessToken || !role) return;
 
     try {
-      const res = await fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      const res = await fetch(
+        `https://localhost:7035/api/membership/user/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
       const data = await res.json();
 
       if (res.ok && data?.isSuccess && data?.data) {
-        const infoRes = await fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`);
+        const infoRes = await fetch(
+          `https://localhost:7035/api/influ/get-influ-by-userId/${userId}`
+        );
         const infoJson = await infoRes.json();
 
         if (infoJson?.isSuccess && infoJson.data) {
@@ -82,7 +92,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
           let fieldNames: string[] = [];
           try {
             const fieldRes = await fetch(
-              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influ.influId}`
+              `https://localhost:7035/api/field/get-all-field-of-influ/${influ.influId}`
             );
             const fieldJson = await fieldRes.json();
             if (fieldJson.isSuccess && Array.isArray(fieldJson.data)) {
@@ -146,7 +156,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
           );
         })}
 
-<div className="absolute h-[170px] w-[230px] left-[-80px] top-1/2 -translate-y-1/2 z-20 text-white bg-gradient-to-r from-[rgba(13,148,136,0.5)] to-[rgba(13,148,136,0.01)] px-4 py-2 rounded-lg backdrop-blur-sm">
+        <div className="absolute h-[170px] w-[265px] left-[-80px] top-1/2 -translate-y-1/2 z-20 text-white bg-gradient-to-r from-[rgba(13,148,136,0.5)] to-[rgba(13,148,136,0.01)] px-4 py-2 rounded-lg backdrop-blur-sm">
           <h3 className="font-bold text-2xl mt-7 mb-3 drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)]">
             HỒ SƠ NỔI BẬT
           </h3>
@@ -166,7 +176,9 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
         {imageList.map((_, i) => (
           <div
             key={i}
-            className={`w-3 h-2 rounded-full ${i === index ? "bg-teal100" : "bg-gray-500"}`}
+            className={`w-3 h-2 rounded-full ${
+              i === index ? "bg-teal100" : "bg-gray-500"
+            }`}
           ></div>
         ))}
       </div>

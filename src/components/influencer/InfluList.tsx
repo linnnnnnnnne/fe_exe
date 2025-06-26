@@ -1,5 +1,12 @@
 import { X, MapPin, UserPlus, Star } from "lucide-react";
 import Pagination from "../share/Pagination";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaYoutube,
+  FaTiktok,
+  FaWhatsapp,
+} from "react-icons/fa";
 
 type Influencer = {
   name: string;
@@ -12,14 +19,17 @@ type Influencer = {
   linkImage: string;
   userId: string;
   fieldNames?: string[];
+  linkmxh?: string[];
 };
 
 interface InfluListProps {
   items: Influencer[];
   currentPage: number;
   totalPages: number;
+  itemsPerPage: number;
   onPageChange: (page: number) => void;
   onConnect: (influencer: Influencer) => void;
+  onMoveToEnd: (userId: string) => void;
   highlightMembershipUserIds?: string[];
 }
 
@@ -27,8 +37,10 @@ export default function InfluList({
   items,
   currentPage,
   totalPages,
+  itemsPerPage,
   onPageChange,
   onConnect,
+  onMoveToEnd,
   highlightMembershipUserIds = [],
 }: InfluListProps) {
   return (
@@ -39,10 +51,15 @@ export default function InfluList({
             key={index}
             className="relative bg-white text-center p-4 rounded-2xl border border-gray-200 shadow-[0_6px_20px_rgba(0,0,0,0.12)] transform transition-all duration-300 ease-in-out hover:scale-[1.03] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] flex flex-col"
           >
-            <button className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-lightgray text-teal hover:text-red-500 rounded-full shadow-sm">
+            {/* Nút x */}
+            <button
+  onClick={() => onMoveToEnd(influencer.userId)}
+              className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-lightgray text-teal hover:text-red-500 rounded-full shadow-sm"
+            >
               <X size={18} />
             </button>
 
+            {/* Avatar */}
             <div className="relative w-40 h-40 mx-auto">
               <div className="w-full h-full rounded-full overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.08)] border border-gray-200">
                 <img
@@ -84,13 +101,51 @@ export default function InfluList({
 
             <p className="text-[13px] text-black mt-1">
               Lĩnh vực:{" "}
-              {influencer.fieldNames && influencer.fieldNames.length > 0
+              {influencer.fieldNames?.length
                 ? influencer.fieldNames.join(" | ")
                 : "Không có"}
             </p>
 
+            {influencer.linkmxh && influencer.linkmxh.length > 0 ? (
+              <div className="flex justify-center gap-3 mt-1">
+                {[
+                  { name: "facebook", Icon: FaFacebook },
+                  { name: "instagram", Icon: FaInstagram },
+                  { name: "youtube", Icon: FaYoutube },
+                  { name: "tiktok", Icon: FaTiktok },
+                  { name: "whatsapp", Icon: FaWhatsapp },
+                ]
+                  .filter(({ name }) =>
+                    influencer.linkmxh?.some((url) =>
+                      url.toLowerCase().includes(name)
+                    )
+                  )
+                  .map(({ name, Icon }) => {
+                    const link = influencer.linkmxh?.find((url) =>
+                      url.toLowerCase().includes(name)
+                    );
+                    return (
+                      <a
+                        key={name}
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={name}
+                        className="w-7 h-7 flex items-center justify-center text-gray-600 hover:text-teal200 transition"
+                      >
+                        <Icon size={22} />
+                      </a>
+                    );
+                  })}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 mt-1 italic mb-1.5">
+                Không có mạng xã hội
+              </p>
+            )}
+
             <button
-              className="mt-auto text-sm text-gray-600 font-semibold rounded-full bg-[#C7D7D3] hover:bg-teal100 hover:text-white px-4 py-1 mx-auto flex items-center justify-center gap-1 leading-none transition-colors duration-200"
+              className="mt-3 text-sm text-gray-600 font-semibold rounded-full bg-[#C7D7D3] hover:bg-teal100 hover:text-white px-4 py-1 mx-auto flex items-center justify-center gap-1 leading-none transition-colors duration-200"
               onClick={() => onConnect(influencer)}
             >
               <UserPlus size={16} />

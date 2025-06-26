@@ -7,12 +7,13 @@ interface Props {
   influencer: {
     influAvatar: string;
     influName: string;
-    freelanceJobId: string;
+    jobId?: string; // dùng khi type === "influ"
+    freelanceJobId?: string; // dùng khi type === "business"
   };
   accessToken: string;
   onClose: () => void;
   onReviewed?: () => void;
-  type?: "business" | "influ";
+  type?: "business" | "influ"; // "influ" = business → influencer, "business" = influencer → business
 }
 
 export default function ReviewPopup({
@@ -20,7 +21,7 @@ export default function ReviewPopup({
   accessToken,
   onClose,
   onReviewed,
-  type = "influ", // Mặc định
+  type = "influ",
 }: Props) {
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
@@ -34,8 +35,21 @@ export default function ReviewPopup({
 
     const endpoint =
       type === "business"
-        ? "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/influ-review-business"
-        : "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/business-review-influ";
+        ? "https://localhost:7035/api/review/influ-review-business"
+        : "https://localhost:7035/api/review/business-review-influ";
+
+    const body =
+      type === "business"
+        ? {
+            freelanceJobId: influencer.freelanceJobId,
+            feedback: comment,
+            rating: rating,
+          }
+        : {
+            jobId: influencer.jobId,
+            feedback: comment,
+            rating: rating,
+          };
 
     try {
       const res = await fetch(endpoint, {
@@ -44,12 +58,10 @@ export default function ReviewPopup({
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({
-          freelanceJobId: influencer.freelanceJobId,
-          feedback: comment,
-          rating: rating,
-        }),
+        body: JSON.stringify(body),
       });
+
+      console.log("DATA SENT:", body);
 
       const data = await res.json();
 

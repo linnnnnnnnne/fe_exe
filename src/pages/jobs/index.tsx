@@ -1,25 +1,11 @@
 import { useEffect, useState } from "react";
 import Headerrr from "../../components/share/Headerrr";
 import ListJobs from "../../components/jobs/ListJobs";
+import type { Job } from "../../components/jobs/ListJobs";
 import Footer from "../../components/share/Footer";
 import { Search } from "lucide-react";
-
-interface Job {
-  title: string;
-  location: string;
-  businessId: string;
-  status?: number;
-  budget?: number;
-  fieldName?: string;
-  business?: {
-    name?: string;
-    logo?: string;
-    address?: string;
-  };
-  businessField?: {
-    fieldId?: string;
-  };
-}
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 
 interface Field {
   id: string;
@@ -39,7 +25,7 @@ export default function JobPage() {
   const [maxBudget, setMaxBudget] = useState("");
 
   useEffect(() => {
-    fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all")
+    fetch("https://localhost:7035/api/field/get-all")
       .then((res) => res.json())
       .then((data) => {
         const fieldList = Array.isArray(data) ? data : data.data;
@@ -68,12 +54,12 @@ export default function JobPage() {
       try {
         let result: Job[] = [];
         if (selectedField === "") {
-          const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all");
+          const res = await fetch("https://localhost:7035/api/jobs/get-all");
           const data = await res.json();
           result = Array.isArray(data) ? data : data.data || [];
         } else {
           const res = await fetch(
-            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/search/by-field-name?fieldName=${encodeURIComponent(
+            `https://localhost:7035/api/jobs/search/by-field-name?fieldName=${encodeURIComponent(
               selectedField
             )}`
           );
@@ -93,28 +79,31 @@ export default function JobPage() {
   const handleFilter = async () => {
     setLoading(true);
     try {
-      let url = "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/filter/by-budget?";
-      if (minBudget) url += `minBudget=${minBudget}&`;
-      if (maxBudget) url += `maxBudget=${maxBudget}&`;
+      const res = await fetch("https://localhost:7035/api/jobs/get-all");
+      const data = await res.json();
+      let allJobs: Job[] = Array.isArray(data) ? data : data.data || [];
 
-      const res = await fetch(url);
-      const budgetData = await res.json();
-      const budgetJobs: Job[] = Array.isArray(budgetData)
-        ? budgetData
-        : budgetData.data || [];
+      allJobs = enrichJobsWithFieldName(allJobs);
 
-      let result = budgetJobs;
-      if (selectedField) {
-        result = budgetJobs.filter(
-          (job) =>
-            job.business?.name
-              ?.toLowerCase()
-              .includes(selectedField.toLowerCase()) ||
-            job.title?.toLowerCase().includes(selectedField.toLowerCase())
+      let result = allJobs;
+
+      if (minBudget || maxBudget) {
+        const min = parseFloat(minBudget) || 0;
+        const max = parseFloat(maxBudget) || Infinity;
+        result = result.filter((job) => {
+          const budget = Number(job.budget || 0);
+          return budget >= min && budget <= max;
+        });
+      }
+
+      if (selectedField && selectedField !== "Tất cả") {
+        const keyword = selectedField.toLowerCase();
+        result = result.filter((job) =>
+          job.fieldName?.toLowerCase().includes(keyword)
         );
       }
 
-      setJobs(enrichJobsWithFieldName(result));
+      setJobs(result);
     } catch (err) {
       console.error("Lỗi lọc ngân sách:", err);
     }
@@ -126,7 +115,7 @@ export default function JobPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/search/by-business-name?businessName=${encodeURIComponent(
+        `https://localhost:7035/api/jobs/search/by-business-name?businessName=${encodeURIComponent(
           searchQuery
         )}`
       );
@@ -144,7 +133,7 @@ export default function JobPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/filter/by-location?location=${encodeURIComponent(
+        `https://localhost:7035/api/jobs/filter/by-location?location=${encodeURIComponent(
           locationQuery
         )}`
       );
@@ -161,7 +150,7 @@ export default function JobPage() {
     if (statusValue === "") return;
     setLoading(true);
     try {
-      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all");
+      const res = await fetch("https://localhost:7035/api/jobs/get-all");
       const data = await res.json();
       const allJobs: Job[] = Array.isArray(data) ? data : data.data || [];
 
@@ -179,7 +168,7 @@ export default function JobPage() {
   const handleCombinedSearch = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all");
+      const res = await fetch("https://localhost:7035/api/jobs/get-all");
       const data = await res.json();
       let allJobs: Job[] = Array.isArray(data) ? data : data.data || [];
 
@@ -241,7 +230,7 @@ export default function JobPage() {
         <div className="flex gap-[60px] items-stretch font-montserrat mb-20 px-[30px]">
           <aside className="w-full lg:w-[440px] mt-[25px]">
             <div className="bg-[#C7D7D3] rounded-xl p-4 shadow-lg">
-              <div className="px-6 pt-0 pb-6 text-teal space-y-6 mb-1.75">
+              <div className="px-6 pt-0 text-teal space-y-6 mb-1.75">
                 <div>
                   <p className="font-bold text-xl mb-3">Lĩnh vực hoạt động</p>
                   <div className="flex flex-wrap gap-2">
@@ -272,29 +261,50 @@ export default function JobPage() {
                 </div>
 
                 <div>
-                  <p className="font-bold text-xl mb-2">Mức lương kỳ vọng</p>
-                  <div className="flex gap-2">
-                    <input
-                      type="number"
-                      placeholder="tối thiểu"
-                      className="w-full p-2 border rounded-md"
-                      value={minBudget}
-                      onChange={(e) => setMinBudget(e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      placeholder="tối đa"
-                      className="w-full p-2 border rounded-md"
-                      value={maxBudget}
-                      onChange={(e) => setMaxBudget(e.target.value)}
-                    />
+                  {/* Mức lương kỳ vọng (dùng thanh trượt, không có nút áp dụng) */}
+                  <div className="mb-6">
+                    <h2 className="text-lg font-semibold text-teal mb-2">
+                      Mức lương kỳ vọng
+                    </h2>
+                    <div className="text-sm text-gray-700 mb-2">
+                      Từ {Number(minBudget).toLocaleString()} đến{" "}
+                      {Number(maxBudget || 50000000).toLocaleString()} VND
+                    </div>
+                    <div className="px-2 pt-1 pb-4">
+                      <Slider
+                        range
+                        min={0}
+                        max={50000000}
+                        step={100000}
+                        value={[
+                          Number(minBudget) || 0,
+                          Number(maxBudget) || 50000000,
+                        ]}
+                        onChange={(values: number | number[]) => {
+                          if (Array.isArray(values)) {
+                            setMinBudget(values[0].toString());
+                            setMaxBudget(values[1].toString());
+                          }
+                        }}
+                        onAfterChange={handleFilter}
+                        trackStyle={[{ backgroundColor: "#0f766e" }]}
+                        handleStyle={[
+                          {
+                            borderColor: "#0f766e",
+                            backgroundColor: "#0f766e",
+                          },
+                          {
+                            borderColor: "#0f766e",
+                            backgroundColor: "#0f766e",
+                          },
+                        ]}
+                        railStyle={{ backgroundColor: "#ccc" }}
+                      />
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Kéo 2 đầu để chọn khoảng lương mong muốn
+                    </div>
                   </div>
-                  <button
-                    onClick={handleFilter}
-                    className="mt-2 w-full bg-teal text-white py-2 rounded hover:bg-teal200 transition"
-                  >
-                    Áp dụng
-                  </button>
                 </div>
               </div>
             </div>

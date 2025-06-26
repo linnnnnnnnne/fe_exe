@@ -32,6 +32,7 @@ interface JobListProps {
   itemsPerPage: number;
   reviews: any[];
   influMap: { [id: string]: any };
+  hasMembership: boolean;
 }
 
 export default function JobList({
@@ -45,6 +46,7 @@ export default function JobList({
   itemsPerPage,
   reviews,
   influMap,
+  hasMembership,
 }: JobListProps) {
   const handleUpdateJob = (job: Job) => {
     setSelectedJob(job);
@@ -55,6 +57,13 @@ export default function JobList({
     const jobToDelete = jobs.find((j) => j.id === jobId);
     if (!jobToDelete) return;
 
+    if (jobToDelete.status === 1 || jobToDelete.status === 2) {
+      toast.warning(
+        "Không thể xóa công việc đang thực hiện hoặc đã hoàn thành."
+      );
+      return;
+    }
+
     if (confirm(`Bạn có chắc muốn xóa công việc "${jobToDelete.title}"?`)) {
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
@@ -62,7 +71,7 @@ export default function JobList({
         return;
       }
 
-      fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/delete-job/${jobId}`, {
+      fetch(`https://localhost:7035/api/jobs/delete-job/${jobId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -165,10 +174,19 @@ export default function JobList({
           {job.status === 2 && (
             <div className="mt-3 bg-white border p-3 rounded-lg shadow-sm text-sm space-y-1">
               <strong>Đánh giá từ đối tác:</strong>
-              {reviews.find((r) => r.jobId === job.id) ? (
-                (() => {
-                  const review = reviews.find((r) => r.jobId === job.id);
-                  const influ = review && influMap[review.influId];
+              {(() => {
+                const review = reviews.find((r) => r.jobId === job.id);
+                const influ = review && influMap[review.influId];
+
+                if (!hasMembership) {
+                  return (
+                    <p className="text-gray-500 italic">
+                      Hãy nâng cấp tài khoản để xem review từ đối tác của bạn
+                    </p>
+                  );
+                }
+
+                if (review) {
                   return (
                     <div className="mt-1 flex items-start gap-3">
                       <img
@@ -196,19 +214,26 @@ export default function JobList({
                             ))}
                           </div>
                         </div>
-
-                        <div className="text-gray-700 mt-1 italic">
-                          {review?.feedback
-                            ? `"${review.feedback}"`
-                            : "Hãy nâng cấp tài khoản để xem review từ đối tác"}
+                        <div className="text-gray-700 mt-1">
+                          {review.feedback ? (
+                            <span className="italic">"{review.feedback}"</span>
+                          ) : (
+                            <span className="text-gray-500">
+                              Hiện tại chưa có review từ đối tác
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
                   );
-                })()
-              ) : (
-                <p className="text-gray-500 italic">"Hãy nâng cấp tài khoản để xem đánh giá từ đối tác của bạn"</p>
-              )}
+                }
+
+                return (
+                  <p className="text-gray-500">
+                    Hiện tại chưa có review từ đối tác
+                  </p>
+                );
+              })()}
             </div>
           )}
         </div>

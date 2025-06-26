@@ -52,7 +52,7 @@ export default function ExploreInflu() {
     const fetchMembershipUsers = async () => {
       try {
         const res = await fetch(
-          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/influencers"
+          "https://localhost:7035/api/membership/influencers"
         );
         const json = await res.json();
 
@@ -72,7 +72,7 @@ export default function ExploreInflu() {
   useEffect(() => {
     const fetchFieldOptions = async () => {
       try {
-        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all");
+        const res = await fetch("https://localhost:7035/api/field/get-all");
         const json = await res.json();
         if (json.isSuccess && Array.isArray(json.data)) {
           const names = json.data
@@ -92,7 +92,7 @@ export default function ExploreInflu() {
     const fetchInfluencers = async () => {
       try {
         const res = await fetch(
-          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/search-by-follower?minFollower=${minFollower}&maxFollower=${maxFollower}`
+          `https://localhost:7035/api/influ/search-by-follower?minFollower=${minFollower}&maxFollower=${maxFollower}`
         );
         const json = await res.json();
 
@@ -100,10 +100,12 @@ export default function ExploreInflu() {
           const mapped = await Promise.all(
             json.data.map(async (i: any) => {
               let fieldNames: string[] = [];
+              let linkmxh: string[] = [];
 
+              // 🎯 Fetch lĩnh vực
               try {
                 const fieldRes = await fetch(
-                  `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${i.influId}`
+                  `https://localhost:7035/api/field/get-all-field-of-influ/${i.influId}`
                 );
                 const fieldJson = await fieldRes.json();
                 if (fieldJson.isSuccess && Array.isArray(fieldJson.data)) {
@@ -118,6 +120,25 @@ export default function ExploreInflu() {
                 );
               }
 
+              // ✅ Fetch linkmxh từ userId
+              try {
+                const detailRes = await fetch(
+                  `https://localhost:7035/api/influ/get-influ-by-userId/${i.userId}`
+                );
+                const detailJson = await detailRes.json();
+                if (
+                  detailJson.isSuccess &&
+                  Array.isArray(detailJson.data.linkmxh)
+                ) {
+                  linkmxh = detailJson.data.linkmxh;
+                }
+              } catch (err) {
+                console.error(
+                  `Error fetching linkmxh for user ${i.userId}`,
+                  err
+                );
+              }
+
               return {
                 userId: i.userId,
                 name: i.name,
@@ -127,6 +148,7 @@ export default function ExploreInflu() {
                 area: i.area || "",
                 linkImage: i.linkImage,
                 fieldNames,
+                linkmxh,
               };
             })
           );
@@ -152,8 +174,8 @@ export default function ExploreInflu() {
     if (!creatorId) return alert("Bạn chưa đăng nhập");
 
     const [resBusiness, resInflu] = await Promise.all([
-      fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/all"),
-      fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/all"),
+      fetch("https://localhost:7035/api/business/all"),
+      fetch("https://localhost:7035/api/influ/all"),
     ]);
     const businessData = await resBusiness.json();
     const influData = await resInflu.json();
@@ -179,7 +201,7 @@ export default function ExploreInflu() {
 
     try {
       const resConv = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/conversation/user_conversations?userId=${creatorId}`
+        `https://localhost:7035/api/conversation/user_conversations?userId=${creatorId}`
       );
       const dataConv = await resConv.json();
       const existed = dataConv?.data?.find(
@@ -191,7 +213,7 @@ export default function ExploreInflu() {
 
         try {
           const msgRes = await fetch(
-            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/message/conversation_messages?conversationId=${convId}&pageNumber=1&pageSize=50`
+            `https://localhost:7035/api/message/conversation_messages?conversationId=${convId}&pageNumber=1&pageSize=50`
           );
           const msgData = await msgRes.json();
           const rawMessages = msgData?.data?.items || [];
@@ -222,7 +244,7 @@ export default function ExploreInflu() {
 
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/conversation/create?creatorId=${creatorId}&name=${conversationName}&isGroup=false`,
+        `https://localhost:7035/api/conversation/create?creatorId=${creatorId}&name=${conversationName}&isGroup=false`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -274,6 +296,19 @@ export default function ExploreInflu() {
         ...currentItems.filter((i) => i.userId !== highlightInfluencer.userId),
       ]
     : currentItems;
+
+  const [movedUserIds, setMovedUserIds] = useState<string[]>([]);
+  const handleMoveToEndNoPageChange = (userId: string) => {
+    setInfluencers((prev) => {
+      const newList = [...prev];
+      const index = newList.findIndex((inf) => inf.userId === userId);
+      if (index !== -1) {
+        const [removed] = newList.splice(index, 1);
+        newList.push(removed); // Đẩy xuống cuối
+      }
+      return newList;
+    });
+  };
 
   return (
     <section className="w-full font-montserrat mt-0">
@@ -394,8 +429,10 @@ export default function ExploreInflu() {
             items={combinedItems}
             currentPage={currentPage}
             totalPages={totalPages}
+            itemsPerPage={itemsPerPage}
             onPageChange={(page) => setCurrentPage(page)}
             onConnect={handleConnect}
+            onMoveToEnd={handleMoveToEndNoPageChange}
             highlightMembershipUserIds={membershipUserIds}
           />
 

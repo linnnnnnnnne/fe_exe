@@ -16,12 +16,11 @@ export default function ReviewCard({
   jobTitle,
 }: ReviewCardProps) {
   return (
-    <div className="bg-white rounded-xl shadow p-3 border border-gray-100 hover:shadow-md transition-shadow w-full">
       <div className="flex items-center gap-3">
         <img
           src={avatar}
           alt="avatar"
-          className="w-12 h-12 mt-0 ml-1 rounded-full object-cover"
+          className="w-12 h-12 mt-0 ml-1 mb-6 rounded-full object-cover"
         />
         <div className="flex flex-col ml-1">
           <h3 className="font-semibold text-gray-800 leading-tight mb-1 mt-0">
@@ -44,12 +43,13 @@ export default function ReviewCard({
               />
             ))}
           </div>
-        </div>
-      </div>
 
-      <p className="text-sm text-gray-700 italic mt-2 mb-1 ml-1">
+          <p className="text-sm text-gray-700 italic mt-2 mb-0 ">
         “{feedback?.trim() || "Không có nhận xét"}”
       </p>
+        </div>
+
+
     </div>
   );
 }
