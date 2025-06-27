@@ -17,6 +17,7 @@ const ProfileKOC = lazy(() => import('../pages/profile/koc'));
 const ProfileBS = lazy(() => import('../pages/profile/bs'));
 const HistoryBS = lazy(() => import('../pages/history/bs'));
 const HistoryKOC = lazy(() => import('../pages/history/koc'));
+const SuccessPage = lazy(() => import('../components/login/SuccessPage'));
 
 
 export default function AppRouter() {
@@ -81,6 +82,10 @@ export default function AppRouter() {
         {
           path: '/history_koc',
           element: <HistoryKOC />
+        },
+        {
+          path: '/success',
+          element: <SuccessPage />
         },
       ]
     }

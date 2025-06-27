@@ -1,12 +1,6 @@
 import { X, MapPin, UserPlus, Star } from "lucide-react";
 import Pagination from "../share/Pagination";
-import {
-  FaFacebook,
-  FaInstagram,
-  FaYoutube,
-  FaTiktok,
-  FaWhatsapp,
-} from "react-icons/fa";
+
 
 type Influencer = {
   name: string;
@@ -111,43 +105,7 @@ export default function InfluList({
                 : "Không có"}
             </p>
 
-            {influencer.linkmxh && influencer.linkmxh.length > 0 ? (
-              <div className="flex justify-center gap-3 mt-1">
-                {[FaFacebook, FaInstagram, FaYoutube, FaTiktok, FaWhatsapp].map(
-                  (Icon, idx) => {
-                    const platforms = [
-                      "facebook",
-                      "instagram",
-                      "youtube",
-                      "tiktok",
-                      "whatsapp",
-                    ];
-                    const name = platforms[idx];
-                    const link = influencer.linkmxh?.find((url) =>
-                      url.toLowerCase().includes(name)
-                    );
-                    return (
-                      link && (
-                        <a
-                          key={name}
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title={name}
-                          className="w-7 h-7 flex items-center justify-center text-gray-600 hover:text-teal200 transition"
-                        >
-                          <Icon size={22} />
-                        </a>
-                      )
-                    );
-                  }
-                )}
-              </div>
-            ) : (
-              <p className="text-sm text-gray-500 mt-1 italic mb-1.5">
-                Không có mạng xã hội
-              </p>
-            )}
+            
 
             <button
               className="mt-3 text-sm text-gray-600 font-semibold rounded-full bg-[#C7D7D3] hover:bg-teal100 hover:text-white px-4 py-1 mx-auto flex items-center justify-center gap-1 leading-none transition-colors duration-200"

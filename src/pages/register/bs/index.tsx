@@ -14,7 +14,7 @@ interface Field {
 export default function RegisterBusinessForm() {
   const [agree, setAgree] = useState(false);
   const [fields, setFields] = useState<Field[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false); 
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -146,7 +146,13 @@ export default function RegisterBusinessForm() {
       const result = await res.json();
 
       if (res.ok && result.isSuccess) {
-        toast.success("Đăng ký thành công! Vui lòng đợi duyệt.");
+        toast.success(
+          <span>
+            Đăng ký thành công! Vui lòng chờ{" "}
+            <span className="font-buthick text-teal">InfluencerHub</span> kiểm
+            tra. Sau đó hãy thử đăng nhập lại.
+          </span>
+        );
       } else {
         toast.error(result.message || "Đăng ký thất bại. Vui lòng thử lại!");
       }

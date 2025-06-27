@@ -47,42 +47,43 @@ export default function RegisterKOCForm() {
       .catch((err) => console.error("Failed to fetch fields:", err));
   }, []);
 
-const isValidForm = () => {
-  const requiredFields = [
-    "email",
-    "password",
-    "confirmPassword",
-    "cccd",
-    "name",
-    "nickName",
-    "dateOfBirth",
-    "gender",
-    "phoneNumber",
-    "linkImage",
-    "portfolio_link",
-  ];
+  const isValidForm = () => {
+    const requiredFields = [
+      "email",
+      "password",
+      "confirmPassword",
+      "cccd",
+      "name",
+      "nickName",
+      "dateOfBirth",
+      "gender",
+      "phoneNumber",
+      "linkImage",
+      "portfolio_link",
+    ];
 
-  const allFilled = requiredFields.every((key) => (formData as any)[key]);
-  const hasSelectedField = formData.fieldIds.length > 0;
-  const hasSocial = formData.facebook || formData.instagram || formData.tiktok;
-  const passwordMatch = formData.password === formData.confirmPassword;
-  const passwordLengthValid = formData.password.length >= 6;
-  const validPhone = /^0\d{9}$/.test(formData.phoneNumber);
-  const validEmail = /^[^\s@]+@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com|[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(
-    formData.email
-  );
+    const allFilled = requiredFields.every((key) => (formData as any)[key]);
+    const hasSelectedField = formData.fieldIds.length > 0;
+    const hasSocial =
+      formData.facebook || formData.instagram || formData.tiktok;
+    const passwordMatch = formData.password === formData.confirmPassword;
+    const passwordLengthValid = formData.password.length >= 6;
+    const validPhone = /^0\d{9}$/.test(formData.phoneNumber);
+    const validEmail =
+      /^[^\s@]+@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com|[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(
+        formData.email
+      );
 
-  return (
-    allFilled &&
-    hasSocial &&
-    passwordMatch &&
-    passwordLengthValid &&
-    validPhone &&
-    validEmail &&
-    hasSelectedField
-  );
-};
-
+    return (
+      allFilled &&
+      hasSocial &&
+      passwordMatch &&
+      passwordLengthValid &&
+      validPhone &&
+      validEmail &&
+      hasSelectedField
+    );
+  };
 
   const handleSubmit = useCallback(async () => {
     if (!isValidForm()) {
@@ -119,7 +120,11 @@ const isValidForm = () => {
       await createInflu(payload);
 
       toast.success(
-        "Tài khoản của bạn đã được tạo thành công. Vui lòng chờ duyệt!"
+        <span>
+          Đăng ký thành công! Vui lòng chờ{" "}
+          <span className="font-buthick text-teal">InfluencerHub</span> kiểm tra.
+          Sau đó hãy thử đăng nhập lại.
+        </span>
       );
     } catch (err: any) {
       toast.error(err.message || "Đăng ký thất bại, vui lòng thử lại!");
