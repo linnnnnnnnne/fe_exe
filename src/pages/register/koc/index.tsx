@@ -122,10 +122,14 @@ export default function RegisterKOCForm() {
       toast.success(
         <span>
           Đăng ký thành công! Vui lòng chờ{" "}
-          <span className="font-buthick text-teal">InfluencerHub</span> kiểm tra.
-          Sau đó hãy thử đăng nhập lại.
+          <span className="font-buthick text-teal">InfluencerHub</span> kiểm
+          tra. Sau đó hãy thử đăng nhập lại.
         </span>
       );
+
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 5000);
     } catch (err: any) {
       toast.error(err.message || "Đăng ký thất bại, vui lòng thử lại!");
     }

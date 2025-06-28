@@ -1,4 +1,3 @@
-import { Search } from "lucide-react";
 
 const Hero = () => {
   return (
@@ -19,16 +18,7 @@ const Hero = () => {
               </div>
             </div>
           </h1>
-          <div className="flex bg-white rounded-lg overflow-hidden w-full max-w-[620px] h-[50px] shadow">
-            <input
-              type="text"
-              placeholder="Tìm kiếm công việc phù hợp"
-              className="flex-1 px-4 py-3 outline-none text-black text-lg placeholder:text-[#B5B5B5]"
-            />
-            <button className="bg-teal text-white px-6 flex items-center justify-center">
-              <Search className="w-6 h-6" />
-            </button>
-          </div>
+          
           <button
             className="mt-2 bg-teal text-white px-6 py-3 rounded-xl text-lg font-semibold w-fit"
             onClick={() => {

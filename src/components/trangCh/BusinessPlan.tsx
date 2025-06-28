@@ -34,7 +34,7 @@ const BusinessPlan = () => {
               Nghiệp
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 mb-10">
               {features.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-4">
                   <CheckCircle className="text-green-500 w-6 h-6 shrink-0 " />
@@ -48,9 +48,7 @@ const BusinessPlan = () => {
               ))}
             </div>
 
-            <button className="mt-10 px-6 py-3 bg-teal text-white font-semibold rounded-md hover:opacity-90 transition">
-              Thử Ngay
-            </button>
+            
           </div>
 
           {/* RIGHT IMAGE */}

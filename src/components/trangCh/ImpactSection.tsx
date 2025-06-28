@@ -1,12 +1,42 @@
-import { type FunctionComponent, useCallback } from "react";
+import {
+  type FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
+import PopAsk from "../login/PopAsk";
 
 const ImpactSection: FunctionComponent = () => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isPopAskOpen, setIsPopAskOpen] = useState(false);
+
+  useEffect(() => {
+    if (isPopAskOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isPopAskOpen]);
+
+  useEffect(() => {
+    const roleFromStorage = localStorage.getItem("role");
+    const userIdFromStorage = localStorage.getItem("userId");
+    const tokenFromStorage = localStorage.getItem("accessToken");
+
+    if (roleFromStorage && userIdFromStorage && tokenFromStorage) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleJoinClick = useCallback(() => {
-    navigate("/login");
-  }, [navigate]);
+    setIsPopAskOpen(true);
+  }, []);
 
   return (
     <div className="w-full py-[80px] flex items-center justify-center bg-white">
@@ -50,22 +80,24 @@ const ImpactSection: FunctionComponent = () => {
           </div>
 
           {/* button */}
-          <div
-            className="absolute top-[800px] left-[calc(50%-200px)] w-[346px] h-[55px] cursor-pointer transition duration-200 ease-in-out hover:scale-105"
-            onClick={handleJoinClick}
-          >
-            <div className="w-full h-full rounded-lg bg-darkslategray-200 hover:bg-darkslategray-300 flex items-center justify-center gap-2 px-4 transition duration-200 ease-in-out">
-              <span className="text-white font-poppins font-bold text-[20px] leading-none">
-                Tham gia
-              </span>
-              <span className="text-white font-buthick text-[23px] leading-none">
-                InfluencerHub
-              </span>
-              <span className="text-white font-poppins font-bold text-[20px] leading-none">
-                ngay
-              </span>
+          {!isLoggedIn && (
+            <div
+              className="absolute top-[800px] left-[calc(50%-200px)] w-[346px] h-[55px] cursor-pointer transition duration-200 ease-in-out hover:scale-105"
+              onClick={handleJoinClick}
+            >
+              <div className="w-full h-full rounded-lg bg-darkslategray-200 hover:bg-darkslategray-300 flex items-center justify-center gap-2 px-4 transition duration-200 ease-in-out">
+                <span className="text-white font-poppins font-bold text-[20px] leading-none">
+                  Tham gia
+                </span>
+                <span className="text-white font-buthick text-[23px] leading-none">
+                  InfluencerHub
+                </span>
+                <span className="text-white font-poppins font-bold text-[20px] leading-none">
+                  ngay
+                </span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* tiềm năng  */}
@@ -129,6 +161,9 @@ const ImpactSection: FunctionComponent = () => {
           </div>
         </div>
       </div>
+      {!isLoggedIn && isPopAskOpen && (
+        <PopAsk onClose={() => setIsPopAskOpen(false)} />
+      )}
     </div>
   );
 };

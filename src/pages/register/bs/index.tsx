@@ -153,6 +153,10 @@ export default function RegisterBusinessForm() {
             tra. Sau đó hãy thử đăng nhập lại.
           </span>
         );
+
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 5000);
       } else {
         toast.error(result.message || "Đăng ký thất bại. Vui lòng thử lại!");
       }

@@ -1,8 +1,10 @@
 import { useEffect, useState, type FunctionComponent } from "react";
 import { Users } from "lucide-react";
+import PopAsk from "../login/PopAsk";
 
 const Header: FunctionComponent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isPopAskOpen, setIsPopAskOpen] = useState(false);
 
   useEffect(() => {
     const roleFromStorage = localStorage.getItem("role");
@@ -13,6 +15,18 @@ const Header: FunctionComponent = () => {
       setIsLoggedIn(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (isPopAskOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isPopAskOpen]);
 
   return (
     <header className="w-full bg-[#FFFFFFA3] shadow-md fixed z-50">
@@ -43,17 +57,19 @@ const Header: FunctionComponent = () => {
               <a href="/login" className="relative text-teal no-underline">
                 Đăng nhập
               </a>
-              <a
-                href="/login#"
+              <button
+                onClick={() => setIsPopAskOpen(true)}
                 className="flex items-center gap-2 bg-[#04675F] hover:bg-[#03504A] text-white px-5 py-2 rounded-lg font-poppins text-xl no-underline transition-colors duration-200"
               >
                 <span>Tham gia</span>
                 <Users className="w-6 h-6" stroke="currentColor" />
-              </a>
+              </button>
             </>
           )}
         </nav>
       </div>
+
+      {isPopAskOpen && <PopAsk onClose={() => setIsPopAskOpen(false)} />}
     </header>
   );
 };
