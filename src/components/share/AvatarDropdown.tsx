@@ -23,7 +23,7 @@ export default function AvatarDropdown({ avatarUrl }: { avatarUrl: string }) {
 
       if (res.ok) {
         localStorage.clear();
-        window.location.href = "/login";
+        window.location.href = "/";
       } else {
         alert("Đăng xuất thất bại: " + (data?.message || "Lỗi không xác định"));
       }

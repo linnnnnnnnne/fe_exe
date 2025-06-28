@@ -4,11 +4,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useNavigate } from "react-router-dom";
 import PopAsk from "../login/PopAsk";
 
 const ImpactSection: FunctionComponent = () => {
-  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isPopAskOpen, setIsPopAskOpen] = useState(false);
 
