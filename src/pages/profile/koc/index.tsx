@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Headerrr from "../../../components/share/Headerrr";
 import Footer from "../../../components/share/Footer";
@@ -60,6 +61,11 @@ interface Job {
   fieldName?: string;
 }
 
+interface Field {
+  id: string;
+  name: string;
+}
+
 const getGenderLabel = (gender: number) => {
   switch (gender) {
     case 1:
@@ -92,6 +98,7 @@ const getStatusLabel = (status: number) => {
 
 export default function ProfileKOC() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [koc, setKoc] = useState<KOCProfile | null>(null);
   const [editedKoc, setEditedKoc] = useState<KOCProfile | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -110,6 +117,13 @@ export default function ProfileKOC() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [inProgressJobs, setInProgressJobs] = useState<Job[]>([]);
   const [influId, setInfluId] = useState<string | null>(null);
+  const [fields, setFields] = useState<
+    { fieldId: string; fieldName: string }[]
+  >([]);
+  const [selectedFieldIds, setSelectedFieldIds] = useState<string[]>([]);
+  const [allFields, setAllFields] = useState<
+    { fieldId: string; fieldName: string }[]
+  >([]);
 
   useEffect(() => {
     if (!id) return;
@@ -195,7 +209,7 @@ export default function ProfileKOC() {
       portfolio_link: editedKoc?.portfolio_link || "",
       area: editedKoc?.area || "",
       linkmxh: editedKoc?.linkmxh || [],
-      fieldIds: [],
+      fieldIds: selectedFieldIds,
     };
 
     try {
@@ -220,10 +234,15 @@ export default function ProfileKOC() {
       }
 
       if (res.status === 401) {
-        toast.error("Không có quyền cập nhật (401 Unauthorized)");
+        toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+        navigate("/login");
+        return;
       } else if (res.ok && json?.isSuccess !== false) {
         toast.success("Cập nhật thành công!");
         setKoc(editedKoc);
+        setFields(
+          allFields.filter((f) => selectedFieldIds.includes(f.fieldId))
+        );
         setIsEditing(false);
       } else {
         toast.error(json?.message || "Cập nhật thất bại!");
@@ -243,7 +262,7 @@ export default function ProfileKOC() {
       .then((data) => {
         if (data?.data) {
           setKoc(data.data);
-          setInfluId(data.data.influId); // ✅ Lưu influId
+          setInfluId(data.data.influId); 
         }
       });
 
@@ -267,7 +286,7 @@ export default function ProfileKOC() {
   useEffect(() => {
     if (!influId) return;
 
-    const baseUrl = "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
+    const baseUrl = "https://localhost:7035";
 
     // Jobs hoàn thành
     fetch(`${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/completed`)
@@ -293,6 +312,47 @@ export default function ProfileKOC() {
       })
       .catch((err) => console.error("Lỗi job in-progress:", err));
   }, [influId]);
+
+  useEffect(() => {
+    if (!influId) return;
+
+    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.isSuccess && Array.isArray(data.data)) {
+          const normalizedFields = data.data.map((f: Field) => ({
+            fieldId: f.id,
+            fieldName: f.name,
+          }));
+
+          setFields(normalizedFields);
+          setSelectedFieldIds(
+            normalizedFields.map((f: { fieldId: string }) => f.fieldId)
+          );
+          console.log("field data:", normalizedFields);
+        }
+      })
+      .catch((err) => console.error("Lỗi tải lĩnh vực của influencer:", err));
+  }, [influId]);
+
+  // 📦 Tải tất cả lĩnh vực (chỉ khi chỉnh sửa)
+  useEffect(() => {
+    if (!isEditing) return;
+
+    fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.isSuccess && Array.isArray(data.data)) {
+          const normalizedAllFields = data.data.map((f: Field) => ({
+            fieldId: f.id,
+            fieldName: f.name,
+          }));
+
+          setAllFields(normalizedAllFields);
+        }
+      })
+      .catch((err) => console.error("Lỗi tải danh sách lĩnh vực:", err));
+  }, [isEditing]);
 
   if (!koc) return <div className="text-center mt-10">Đang tải dữ liệu...</div>;
 
@@ -536,6 +596,53 @@ export default function ProfileKOC() {
               </div>
 
               <div className="flex items-start gap-2">
+                {isEditing ? (
+                  <div className="grid grid-cols-2 gap-3 w-full mb-2 mt-1">
+                    {allFields.map((field, index) => (
+                      <label
+                        key={field.fieldId ?? index}
+                        className="flex items-center gap-1 text-sm"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedFieldIds.includes(field.fieldId)}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setSelectedFieldIds((prev) =>
+                              checked
+                                ? [...prev, field.fieldId]
+                                : prev.filter((id) => id !== field.fieldId)
+                            );
+                          }}
+                        />
+                        {field.fieldName}
+                      </label>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex items-start gap-2">
+                    <span className="w-32 mt-1">Lĩnh vực:</span>
+                    <div className="flex flex-wrap gap-1 w-full">
+                      {fields.length > 0 ? (
+                        fields.map((field, index) => (
+                          <span
+                            key={field.fieldId ?? index}
+                            className="px-0 py-1 bg-teal-50 border border-teal-200 text-teal-800 rounded-md text-sm"
+                          >
+                            {field.fieldName}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-gray-500 italic">
+                          Chưa có lĩnh vực
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-start gap-0">
                 <span className="w-32 mt-1">Portfolio:</span>
                 {isEditing ? (
                   <input

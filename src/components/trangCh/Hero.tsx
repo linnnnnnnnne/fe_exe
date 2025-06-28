@@ -29,7 +29,20 @@ const Hero = () => {
               <Search className="w-6 h-6" />
             </button>
           </div>
-          <button className="mt-2 bg-teal text-white px-6 py-3 rounded-xl text-lg font-semibold w-fit">
+          <button
+            className="mt-2 bg-teal text-white px-6 py-3 rounded-xl text-lg font-semibold w-fit"
+            onClick={() => {
+              const roleFromStorage = localStorage.getItem("role");
+              const userIdFromStorage = localStorage.getItem("userId");
+              const tokenFromStorage = localStorage.getItem("accessToken");
+
+              if (roleFromStorage && userIdFromStorage && tokenFromStorage) {
+                window.location.href = "/home";
+              } else {
+                window.location.href = "/login";
+              }
+            }}
+          >
             XEM THÊM
           </button>
         </div>

@@ -84,7 +84,7 @@ export default function InfluencerHistoryPage() {
       : "";
 
   const getBusinessInfo = async (id: string) => {
-    const baseUrl = "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
+    const baseUrl = "https://localhost:7035";
     try {
       const res = await fetch(
         `${baseUrl}/api/business/get-business-by-id/${id}`,
@@ -109,7 +109,7 @@ export default function InfluencerHistoryPage() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const baseUrl = "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
+        const baseUrl = "https://localhost:7035";
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,

@@ -78,7 +78,10 @@ export default function Header() {
     <header className="w-full bg-teal h-[75px] relative">
       <div className="h-[75px] flex items-center justify-between px-6">
         <div className="flex items-center gap-10">
-          <div className="text-white font-bold text-[28px] font-buthick">
+          <div
+            className="text-white font-bold text-[28px] font-buthick cursor-pointer"
+            onClick={() => (window.location.href = "/")}
+          >
             ih
           </div>
         </div>
