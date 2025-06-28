@@ -40,7 +40,7 @@ export function LoginForm() {
     if (!validateInputs()) return;
     setLoading(true);
     try {
-      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/login", {
+      const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

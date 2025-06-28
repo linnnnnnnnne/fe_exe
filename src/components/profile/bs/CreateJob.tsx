@@ -38,7 +38,7 @@ export default function CreateJob({ businessId, onClose, onCreated }: Props) {
   useEffect(() => {
     const fetchFields = async () => {
       try {
-        const res = await fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`);
+        const res = await fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`);
         const json = await res.json();
 
         if (json?.isSuccess && Array.isArray(json.data)) {
@@ -80,7 +80,7 @@ export default function CreateJob({ businessId, onClose, onCreated }: Props) {
     }
 
     try {
-      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/add-job", {
+      const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/add-job", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

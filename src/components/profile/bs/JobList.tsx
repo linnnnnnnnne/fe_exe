@@ -71,7 +71,7 @@ export default function JobList({
         return;
       }
 
-      fetch(`https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/delete-job/${jobId}`, {
+      fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/delete-job/${jobId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,

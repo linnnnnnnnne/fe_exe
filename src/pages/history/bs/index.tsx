@@ -85,7 +85,7 @@ export default function BusinessHistoryPage() {
 
   const fetchJobs = async () => {
     try {
-      const baseUrl = "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net";
+      const baseUrl = "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -131,7 +131,7 @@ export default function BusinessHistoryPage() {
   const fetchReviewedJobs = async () => {
     try {
       const res = await fetch(
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/rating-of-influ",
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/review/rating-of-influ",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -166,7 +166,7 @@ export default function BusinessHistoryPage() {
   ) => {
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/${jobId}/list-influencers-apply-job`,
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/freelance-jobs/${jobId}/list-influencers-apply-job`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -198,7 +198,7 @@ const confirmComplete = async (freelanceJobId: string) => {
 
     try {
       const res = await fetch(
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/confirm-complete-job",
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/freelance-jobs/confirm-complete-job",
         {
           method: "POST",
           headers: {

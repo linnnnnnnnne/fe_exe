@@ -44,10 +44,10 @@ export default function FreelancerManager() {
 
       try {
         const [influRes, userStatusRes] = await Promise.all([
-          fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/all", {
+          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all", {
             headers: { Authorization: `Bearer ${accessToken}` },
           }),
-          fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/all", {
+          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all", {
             headers: { Authorization: `Bearer ${accessToken}` },
           }),
         ]);
@@ -73,7 +73,7 @@ export default function FreelancerManager() {
 
               try {
                 const detailRes = await fetch(
-                  `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${influ.userId}`,
+                  `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${influ.userId}`,
                   { headers: { Authorization: `Bearer ${accessToken}` } }
                 );
                 const detailData = await detailRes.json();
@@ -83,7 +83,7 @@ export default function FreelancerManager() {
 
               try {
                 const fieldRes = await fetch(
-                  `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influ.influId}`,
+                  `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influ.influId}`,
                   { headers: { Authorization: `Bearer ${accessToken}` } }
                 );
                 const fieldData = await fieldRes.json();
@@ -136,7 +136,7 @@ export default function FreelancerManager() {
 
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/admin/users/${userId}/block?isBlocked=${block}`,
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/admin/users/${userId}/block?isBlocked=${block}`,
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${accessToken}` },

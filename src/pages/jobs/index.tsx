@@ -25,7 +25,7 @@ export default function JobPage() {
   const [maxBudget, setMaxBudget] = useState("");
 
   useEffect(() => {
-    fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all")
+    fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all")
       .then((res) => res.json())
       .then((data) => {
         const fieldList = Array.isArray(data) ? data : data.data;
@@ -54,12 +54,12 @@ export default function JobPage() {
       try {
         let result: Job[] = [];
         if (selectedField === "") {
-          const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all");
+          const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all");
           const data = await res.json();
           result = Array.isArray(data) ? data : data.data || [];
         } else {
           const res = await fetch(
-            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/search/by-field-name?fieldName=${encodeURIComponent(
+            `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/search/by-field-name?fieldName=${encodeURIComponent(
               selectedField
             )}`
           );
@@ -79,7 +79,7 @@ export default function JobPage() {
   const handleFilter = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all");
+      const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all");
       const data = await res.json();
       let allJobs: Job[] = Array.isArray(data) ? data : data.data || [];
 
@@ -115,7 +115,7 @@ export default function JobPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/search/by-business-name?businessName=${encodeURIComponent(
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/search/by-business-name?businessName=${encodeURIComponent(
           searchQuery
         )}`
       );
@@ -133,7 +133,7 @@ export default function JobPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/filter/by-location?location=${encodeURIComponent(
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/filter/by-location?location=${encodeURIComponent(
           locationQuery
         )}`
       );
@@ -150,7 +150,7 @@ export default function JobPage() {
     if (statusValue === "") return;
     setLoading(true);
     try {
-      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all");
+      const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all");
       const data = await res.json();
       const allJobs: Job[] = Array.isArray(data) ? data : data.data || [];
 
@@ -168,7 +168,7 @@ export default function JobPage() {
   const handleCombinedSearch = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all");
+      const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all");
       const data = await res.json();
       let allJobs: Job[] = Array.isArray(data) ? data : data.data || [];
 

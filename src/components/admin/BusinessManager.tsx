@@ -41,13 +41,13 @@ export default function BusinessManager() {
       }
 
       try {
-        const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/all", {
+        const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all", {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
         const result = await res.json();
 
         const userStatusRes = await fetch(
-          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/all",
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all",
           {
             headers: { Authorization: `Bearer ${accessToken}` },
           }
@@ -93,7 +93,7 @@ export default function BusinessManager() {
         businesses.map(async (biz) => {
           try {
             const res = await fetch(
-              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/${biz.id}/representative`,
+              `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/${biz.id}/representative`,
               {
                 headers: { Authorization: `Bearer ${accessToken}` },
               }
@@ -129,7 +129,7 @@ export default function BusinessManager() {
 
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/admin/users/${userId}/block?isBlocked=${block}`,
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/admin/users/${userId}/block?isBlocked=${block}`,
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${accessToken}` },
