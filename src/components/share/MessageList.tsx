@@ -26,6 +26,7 @@ export default function MessageList() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [currentOpenedId, setCurrentOpenedId] = useState<string | null>(null);
 
   const fetchConversations = async () => {
     const userId = localStorage.getItem("userId");
@@ -77,9 +78,16 @@ export default function MessageList() {
               );
               const msgData = await msgRes.json();
               const lastMsg = msgData?.data?.items?.[0];
-              lastMsgContent = lastMsg?.content || "";
 
-              if (lastMsg?.senderID !== userId) {
+              const isSentByMe = lastMsg?.senderID === userId;
+              lastMsgContent = lastMsg?.content
+                ? isSentByMe
+                  ? `Bạn: ${lastMsg.content}`
+                  : lastMsg.content
+                : "";
+
+              const isCurrentConvOpen = conv.conversationID === currentOpenedId;
+              if (lastMsg?.senderID !== userId && !isCurrentConvOpen) {
                 totalUnread += 1;
               }
             } catch (err) {
@@ -154,6 +162,7 @@ export default function MessageList() {
 
       setSelectedConv(conv);
       setConversationId(conv.id);
+      setCurrentOpenedId(conv.id);
       setMessages(msgs);
       setOpen(false);
       setUnreadCount(0); //ẩn badge sau khi mở chat
@@ -161,6 +170,23 @@ export default function MessageList() {
       console.error("Lỗi tải tin nhắn:", err);
     }
   };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loop = async () => {
+      while (isMounted) {
+        await fetchConversations();
+        await new Promise((res) => setTimeout(res, 3000));
+      }
+    };
+
+    loop();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentOpenedId]);
 
   return (
     <>

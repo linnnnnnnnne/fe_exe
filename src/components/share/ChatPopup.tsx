@@ -32,6 +32,50 @@ export default function ChatPopup({
     setMessages(initialMessages);
   }, [conversationId, initialMessages]);
 
+  useEffect(() => {
+  let isMounted = true;
+
+  const loop = async () => {
+    while (isMounted) {
+      try {
+        const res = await fetch(
+          `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/message/conversation_messages?conversationId=${conversationId}&pageNumber=1&pageSize=50`
+        );
+        if (!res.ok) return;
+
+        const data = await res.json();
+        const rawMessages = data?.data?.items || [];
+
+        const updatedMessages: Message[] = rawMessages.map((msg: any) => ({
+          id: msg.messageID,
+          sender:
+            msg.senderID === localStorage.getItem("userId") ? "me" : "other",
+          content: msg.content,
+          time: msg.sentAt,
+        }));
+
+        // Nếu khác với hiện tại thì cập nhật
+        setMessages((prev) => {
+          const prevIds = prev.map((m) => m.id).join(",");
+          const newIds = updatedMessages.map((m) => m.id).join(",");
+          return prevIds !== newIds ? updatedMessages : prev;
+        });
+      } catch (err) {
+        console.error("Lỗi auto cập nhật tin nhắn:", err);
+      }
+
+      await new Promise((res) => setTimeout(res, 1000)); // mỗi 1 giây
+    }
+  };
+
+  loop();
+
+  return () => {
+    isMounted = false;
+  };
+}, [conversationId]);
+
+
   // Auto scroll xuống cuối khi có tin nhắn mới
   useEffect(() => {
     const container = chatContainerRef.current;
