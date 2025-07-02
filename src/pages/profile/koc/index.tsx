@@ -24,6 +24,7 @@ interface Review {
   rating: number;
   businessId: string;
   createdAt?: string;
+  influId: string;
 }
 
 interface KOCProfile {
@@ -126,17 +127,21 @@ export default function ProfileKOC() {
   >([]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !influId) return;
 
     fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/review/review-of-influ/${id}`)
       .then((res) => res.json())
       .then(async (data) => {
         if (data?.isSuccess && Array.isArray(data.data)) {
-          setReviews(data.data);
+          const reviewList = data.data as Review[];
 
-          const reviewList = data.data as { businessId: string }[];
-          const uniqueBusinessIds: string[] = [
-            ...new Set(reviewList.map((r) => r.businessId)),
+          const filtered = reviewList.filter(
+            (review) => review.influId === influId
+          );
+          setReviews(filtered);
+
+          const uniqueBusinessIds = [
+            ...new Set(filtered.map((r) => r.businessId)),
           ];
 
           const businessMapTemp: Record<
@@ -172,7 +177,7 @@ export default function ProfileKOC() {
         }
       })
       .catch((err) => console.error("Lỗi tải đánh giá:", err));
-  }, [id]);
+  }, [id, influId]);
 
   if (userId && token) {
     fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
@@ -262,7 +267,7 @@ export default function ProfileKOC() {
       .then((data) => {
         if (data?.data) {
           setKoc(data.data);
-          setInfluId(data.data.influId); 
+          setInfluId(data.data.influId);
         }
       });
 
@@ -768,52 +773,56 @@ export default function ProfileKOC() {
               ))}
 
             {reviews.length > 0 && (
-              <>
-                {/* Review card container */}
-                <div className="bg-[#F0FAFA] rounded-xl mt-3 shadow space-y-3 px-4 md:px-3 md:py-5 border border-gray-100 hover:shadow-md transition-shadow">
-                  {reviews
-                    .slice((reviewPage - 1) * 4, reviewPage * 4)
-                    .map((review) => {
-                      const business = businessMap[review.businessId];
-                      if (!business) return null;
+  <>
+    <div className="space-y-4 mt-3">
+      {reviews
+        .slice((reviewPage - 1) * 4, reviewPage * 4)
+        .map((review) => {
+          const business = businessMap[review.businessId];
+          if (!business) return null;
 
-                      return (
-                        <ReviewCard
-                          key={review.id}
-                          name={business.name}
-                          avatar={business.logo}
-                          rating={review.rating}
-                          feedback={review.feedback}
-                          jobTitle={business.jobTitle}
-                        />
-                      );
-                    })}
-                </div>
+          return (
+            <div
+              key={review.id}
+              className="bg-[#F0FAFA] rounded-xl shadow px-4 py-5 border border-gray-100"
+            >
+              <ReviewCard
+                name={business.name}
+                avatar={business.logo}
+                rating={review.rating}
+                feedback={review.feedback}
+                jobTitle={business.jobTitle}
+              />
+            </div>
+          );
+        })}
+    </div>
 
-                {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2 mt-4">
-                    {Array.from({ length: totalPages }, (_, i) => {
-                      const pageNum = i + 1;
-                      const isActive = pageNum === reviewPage;
+    {totalPages > 1 && (
+      <div className="flex justify-center items-center gap-2 mt-4">
+        {Array.from({ length: totalPages }, (_, i) => {
+          const pageNum = i + 1;
+          const isActive = pageNum === reviewPage;
 
-                      return (
-                        <button
-                          key={pageNum}
-                          onClick={() => setReviewPage(pageNum)}
-                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                            isActive
-                              ? "bg-teal text-white font-semibold"
-                              : "text-gray-700 hover:text-teal"
-                          }`}
-                        >
-                          {pageNum}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </>
-            )}
+          return (
+            <button
+              key={pageNum}
+              onClick={() => setReviewPage(pageNum)}
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
+                isActive
+                  ? "bg-teal text-white font-semibold"
+                  : "text-gray-700 hover:text-teal"
+              }`}
+            >
+              {pageNum}
+            </button>
+          );
+        })}
+      </div>
+    )}
+  </>
+)}
+
           </div>
 
           {/* Thống kê hoạt động */}

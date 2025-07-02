@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Headerrr from "../../../components/share/Headerrr";
 import Footer from "../../../components/share/Footer";
 import ReviewPopup from "../../../components/history/ReviewPopup";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import {
@@ -370,14 +369,7 @@ export default function InfluencerHistoryPage() {
         <Footer />
       </div>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={false}
-        hideProgressBar
-        closeOnClick
-        draggable
-        pauseOnHover
-      />
+
     </div>
   );
 }

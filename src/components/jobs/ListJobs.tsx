@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { MapPin, Clock4, Star } from "lucide-react";
 import Pagination from "../share/Pagination";
-import BusinessPopup from "./BusinessPopup";
 import JobDetail from "./JobDetail";
+import { useNavigate } from "react-router-dom";
 
 const jobsPerPage = 6;
 
@@ -62,31 +62,17 @@ export default function ListJobs({
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const [highlightMembershipUserIds, setHighlightMembershipUserIds] = useState<
-    string[]
-  >([]);
-
-  const [selectedBusiness, setSelectedBusiness] = useState<{
-    businessId: string;
-    name: string;
-    address?: string;
-    logo?: string;
-    userId?: string;
-  } | null>(null);
-  const [showPopup, setShowPopup] = useState(false);
-
+  const [highlightMembershipUserIds, setHighlightMembershipUserIds] = useState<string[]>([]);
   const [selectedJobDetail, setSelectedJobDetail] = useState<Job | null>(null);
   const [showJobDetail, setShowJobDetail] = useState(false);
 
+  const navigate = useNavigate();
   const useSearch = Array.isArray(searchJobs);
 
   useEffect(() => {
     const fetchMemberships = async () => {
       try {
-        const res = await fetch(
-          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/businesses"
-        );
+        const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/businesses");
         const json = await res.json();
         if (json?.isSuccess && Array.isArray(json.data)) {
           const ids = json.data.map((m: any) => m.userId);
@@ -126,7 +112,7 @@ export default function ListJobs({
   }, [searchJobs, searchLoading]);
 
   useEffect(() => {
-    if (showPopup || showJobDetail) {
+    if (showJobDetail) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -135,31 +121,27 @@ export default function ListJobs({
     return () => {
       document.body.style.overflow = "";
     };
-  }, [showPopup, showJobDetail]);
+  }, [showJobDetail]);
 
   const totalPages = Math.ceil(jobs.length / jobsPerPage);
   const currentJobs = jobs.slice((page - 1) * jobsPerPage, page * jobsPerPage);
 
-  const handleOpenBusinessPopup = (job: Job) => {
-    setSelectedBusiness({
-      businessId: job.businessId,
-      name: job.business?.name || "Không rõ",
-      address: job.business?.address,
-      logo: job.business?.logo,
-      userId: job.business?.userId, 
+  const handleNavigateToBusinessDetail = (job: Job) => {
+    navigate("/business_detail", {
+      state: {
+        businessId: job.businessId,
+        businessName: job.business?.name || "Không rõ",
+        businessAddress: job.business?.address,
+        businessLogo: job.business?.logo,
+        businessUserId: job.business?.userId,
+      },
     });
-    setShowPopup(true);
   };
 
-  if (loading)
-    return <p className="text-center">Đang tải dữ liệu công việc...</p>;
+  if (loading) return <p className="text-center">Đang tải dữ liệu công việc...</p>;
   if (error) return <p className="text-red-600 text-center">{error}</p>;
   if (jobs.length === 0)
-    return (
-      <p className="text-center text-gray-500">
-        Không có công việc nào được hiển thị.
-      </p>
-    );
+    return <p className="text-center text-gray-500">Không có công việc nào được hiển thị.</p>;
 
   return (
     <div className="space-y-6">
@@ -197,9 +179,7 @@ export default function ListJobs({
 
           <div className="flex-1">
             <div className="flex h-[32px] justify-between items-center">
-              <h2 className="font-semibold text-[19px] text-gray-800">
-                {job.title}
-              </h2>
+              <h2 className="font-semibold text-[19px] text-gray-800">{job.title}</h2>
               <span className="text-sm font-medium text-teal ml-4 whitespace-nowrap">
                 {getStatusLabel(job.status)}
               </span>
@@ -207,11 +187,11 @@ export default function ListJobs({
 
             <p className="text-gray-600 mt-0 mb-2 flex justify-between items-center gap-2 flex-wrap">
               <a
-                href="#"
+                href="/business_detail"
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
-                  handleOpenBusinessPopup(job);
+                  handleNavigateToBusinessDetail(job);
                 }}
                 className="no-underline cursor-pointer text-gray-600 hover:text-black"
               >
@@ -260,19 +240,6 @@ export default function ListJobs({
           currentPage={page}
           totalPages={totalPages}
           onPageChange={(p) => setPage(p)}
-        />
-      )}
-
-      {showPopup && selectedBusiness && (
-        <BusinessPopup
-          businessId={selectedBusiness.businessId}
-          businessName={selectedBusiness.name}
-          businessUserId={selectedBusiness.userId}
-          businessAddress={selectedBusiness.address}
-          businessLogo={selectedBusiness.logo}
-          onClose={() => setShowPopup(false)}
-          reviews={[]} 
-          getStatusLabel={getStatusLabel}
         />
       )}
 
