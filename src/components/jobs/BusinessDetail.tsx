@@ -69,7 +69,9 @@ export default function BusinessDetail() {
   useEffect(() => {
     if (!businessId) return;
 
-    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/${businessId}/representative`)
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/${businessId}/representative`
+    )
       .then((res) => res.json())
       .then((rep) => {
         if (rep?.data) setRepresentative(rep.data);
@@ -130,9 +132,12 @@ export default function BusinessDetail() {
 
     if (!token || !viewerId) return;
 
-    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${viewerId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${viewerId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
       .then((res) => res.json())
       .then((mem) => {
         const type = mem?.data?.membershipType?.type ?? 0;

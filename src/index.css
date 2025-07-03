@@ -1,20 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Buthick:wght@400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Buthick:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-@apply leading-[normal] m-0;
+  @apply leading-[normal] m-0;
 }
-@layer base { *, ::before, ::after { border-width: 0; } }
-
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-width: 0;
+  }
+}
 
 @font-face {
-  font-family: 'Buthick';
-  src: url('/fonts/Buthick.otf') format('truetype');
+  font-family: "Buthick";
+  src: url("/fonts/Buthick.otf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -32,13 +37,13 @@ input[type="password"]::-webkit-textfield-decoration-button {
 
 /* ==== Custom Toastify styles using raw CSS ==== */
 .Toastify__toast {
-  width: 640px;                         /* ⬅️ Chiều ngang dài hơn */
+  width: 640px; /* ⬅️ Chiều ngang dài hơn */
   max-width: 95vw;
-  font-size: 18px;                      /* Chữ to */
-  padding: 2rem;                        /* Nhiều padding hơn */
-  border-radius: 1.25rem;               /* Bo nhiều hơn */
+  font-size: 18px; /* Chữ to */
+  padding: 2rem; /* Nhiều padding hơn */
+  border-radius: 1.25rem; /* Bo nhiều hơn */
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); /* Đổ bóng lớn */
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   background-color: #fff;
   border: 1px solid #d1d5db;
   color: #000;
@@ -46,22 +51,22 @@ input[type="password"]::-webkit-textfield-decoration-button {
 }
 
 .Toastify__toast-body {
-  font-size: 20px;                      /* Chữ chính to rõ */
+  font-size: 20px; /* Chữ chính to rõ */
   font-weight: 600;
   line-height: 1.6;
 }
 
 .Toastify__close-button {
-  font-size: 1.5rem;                    /* Nút X to hơn */
+  font-size: 1.5rem; /* Nút X to hơn */
   color: #9d9d9d;
 }
 
 .Toastify__close-button:hover {
-  color: #0D564F;
+  color: #0d564f;
 }
 
 .Toastify__toast--success {
-  border-left: 10px solid #16a34a;      /* Viền trái to, màu xanh */
+  border-left: 10px solid #16a34a; /* Viền trái to, màu xanh */
 }
 
 .Toastify__toast--error {
@@ -85,4 +90,11 @@ input[type="password"]::-webkit-textfield-decoration-button {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }

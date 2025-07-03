@@ -61,8 +61,6 @@ export default function ReviewPopup({
         body: JSON.stringify(body),
       });
 
-      console.log("DATA SENT:", body);
-
       const data = await res.json();
 
       if (res.ok && data?.isSuccess) {

@@ -39,9 +39,12 @@ export default function InfluDetail() {
   useEffect(() => {
     if (!viewerId || !token) return;
 
-    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${viewerId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${viewerId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
       .then((res) => res.json())
       .then((mem) => {
         setCurrentType(mem?.data?.membershipType?.type ?? null);
@@ -52,14 +55,17 @@ export default function InfluDetail() {
   useEffect(() => {
     if (!data?.influId || !token) return;
 
-    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/review/review-of-influ/${viewerId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/review/review-of-influ/${viewerId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
       .then((res) => res.json())
       .then(async (res) => {
         if (res?.isSuccess && Array.isArray(res.data)) {
           const reviewList = res.data as Review[];
-          const filtered = reviewList.filter(r => r.influId === data.influId);
+          const filtered = reviewList.filter((r) => r.influId === data.influId);
           setReviews(filtered);
 
           const uniqueBusinessIds = [
@@ -79,7 +85,10 @@ export default function InfluDetail() {
               const jobJson = await jobRes.json();
               if (jobJson?.isSuccess && Array.isArray(jobJson.data)) {
                 const job = jobJson.data.find(
-                  (j: any) => j.business?.name && j.business?.logo && j.title
+                  (j: {
+                    business?: { name?: string; logo?: string };
+                    title?: string;
+                  }) => j.business?.name && j.business?.logo && j.title
                 );
                 if (job) {
                   tempMap[bid] = {

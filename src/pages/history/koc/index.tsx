@@ -370,8 +370,6 @@ export default function InfluencerHistoryPage() {
       <div className="mt-[80px]">
         <Footer />
       </div>
-
-
     </div>
   );
 }
