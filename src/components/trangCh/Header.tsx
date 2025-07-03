@@ -34,7 +34,7 @@ const Header: FunctionComponent = () => {
         {/* Logo chuyển về trang /h */}
         <div
           className="cursor-pointer"
-          onClick={() => (window.location.href = "/h")}
+          onClick={() => (window.location.href = " ")}
         >
           <img src="logo.png" alt="logo" className="h-[70px]" />
         </div>

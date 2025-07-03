@@ -19,7 +19,7 @@
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "fireworks-js": "^2.10.8",
-    "framer-motion": "^12.22.0",
+    "framer-motion": "^12.23.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.511.0",
     "node-fetch": "^3.3.2",
