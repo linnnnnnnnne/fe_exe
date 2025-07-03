@@ -1,6 +1,19 @@
 import fetch from "node-fetch";
 
 export default async function handler(req, res) {
+  // Thiết lập CORS cho mọi response
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Requested-With"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "OPTIONS, POST");
+
+  // Trả lời nhanh cho pre-flight OPTIONS
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+
   // Chỉ cho phép POST requests
   if (req.method !== "POST") {
     return res.status(405).end();
