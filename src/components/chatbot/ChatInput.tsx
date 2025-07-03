@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Mic, Paperclip, Sparkles } from "lucide-react";
+import { Send } from "lucide-react";
 
 interface ChatInputProps {
   value: string;

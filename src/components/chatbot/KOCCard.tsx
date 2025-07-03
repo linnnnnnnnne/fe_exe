@@ -27,7 +27,11 @@ interface InfluencerData {
   fieldNames?: string[];
 }
 
-const KOCCard: React.FC<KOCCardProps> = ({ kocId, kocName, matchScore }) => {
+const KOCCard: React.FC<KOCCardProps> = ({
+  kocId,
+  kocName: _kocName,
+  matchScore,
+}) => {
   const navigate = useNavigate();
   const { closeChatbox } = useChatbotContext();
   const [influencerData, setInfluencerData] = useState<InfluencerData | null>(

@@ -88,7 +88,7 @@ export const useAIChat = () => {
   // Create prompts based on user type and context
   const createKOCPrompt = useCallback(
     (
-      influencersData: InfluencerData[],
+      _influencersData: InfluencerData[],
       jobsData: JobData[],
       userMessage: string
     ) => {
@@ -158,7 +158,7 @@ Hãy phân tích profile KOC và GỢI Ý MỘT CÔNG VIỆC CỤ THỂ từ dan
   const createBusinessPrompt = useCallback(
     (
       influencersData: InfluencerData[],
-      businessData: BusinessData[],
+      _businessData: BusinessData[],
       userMessage: string
     ) => {
       return `Bạn là AI Marketing Consultant chuyên nghiệp cho doanh nghiệp tìm kiếm KOL/KOC.
@@ -326,9 +326,10 @@ Hãy phân tích yêu cầu và GỢI Ý MỘT KOL/KOC CỤ THỂ từ danh sác
                   const fieldJson = await fieldRes.json();
                   if (fieldJson.isSuccess && Array.isArray(fieldJson.data)) {
                     fieldNames = fieldJson.data
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      /* eslint-disable @typescript-eslint/no-explicit-any */
                       .filter((f: any) => f.name && f.name.trim() !== "")
                       .map((f: any) => f.name.trim());
+                    /* eslint-enable @typescript-eslint/no-explicit-any */
                   }
                 } catch (error) {
                   console.error(
@@ -429,7 +430,7 @@ Hãy phân tích yêu cầu và GỢI Ý MỘT KOL/KOC CỤ THỂ từ danh sác
       try {
         // Fetch data for AI analysis
         const { influencers, jobs, businesses } = await fetchDataForAI();
-        const currentProfile = await fetchCurrentUserProfile();
+        await fetchCurrentUserProfile();
 
         // Create appropriate prompt based on user type
         let prompt = "";
@@ -543,6 +544,7 @@ Hãy phân tích yêu cầu và GỢI Ý MỘT KOL/KOC CỤ THỂ từ danh sác
       processAIResponse,
       fetchDataForAI,
       scrollToBottom,
+      fetchCurrentUserProfile,
     ]
   );
 

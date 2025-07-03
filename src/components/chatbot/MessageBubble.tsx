@@ -33,7 +33,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
   // Enhanced text formatting function
   const formatAIText = (text: string) => {
     const lines = text.split("\n");
-    const elements: JSX.Element[] = [];
+    const elements: React.ReactNode[] = [];
 
     lines.forEach((line, index) => {
       const trimmedLine = line.trim();
@@ -153,7 +153,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
       opacity: 1,
       x: 0,
       scale: 1,
-      transition: { duration: 0.3, ease: "easeOut" },
+      transition: { duration: 0.3, ease: "easeOut" as const },
     },
   };
 
