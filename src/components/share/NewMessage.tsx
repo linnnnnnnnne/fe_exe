@@ -73,8 +73,8 @@ export default function NewMessage({ onClose, onSelect }: NewMessageProps) {
     const currentUser = results.find((u) => u.userId === creatorId);
     if (!currentUser) return alert("Không xác định được người dùng hiện tại");
 
-const [name1, name2] = [currentUser.name, user.name].sort();
-const conversationName = `${name1}__${name2}`;
+    const [name1, name2] = [currentUser.name, user.name].sort();
+    const conversationName = `${name1}__${name2}`;
 
     // B1: Kiểm tra hội thoại đã tồn tại chưa
     try {

@@ -74,7 +74,9 @@ export default function ExploreInflu() {
   useEffect(() => {
     const fetchFieldOptions = async () => {
       try {
-        const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all");
+        const res = await fetch(
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all"
+        );
         const json = await res.json();
         if (json.isSuccess && Array.isArray(json.data)) {
           const names = json.data
@@ -181,8 +183,12 @@ export default function ExploreInflu() {
     if (!creatorId) return alert("Bạn chưa đăng nhập");
 
     const [resBusiness, resInflu] = await Promise.all([
-      fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all"),
-      fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all"),
+      fetch(
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all"
+      ),
+      fetch(
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all"
+      ),
     ]);
     const businessData = await resBusiness.json();
     const influData = await resInflu.json();

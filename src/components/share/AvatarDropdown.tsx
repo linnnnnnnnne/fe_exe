@@ -11,13 +11,16 @@ export default function AvatarDropdown({ avatarUrl }: { avatarUrl: string }) {
     if (!userId) return alert("Không tìm thấy userId");
 
     try {
-      const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId }),
-      });
+      const res = await fetch(
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/logout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId }),
+        }
+      );
 
       const data = await res.json();
 
@@ -84,24 +87,25 @@ export default function AvatarDropdown({ avatarUrl }: { avatarUrl: string }) {
       </div>
 
       {menuOpen && (
-  <div className="absolute font-montserrat right-0 top-[45px] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.20)] rounded-xl overflow-hidden z-50 min-w-[200px] text-lg"> {/* ← chỉnh từ text-base sang text-lg */}
-    <button
-      onClick={handleProfileClick}
-      className="flex bg-white font-montserrat font-bold items-center gap-3 w-full text-left px-4 py-3 hover:bg-lightgray"
-    >
-      <CircleUser className="w-6 h-6" /> 
-      Trang cá nhân
-    </button>
-    <button
-      onClick={handleLogout}
-      className="flex bg-white font-montserrat font-bold items-center gap-3 w-full text-left px-4 py-3 hover:bg-lightgray"
-    >
-      <LogOut className="w-6 h-6" /> 
-      Đăng xuất
-    </button>
-  </div>
-)}
-
+        <div className="absolute font-montserrat right-0 top-[45px] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.20)] rounded-xl overflow-hidden z-50 min-w-[200px] text-lg">
+          {" "}
+          {/* ← chỉnh từ text-base sang text-lg */}
+          <button
+            onClick={handleProfileClick}
+            className="flex bg-white font-montserrat font-bold items-center gap-3 w-full text-left px-4 py-3 hover:bg-lightgray"
+          >
+            <CircleUser className="w-6 h-6" />
+            Trang cá nhân
+          </button>
+          <button
+            onClick={handleLogout}
+            className="flex bg-white font-montserrat font-bold items-center gap-3 w-full text-left px-4 py-3 hover:bg-lightgray"
+          >
+            <LogOut className="w-6 h-6" />
+            Đăng xuất
+          </button>
+        </div>
+      )}
     </div>
   );
 }

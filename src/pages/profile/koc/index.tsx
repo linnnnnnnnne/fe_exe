@@ -129,7 +129,9 @@ export default function ProfileKOC() {
   useEffect(() => {
     if (!id || !influId) return;
 
-    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/review/review-of-influ/${id}`)
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/review/review-of-influ/${id}`
+    )
       .then((res) => res.json())
       .then(async (data) => {
         if (data?.isSuccess && Array.isArray(data.data)) {
@@ -180,9 +182,12 @@ export default function ProfileKOC() {
   }, [id, influId]);
 
   if (userId && token) {
-    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
       .then((res) => res.json())
       .then((mem) => {
         const userData = mem?.data?.user;
@@ -262,7 +267,9 @@ export default function ProfileKOC() {
     if (!id) return;
 
     // 1. Lấy thông tin KOC & influId
-    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${id}`)
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${id}`
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data?.data) {
@@ -275,9 +282,12 @@ export default function ProfileKOC() {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("accessToken");
     if (userId && token) {
-      fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      fetch(
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
         .then((res) => res.json())
         .then((mem) => {
           const userData = mem?.data?.user;
@@ -291,7 +301,8 @@ export default function ProfileKOC() {
   useEffect(() => {
     if (!influId) return;
 
-    const baseUrl = "https://localhost:7035";
+    const baseUrl =
+      "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
 
     // Jobs hoàn thành
     fetch(`${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/completed`)
@@ -321,7 +332,9 @@ export default function ProfileKOC() {
   useEffect(() => {
     if (!influId) return;
 
-    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influId}`)
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influId}`
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data?.isSuccess && Array.isArray(data.data)) {
@@ -344,7 +357,9 @@ export default function ProfileKOC() {
   useEffect(() => {
     if (!isEditing) return;
 
-    fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all")
+    fetch(
+      "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all"
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data?.isSuccess && Array.isArray(data.data)) {

@@ -38,12 +38,18 @@ export default function MembershipManager() {
 
       try {
         const [transRes, userRes] = await Promise.all([
-          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/transaction/all", {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }),
-          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all", {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }),
+          fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/transaction/all",
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }
+          ),
+          fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all",
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }
+          ),
         ]);
 
         if (transRes.status === 401 || userRes.status === 401) {
@@ -99,7 +105,9 @@ export default function MembershipManager() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Tất cả Membership giao dịch</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        Tất cả Membership giao dịch
+      </h2>
       {loading ? (
         <p>Đang tải...</p>
       ) : transactions.length === 0 ? (
@@ -117,14 +125,24 @@ export default function MembershipManager() {
                 <p className="mt-0">
                   <strong>Membership ID:</strong> {item.membershipTypeId}
                 </p>
-                <p><strong>Số tiền:</strong> {item.amount.toLocaleString()}đ</p>
-                <p><strong>Ngày:</strong> {new Date(item.time).toLocaleString()}</p>
-                <p><strong>Trạng thái:</strong> {renderStatus(item.status)}</p>
+                <p>
+                  <strong>Số tiền:</strong> {item.amount.toLocaleString()}đ
+                </p>
+                <p>
+                  <strong>Ngày:</strong> {new Date(item.time).toLocaleString()}
+                </p>
+                <p>
+                  <strong>Trạng thái:</strong> {renderStatus(item.status)}
+                </p>
 
                 {user && (
                   <>
-                    <p><strong>Người dùng:</strong> {user.email}</p>
-                    <p><strong>Vai trò:</strong> {user.role?.name}</p>
+                    <p>
+                      <strong>Người dùng:</strong> {user.email}
+                    </p>
+                    <p>
+                      <strong>Vai trò:</strong> {user.role?.name}
+                    </p>
                   </>
                 )}
 

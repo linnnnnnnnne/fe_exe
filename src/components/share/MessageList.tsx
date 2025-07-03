@@ -34,8 +34,12 @@ export default function MessageList() {
 
     try {
       const [resBusiness, resInflu] = await Promise.all([
-        fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all"),
-        fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all"),
+        fetch(
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all"
+        ),
+        fetch(
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all"
+        ),
       ]);
       const businessData = await resBusiness.json();
       const influData = await resInflu.json();

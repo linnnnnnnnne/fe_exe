@@ -87,11 +87,14 @@ export default function ProfileBusinessPage() {
     const accessToken = localStorage.getItem("accessToken");
 
     if (userId && accessToken) {
-      fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/review/review-of-business/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      fetch(
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/review/review-of-business/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data.isSuccess) setReviews(data.data || []);
@@ -205,7 +208,9 @@ export default function ProfileBusinessPage() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${id}`)
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${id}`
+    )
       .then((res) => res.json())
       .then((data) => {
         const businessData = data?.data;
@@ -215,9 +220,12 @@ export default function ProfileBusinessPage() {
         const userId = localStorage.getItem("userId");
         const token = localStorage.getItem("accessToken");
         if (userId && token) {
-          fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
+          fetch(
+            `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
             .then((res) => res.json())
             .then((mem) => {
               const userData = mem?.data?.user;
@@ -527,7 +535,7 @@ export default function ProfileBusinessPage() {
               itemsPerPage={itemsPerPage}
               reviews={reviews}
               influMap={influMap}
-              hasMembership={currentType !== null && currentType > 0} 
+              hasMembership={currentType !== null && currentType > 0}
             />
           </div>
 

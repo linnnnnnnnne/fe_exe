@@ -71,12 +71,15 @@ export default function JobList({
         return;
       }
 
-      fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/delete-job/${jobId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      fetch(
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/delete-job/${jobId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
         .then((res) => {
           if (res.ok) {
             setJobs((prev) => prev.filter((job) => job.id !== jobId));

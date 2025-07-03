@@ -98,11 +98,14 @@ export default function ResetPassword({ onClose }: { onClose: () => void }) {
   const handleResendCode = () => {
     setResending(true);
     // Gửi lại dùng lại forgot-password
-    fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/forgot-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    })
+    fetch(
+      "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/forgot-password",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    )
       .then(() => {
         toast.success("Mã xác minh đã được gửi lại.");
         setResending(false);

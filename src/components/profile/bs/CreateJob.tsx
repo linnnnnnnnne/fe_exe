@@ -38,7 +38,9 @@ export default function CreateJob({ businessId, onClose, onCreated }: Props) {
   useEffect(() => {
     const fetchFields = async () => {
       try {
-        const res = await fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`);
+        const res = await fetch(
+          `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`
+        );
         const json = await res.json();
 
         if (json?.isSuccess && Array.isArray(json.data)) {
@@ -60,12 +62,16 @@ export default function CreateJob({ businessId, onClose, onCreated }: Props) {
   }, [businessId]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: ["budget", "follower", "gender"].includes(name) ? Number(value) : value,
+      [name]: ["budget", "follower", "gender"].includes(name)
+        ? Number(value)
+        : value,
     }));
   };
 
@@ -80,14 +86,17 @@ export default function CreateJob({ businessId, onClose, onCreated }: Props) {
     }
 
     try {
-      const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/add-job", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ ...form, businessId }),
-      });
+      const res = await fetch(
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/add-job",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ ...form, businessId }),
+        }
+      );
 
       const json = await res.json();
       if (res.ok && json.data) {
@@ -116,8 +125,16 @@ export default function CreateJob({ businessId, onClose, onCreated }: Props) {
             { label: "Mô tả công việc", name: "description", type: "textarea" },
             { label: "Địa điểm", name: "location", type: "text" },
             { label: "Ngân sách (VNĐ)", name: "budget", type: "number" },
-            { label: "Thời gian bắt đầu", name: "startTime", type: "datetime-local" },
-            { label: "Thời gian kết thúc", name: "endTime", type: "datetime-local" },
+            {
+              label: "Thời gian bắt đầu",
+              name: "startTime",
+              type: "datetime-local",
+            },
+            {
+              label: "Thời gian kết thúc",
+              name: "endTime",
+              type: "datetime-local",
+            },
             { label: "Yêu cầu KOC", name: "require", type: "text" },
             { label: "Quyền lợi KOC", name: "kolBenefits", type: "text" },
             { label: "Follower tối thiểu", name: "follower", type: "number" },

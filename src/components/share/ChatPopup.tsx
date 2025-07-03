@@ -3,7 +3,7 @@ import { X, Send } from "lucide-react";
 
 interface Message {
   id: string;
-  sender: string; 
+  sender: string;
   content: string;
   time: string;
   avatar?: string;
@@ -12,7 +12,7 @@ interface Message {
 interface ChatPopupProps {
   conversationId: string;
   conversationName: string;
-  avatar: string; 
+  avatar: string;
   messages: Message[];
   onClose: () => void;
 }
@@ -91,7 +91,9 @@ export default function ChatPopup({
 
     try {
       const res = await fetch(
-        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/message/send?senderId=${senderId}&conversationId=${conversationId}&content=${encodeURIComponent(content)}`,
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/message/send?senderId=${senderId}&conversationId=${conversationId}&content=${encodeURIComponent(
+          content
+        )}`,
         { method: "POST" }
       );
 
@@ -131,7 +133,9 @@ export default function ChatPopup({
         className="flex-1 overflow-y-auto p-4 space-y-2"
       >
         {messages
-          .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+          .sort(
+            (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
+          )
           .map((msg) => (
             <div
               key={msg.id}

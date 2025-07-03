@@ -38,16 +38,22 @@ export default function MembershipApproval() {
 
       try {
         const [transRes, userRes] = await Promise.all([
-          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/transaction/all", {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }),
-          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all", {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }),
+          fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/transaction/all",
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          ),
+          fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all",
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          ),
         ]);
 
         if (transRes.status === 401 || userRes.status === 401) {
@@ -96,18 +102,19 @@ export default function MembershipApproval() {
     }
 
     try {
-      const res = await fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/transaction/approve/${id}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await fetch(
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/transaction/approve/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (res.ok) {
-        setTransactions(prev =>
-          prev.map(item =>
-            item.id === id ? { ...item, status: 1 } : item
-          )
+        setTransactions((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, status: 1 } : item))
         );
         toast.success("Duyệt thành công!");
       } else {
@@ -127,18 +134,19 @@ export default function MembershipApproval() {
     }
 
     try {
-      const res = await fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/transaction/cancel/${id}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await fetch(
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/transaction/cancel/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (res.ok) {
-        setTransactions(prev =>
-          prev.map(item =>
-            item.id === id ? { ...item, status: 2 } : item
-          )
+        setTransactions((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, status: 2 } : item))
         );
         toast.success("Đã từ chối giao dịch.");
       } else {
@@ -150,7 +158,7 @@ export default function MembershipApproval() {
     }
   };
 
-  const pendingTransactions = transactions.filter(t => t.status === 0);
+  const pendingTransactions = transactions.filter((t) => t.status === 0);
 
   const renderStatus = (status: number) => {
     switch (status) {
@@ -182,15 +190,27 @@ export default function MembershipApproval() {
                 key={item.id}
                 className="bg-white p-4 border rounded-lg shadow space-y-2"
               >
-                <p className="mt-0"><strong>Membership ID:</strong> {item.membershipTypeId}</p>
-                <p><strong>Số tiền:</strong> {item.amount.toLocaleString()}đ</p>
-                <p><strong>Ngày:</strong> {new Date(item.time).toLocaleString()}</p>
-                <p><strong>Trạng thái:</strong> {renderStatus(item.status)}</p>
+                <p className="mt-0">
+                  <strong>Membership ID:</strong> {item.membershipTypeId}
+                </p>
+                <p>
+                  <strong>Số tiền:</strong> {item.amount.toLocaleString()}đ
+                </p>
+                <p>
+                  <strong>Ngày:</strong> {new Date(item.time).toLocaleString()}
+                </p>
+                <p>
+                  <strong>Trạng thái:</strong> {renderStatus(item.status)}
+                </p>
 
                 {user && (
                   <>
-                    <p><strong>Người dùng:</strong> {user.email}</p>
-                    <p><strong>Vai trò:</strong> {user.role?.name}</p>
+                    <p>
+                      <strong>Người dùng:</strong> {user.email}
+                    </p>
+                    <p>
+                      <strong>Vai trò:</strong> {user.role?.name}
+                    </p>
                   </>
                 )}
 

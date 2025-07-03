@@ -5,7 +5,6 @@ import JobOverviewChart from "./dashboard/JobOverviewChart";
 import UserStatusPie from "./dashboard/UserStatusPie";
 import MembershipChart from "./dashboard/MembershipChart";
 
-
 interface Stats {
   totalInflu: number;
   totalBusiness: number;
@@ -71,9 +70,18 @@ export default function Dashboard() {
 
       try {
         const [influRes, businessRes, jobsRes] = await Promise.all([
-          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all", { headers }),
-          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all", { headers }),
-          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all", { headers }),
+          fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all",
+            { headers }
+          ),
+          fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all",
+            { headers }
+          ),
+          fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all",
+            { headers }
+          ),
         ]);
 
         if ([influRes, businessRes, jobsRes].some(checkTokenExpired)) return;
@@ -86,7 +94,10 @@ export default function Dashboard() {
         let usersData: any[] = [];
 
         try {
-          const membershipRes = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/all", { headers });
+          const membershipRes = await fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/all",
+            { headers }
+          );
           if (checkTokenExpired(membershipRes)) return;
           if (membershipRes.ok) {
             const json = await membershipRes.json();
@@ -99,7 +110,12 @@ export default function Dashboard() {
         }
 
         try {
-          const userRes = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all", { headers });
+          const userRes = await fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all",
+            {
+              headers,
+            }
+          );
           if (checkTokenExpired(userRes)) return;
           if (userRes.ok) {
             const json = await userRes.json();
@@ -115,16 +131,28 @@ export default function Dashboard() {
         const businessData = Array.isArray(business?.data) ? business.data : [];
         const jobsData = Array.isArray(jobs?.data) ? jobs.data : [];
 
-        const activeAccounts = usersData.filter((u: any) => u.isBlocked === false).length;
-        const blockedAccounts = usersData.filter((u: any) => u.isBlocked === true).length;
+        const activeAccounts = usersData.filter(
+          (u: any) => u.isBlocked === false
+        ).length;
+        const blockedAccounts = usersData.filter(
+          (u: any) => u.isBlocked === true
+        ).length;
 
         const jobStats = { doing: 0, done: 0, canceled: 0, expired: 0 };
         jobsData.forEach((job: any) => {
           switch (job.status) {
-            case 1: jobStats.doing++; break;
-            case 2: jobStats.done++; break;
-            case 3: jobStats.canceled++; break;
-            case 4: jobStats.expired++; break;
+            case 1:
+              jobStats.doing++;
+              break;
+            case 2:
+              jobStats.done++;
+              break;
+            case 3:
+              jobStats.canceled++;
+              break;
+            case 4:
+              jobStats.expired++;
+              break;
           }
         });
 

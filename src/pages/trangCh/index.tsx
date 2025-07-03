@@ -4,6 +4,7 @@ import PopularJobs from "../../components/trangCh/PopularJobs";
 import BusinessPlan from "../../components/trangCh/BusinessPlan";
 import ImpactSection from "../../components/trangCh/ImpactSection";
 import Footer from "../../components/share/Footer";
+import AIchat from "../../components/trangCh/AIchat";
 
 export default function TrangCh1() {
   return (
@@ -14,6 +15,7 @@ export default function TrangCh1() {
       <BusinessPlan />
       <ImpactSection />
       <Footer />
+      <AIchat />
     </div>
   );
 }

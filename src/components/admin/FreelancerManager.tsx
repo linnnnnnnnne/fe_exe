@@ -44,12 +44,18 @@ export default function FreelancerManager() {
 
       try {
         const [influRes, userStatusRes] = await Promise.all([
-          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all", {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }),
-          fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all", {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }),
+          fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all",
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }
+          ),
+          fetch(
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all",
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }
+          ),
         ]);
 
         const [influData, userStatusData] = await Promise.all([

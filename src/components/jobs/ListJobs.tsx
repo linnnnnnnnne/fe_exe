@@ -62,7 +62,9 @@ export default function ListJobs({
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [highlightMembershipUserIds, setHighlightMembershipUserIds] = useState<string[]>([]);
+  const [highlightMembershipUserIds, setHighlightMembershipUserIds] = useState<
+    string[]
+  >([]);
   const [selectedJobDetail, setSelectedJobDetail] = useState<Job | null>(null);
   const [showJobDetail, setShowJobDetail] = useState(false);
 
@@ -72,7 +74,9 @@ export default function ListJobs({
   useEffect(() => {
     const fetchMemberships = async () => {
       try {
-        const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/businesses");
+        const res = await fetch(
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/businesses"
+        );
         const json = await res.json();
         if (json?.isSuccess && Array.isArray(json.data)) {
           const ids = json.data.map((m: any) => m.userId);
@@ -95,7 +99,9 @@ export default function ListJobs({
 
     const fetchJobs = async () => {
       try {
-        const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all");
+        const res = await fetch(
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all"
+        );
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         const jobList = Array.isArray(data) ? data : data.data || [];
@@ -138,10 +144,15 @@ export default function ListJobs({
     });
   };
 
-  if (loading) return <p className="text-center">Đang tải dữ liệu công việc...</p>;
+  if (loading)
+    return <p className="text-center">Đang tải dữ liệu công việc...</p>;
   if (error) return <p className="text-red-600 text-center">{error}</p>;
   if (jobs.length === 0)
-    return <p className="text-center text-gray-500">Không có công việc nào được hiển thị.</p>;
+    return (
+      <p className="text-center text-gray-500">
+        Không có công việc nào được hiển thị.
+      </p>
+    );
 
   return (
     <div className="space-y-6">
@@ -179,7 +190,9 @@ export default function ListJobs({
 
           <div className="flex-1">
             <div className="flex h-[32px] justify-between items-center">
-              <h2 className="font-semibold text-[19px] text-gray-800">{job.title}</h2>
+              <h2 className="font-semibold text-[19px] text-gray-800">
+                {job.title}
+              </h2>
               <span className="text-sm font-medium text-teal ml-4 whitespace-nowrap">
                 {getStatusLabel(job.status)}
               </span>

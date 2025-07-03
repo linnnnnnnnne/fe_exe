@@ -39,13 +39,16 @@ export default function AdminLayout() {
     if (!userId) return alert("Không tìm thấy userId");
 
     try {
-      const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId }),
-      });
+      const res = await fetch(
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/logout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId }),
+        }
+      );
 
       const data = await res.json();
 
@@ -62,26 +65,25 @@ export default function AdminLayout() {
   };
 
   const renderContent = () => {
-  switch (activeIndex) {
-    case 0:
-      return <Dashboard />;
-    case 1:
-      return <ProjectManager />;
-    case 2:
-      return <AccountApproval />;
-    case 3:
-      return <MembershipApproval />;
-    case 4:
-      return <MembershipManager />;
-    case 5:
-      return <FreelancerManager />;
-    case 6:
-      return <BusinessManager />;
-    default:
-      return null;
-  }
-};
-
+    switch (activeIndex) {
+      case 0:
+        return <Dashboard />;
+      case 1:
+        return <ProjectManager />;
+      case 2:
+        return <AccountApproval />;
+      case 3:
+        return <MembershipApproval />;
+      case 4:
+        return <MembershipManager />;
+      case 5:
+        return <FreelancerManager />;
+      case 6:
+        return <BusinessManager />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="flex h-screen font-montserrat bg-lightgray">

@@ -178,7 +178,6 @@ export default function NotificationBellB({
                         >
                           Chấp nhận
                         </button>
-                        
                       </div>
                     </div>
                   </div>

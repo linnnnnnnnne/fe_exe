@@ -22,8 +22,12 @@ interface InfluencerJobDisplay {
 }
 
 export default function NotificationBellK() {
-  const [jobsInProgress, setJobsInProgress] = useState<InfluencerJobDisplay[]>([]);
-  const [jobsCancelled, setJobsCancelled] = useState<InfluencerJobDisplay[]>([]);
+  const [jobsInProgress, setJobsInProgress] = useState<InfluencerJobDisplay[]>(
+    []
+  );
+  const [jobsCancelled, setJobsCancelled] = useState<InfluencerJobDisplay[]>(
+    []
+  );
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +73,8 @@ export default function NotificationBellK() {
                 );
                 if (businessRes.ok) {
                   const businessData = await businessRes.json();
-                  businessName = businessData?.data?.[0]?.business?.name || "Không rõ";
+                  businessName =
+                    businessData?.data?.[0]?.business?.name || "Không rõ";
                 }
               } catch {}
 
@@ -95,7 +100,10 @@ export default function NotificationBellK() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -126,7 +134,9 @@ export default function NotificationBellK() {
           </div>
 
           {totalJobs === 0 ? (
-            <div className="p-4 text-gray-500 text-sm">Không có công việc mới.</div>
+            <div className="p-4 text-gray-500 text-sm">
+              Không có công việc mới.
+            </div>
           ) : (
             <div className="p-3 space-y-4">
               {jobsInProgress.length > 0 && (
@@ -165,7 +175,6 @@ export default function NotificationBellK() {
                       <div className="text-xs text-gray-500 mt-1">
                         Bởi doanh nghiệp: {job.businessName}
                       </div>
-                      
                     </div>
                   ))}
                 </div>

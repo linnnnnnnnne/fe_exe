@@ -58,18 +58,24 @@ export default function PlanBS() {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/MembershipType/Get-all-membershiptype-business");
+        const res = await fetch(
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/MembershipType/Get-all-membershiptype-business"
+        );
         const data: Membership[] = await res.json();
 
         const mappedPlans: Plan[] = data.map((item) => ({
           id: item.id,
           type: item.type,
           name: planDescriptions[item.type]?.name ?? item.name,
-          price: item.price === 0
-            ? "0Đ"
-            : new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" })
-              .format(item.price)
-              .replace("₫", "Đ"),
+          price:
+            item.price === 0
+              ? "0Đ"
+              : new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })
+                  .format(item.price)
+                  .replace("₫", "Đ"),
           benefits: planDescriptions[item.type]?.benefits ?? [],
         }));
 
@@ -90,9 +96,12 @@ export default function PlanBS() {
       if (!userId || !token) return;
 
       try {
-        const res = await fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const json = await res.json();
         const userData = json.data?.user;
@@ -124,18 +133,23 @@ export default function PlanBS() {
 
     try {
       setIsSubmitting(true);
-      const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/MembershipRegistration/register-membership", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      const res = await fetch(
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/MembershipRegistration/register-membership",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
 
       if (!res.ok) {
         toast.error("Đăng ký thất bại!");
         return;
       }
 
-      toast.success("Đăng ký gói thành công! Vui lòng chờ Admin kiểm tra và sẽ nâng cấp giúp bạn lên PRO.");
+      toast.success(
+        "Đăng ký gói thành công! Vui lòng chờ Admin kiểm tra và sẽ nâng cấp giúp bạn lên PRO."
+      );
       setSelectedPlan(null);
       setPaymentImage("");
     } catch (error) {
@@ -148,7 +162,9 @@ export default function PlanBS() {
 
   return (
     <section className="py-8 px-4 flex flex-col items-center font-montserrat relative z-10">
-      <h1 className="text-3xl font-bold text-teal mb-12">NÂNG CẤP TÀI KHOẢN BUSINESS</h1>
+      <h1 className="text-3xl font-bold text-teal mb-12">
+        NÂNG CẤP TÀI KHOẢN BUSINESS
+      </h1>
       <div className="flex flex-col lg:flex-row gap-12 justify-center items-stretch w-full max-w-6xl">
         {plans.map((plan) => (
           <div
@@ -161,13 +177,20 @@ export default function PlanBS() {
           >
             <div>
               <div className="text-center">
-                <h2 className="text-4xl font-bold text-teal mt-5 mb-0">{plan.name}</h2>
-                <p className="text-3xl font-bold text-teal mt-3 mb-2">{plan.price}</p>
+                <h2 className="text-4xl font-bold text-teal mt-5 mb-0">
+                  {plan.name}
+                </h2>
+                <p className="text-3xl font-bold text-teal mt-3 mb-2">
+                  {plan.price}
+                </p>
               </div>
 
               <ul className="text-gray-700 space-y-2 text-sm m-0 p-5">
                 {plan.benefits.map((benefit, i) => (
-                  <li key={i} className="flex items-start gap-2 leading-relaxed">
+                  <li
+                    key={i}
+                    className="flex items-start gap-2 leading-relaxed"
+                  >
                     <CircleCheck className="w-4 h-4 text-teal mt-[2px] shrink-0" />
                     <span>{benefit}</span>
                   </li>
@@ -176,7 +199,10 @@ export default function PlanBS() {
             </div>
 
             {isVerified && plan.type === currentType ? (
-              <button className="mt-2 mb-2 bg-lightgreen text-gray-600 text-[15px] py-3 rounded-md cursor-not-allowed" disabled>
+              <button
+                className="mt-2 mb-2 bg-lightgreen text-gray-600 text-[15px] py-3 rounded-md cursor-not-allowed"
+                disabled
+              >
                 Gói hiện tại của bạn
               </button>
             ) : (
@@ -207,13 +233,21 @@ export default function PlanBS() {
             </button>
 
             <div className="w-1/2 h-full">
-              <img src="qr.jpg" alt="Chuyển khoản" className="w-full h-full object-cover" />
+              <img
+                src="qr.jpg"
+                alt="Chuyển khoản"
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <div className="w-1/2 h-full p-8 flex flex-col gap-6 overflow-y-auto">
               <div>
-                <h2 className="text-2xl font-bold text-teal mb-4">{selectedPlan.name}</h2>
-                <p className="text-xl font-semibold text-gray-800 mb-2">Giá: {selectedPlan.price}</p>
+                <h2 className="text-2xl font-bold text-teal mb-4">
+                  {selectedPlan.name}
+                </h2>
+                <p className="text-xl font-semibold text-gray-800 mb-2">
+                  Giá: {selectedPlan.price}
+                </p>
                 <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
                   {selectedPlan.benefits.map((benefit, i) => (
                     <li key={i}>{benefit}</li>
@@ -221,9 +255,18 @@ export default function PlanBS() {
                 </ul>
 
                 <div className="mt-6">
-                  <p className="text-sm font-medium text-gray-700 mb-2">Tải ảnh chuyển khoản:</p>
-                  <FileUpload label="Ảnh chuyển khoản *" onUploaded={(link: string) => setPaymentImage(link)} />
-                  {paymentImage && <p className="text-green-600 text-sm mt-2">Đã tải ảnh thành công.</p>}
+                  <p className="text-sm font-medium text-gray-700 mb-2">
+                    Tải ảnh chuyển khoản:
+                  </p>
+                  <FileUpload
+                    label="Ảnh chuyển khoản *"
+                    onUploaded={(link: string) => setPaymentImage(link)}
+                  />
+                  {paymentImage && (
+                    <p className="text-green-600 text-sm mt-2">
+                      Đã tải ảnh thành công.
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -241,7 +284,14 @@ export default function PlanBS() {
         </div>
       )}
 
-      <ToastContainer position="top-right" autoClose={false} hideProgressBar={false} closeOnClick pauseOnHover draggable />
+      <ToastContainer
+        position="top-right"
+        autoClose={false}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
     </section>
   );
 }

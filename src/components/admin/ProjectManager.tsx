@@ -43,70 +43,77 @@ export default function ProjectManager() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const fetchJobsWithFields = async () => {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) return toast.error("Bạn chưa đăng nhập.");
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) return toast.error("Bạn chưa đăng nhập.");
 
-  setLoading(true);
-  try {
-    const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const json = await res.json();
-    const jobList: any[] = Array.isArray(json.data) ? json.data : [];
+    setLoading(true);
+    try {
+      const res = await fetch(
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all",
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      const json = await res.json();
+      const jobList: any[] = Array.isArray(json.data) ? json.data : [];
 
-    // Lấy danh sách businessId duy nhất
-    const uniqueBusinessIds = [...new Set(jobList.map((job) => job.businessId))];
-    const businessFieldsMap: Record<string, { fieldId: string; fieldName: string }[]> = {};
+      // Lấy danh sách businessId duy nhất
+      const uniqueBusinessIds = [
+        ...new Set(jobList.map((job) => job.businessId)),
+      ];
+      const businessFieldsMap: Record<
+        string,
+        { fieldId: string; fieldName: string }[]
+      > = {};
 
-    // Gọi API để lấy fieldName theo từng business
-    await Promise.all(
-      uniqueBusinessIds.map(async (businessId) => {
-        try {
-          const res = await fetch(
-            `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`,
-            {
-              headers: { Authorization: `Bearer ${accessToken}` },
+      // Gọi API để lấy fieldName theo từng business
+      await Promise.all(
+        uniqueBusinessIds.map(async (businessId) => {
+          try {
+            const res = await fetch(
+              `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`,
+              {
+                headers: { Authorization: `Bearer ${accessToken}` },
+              }
+            );
+            const data = await res.json();
+            if (data.isSuccess && Array.isArray(data.data)) {
+              businessFieldsMap[businessId] = data.data.map((f: any) => ({
+                fieldId: f.fieldId,
+                fieldName: f.fieldName,
+              }));
+            } else {
+              businessFieldsMap[businessId] = [];
             }
-          );
-          const data = await res.json();
-          if (data.isSuccess && Array.isArray(data.data)) {
-            businessFieldsMap[businessId] = data.data.map((f: any) => ({
-              fieldId: f.fieldId,
-              fieldName: f.fieldName,
-            }));
-          } else {
+          } catch {
             businessFieldsMap[businessId] = [];
           }
-        } catch {
-          businessFieldsMap[businessId] = [];
-        }
-      })
-    );
+        })
+      );
 
-    // Gán fieldName cho từng job dựa vào job.businessField.fieldId
-    const enrichedJobs = jobList.map((job) => {
-      const businessId = job.businessId;
-      const fieldId = job.businessField?.fieldId;
-      const fields = businessFieldsMap[businessId] || [];
+      // Gán fieldName cho từng job dựa vào job.businessField.fieldId
+      const enrichedJobs = jobList.map((job) => {
+        const businessId = job.businessId;
+        const fieldId = job.businessField?.fieldId;
+        const fields = businessFieldsMap[businessId] || [];
 
-      const matchedField = fields.find((f) => f.fieldId === fieldId);
-      const fieldName = matchedField ? matchedField.fieldName : "Không rõ";
+        const matchedField = fields.find((f) => f.fieldId === fieldId);
+        const fieldName = matchedField ? matchedField.fieldName : "Không rõ";
 
-      return {
-        ...job,
-        fieldNames: [fieldName], // vẫn dùng fieldNames cho dễ render list
-      };
-    });
+        return {
+          ...job,
+          fieldNames: [fieldName], // vẫn dùng fieldNames cho dễ render list
+        };
+      });
 
-    setJobs(enrichedJobs);
-  } catch (err) {
-    toast.error("Không thể tải danh sách công việc.");
-    console.error("Lỗi fetch jobs:", err);
-  } finally {
-    setLoading(false);
-  }
-};
-
+      setJobs(enrichedJobs);
+    } catch (err) {
+      toast.error("Không thể tải danh sách công việc.");
+      console.error("Lỗi fetch jobs:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchJobsWithFields();

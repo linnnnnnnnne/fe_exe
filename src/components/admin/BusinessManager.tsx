@@ -41,9 +41,12 @@ export default function BusinessManager() {
       }
 
       try {
-        const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all", {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const res = await fetch(
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all",
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
         const result = await res.json();
 
         const userStatusRes = await fetch(

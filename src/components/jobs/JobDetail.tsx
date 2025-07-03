@@ -33,9 +33,12 @@ interface JobDetailProps {
 
 const genderText = (gender?: number) => {
   switch (gender) {
-    case 1: return "Nam";
-    case 2: return "Nữ";
-    default: return "Không yêu cầu";
+    case 1:
+      return "Nam";
+    case 2:
+      return "Nữ";
+    default:
+      return "Không yêu cầu";
   }
 };
 
@@ -47,43 +50,47 @@ export default function JobDetail({ job, onClose }: JobDetailProps) {
   const [loading, setLoading] = useState(false);
 
   const handleApplyJob = async () => {
-  const freelanceId = getFreelanceId();
-  const accessToken = localStorage.getItem("accessToken");
+    const freelanceId = getFreelanceId();
+    const accessToken = localStorage.getItem("accessToken");
 
-  if (!freelanceId || !accessToken) {
-    toast.error("Bạn chưa đăng nhập hoặc thiếu thông tin Influencer.");
-    return;
-  }
-
-  setLoading(true);
-  try {
-    const res = await fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/freelance-jobs/apply-job", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        jobId: job.id,
-        freelanceId,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok && data.isSuccess) {
-      toast.success("Ứng tuyển thành công!");
-    } else {
-      toast.error("Ứng tuyển thất bại: " + (data.message || "Lỗi không xác định"));
+    if (!freelanceId || !accessToken) {
+      toast.error("Bạn chưa đăng nhập hoặc thiếu thông tin Influencer.");
+      return;
     }
-  } catch (error) {
-    console.error("Apply error:", error);
-    toast.error("Có lỗi xảy ra khi ứng tuyển.");
-  } finally {
-    setLoading(false);
-  }
-};
 
+    setLoading(true);
+    try {
+      const res = await fetch(
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/freelance-jobs/apply-job",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            jobId: job.id,
+            freelanceId,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok && data.isSuccess) {
+        toast.success("Ứng tuyển thành công!");
+      } else {
+        toast.error(
+          "Ứng tuyển thất bại: " + (data.message || "Lỗi không xác định")
+        );
+      }
+    } catch (error) {
+      console.error("Apply error:", error);
+      toast.error("Có lỗi xảy ra khi ứng tuyển.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return createPortal(
     <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
@@ -107,20 +114,41 @@ export default function JobDetail({ job, onClose }: JobDetailProps) {
             className="w-[100px] h-[100px] object-contain rounded-lg border mt-9"
           />
           <div className="flex-1 space-y-1">
-            <h2 className="text-2xl font-bold text-gray-800 mt-0 mb-2">{job.title}</h2>
-            <p className="text-sm text-gray-700"><strong>Công ty:</strong> {job.business?.name || "Không rõ"}</p>
-            <p className="text-sm text-gray-700"><strong>Địa chỉ:</strong> {job.business?.address || "Không có"}</p>
-            <p className="text-sm text-gray-700"><strong>Khu vực:</strong> {job.location}</p>
-            <p className="text-sm text-gray-700"><strong>Thời gian:</strong> {new Date(job.startTime || "").toLocaleDateString("vi-VN")} → {new Date(job.endTime || "").toLocaleDateString("vi-VN")}</p>
+            <h2 className="text-2xl font-bold text-gray-800 mt-0 mb-2">
+              {job.title}
+            </h2>
+            <p className="text-sm text-gray-700">
+              <strong>Công ty:</strong> {job.business?.name || "Không rõ"}
+            </p>
+            <p className="text-sm text-gray-700">
+              <strong>Địa chỉ:</strong> {job.business?.address || "Không có"}
+            </p>
+            <p className="text-sm text-gray-700">
+              <strong>Khu vực:</strong> {job.location}
+            </p>
+            <p className="text-sm text-gray-700">
+              <strong>Thời gian:</strong>{" "}
+              {new Date(job.startTime || "").toLocaleDateString("vi-VN")} →{" "}
+              {new Date(job.endTime || "").toLocaleDateString("vi-VN")}
+            </p>
           </div>
         </div>
 
         {/* Thông tin nhanh */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-700 mb-6 mt-4">
-          <p><strong>Lương:</strong> {job.budget?.toLocaleString("vi-VN") || "?"} VND</p>
-          <p><strong>Giới tính yêu cầu:</strong> {genderText(job.gender)}</p>
-          <p><strong>Follower tối thiểu:</strong> {job.follower || 0}</p>
-          <p><strong>Lĩnh vực:</strong> {job.fieldName || "Không rõ"}</p>
+          <p>
+            <strong>Lương:</strong> {job.budget?.toLocaleString("vi-VN") || "?"}{" "}
+            VND
+          </p>
+          <p>
+            <strong>Giới tính yêu cầu:</strong> {genderText(job.gender)}
+          </p>
+          <p>
+            <strong>Follower tối thiểu:</strong> {job.follower || 0}
+          </p>
+          <p>
+            <strong>Lĩnh vực:</strong> {job.fieldName || "Không rõ"}
+          </p>
         </div>
 
         {/* Mô tả và Quyền lợi */}
@@ -130,7 +158,9 @@ export default function JobDetail({ job, onClose }: JobDetailProps) {
               <FileText className="w-4 h-4 text-teal-600" />
               Mô tả công việc
             </h3>
-            <p className="text-sm text-gray-600 whitespace-pre-line">{job.description}</p>
+            <p className="text-sm text-gray-600 whitespace-pre-line">
+              {job.description}
+            </p>
           </div>
 
           <div>
@@ -138,7 +168,9 @@ export default function JobDetail({ job, onClose }: JobDetailProps) {
               <Gift className="w-4 h-4 text-pink-600" />
               Quyền lợi
             </h3>
-            <p className="text-sm text-gray-600 whitespace-pre-line">{job.kolBenefits}</p>
+            <p className="text-sm text-gray-600 whitespace-pre-line">
+              {job.kolBenefits}
+            </p>
           </div>
         </div>
 
@@ -149,7 +181,9 @@ export default function JobDetail({ job, onClose }: JobDetailProps) {
               <Target className="w-4 h-4 text-yellow-600" />
               Yêu cầu
             </h3>
-            <p className="text-sm text-gray-600 whitespace-pre-line">{job.require}</p>
+            <p className="text-sm text-gray-600 whitespace-pre-line">
+              {job.require}
+            </p>
           </div>
         )}
 

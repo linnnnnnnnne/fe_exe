@@ -85,7 +85,8 @@ export default function BusinessHistoryPage() {
 
   const fetchJobs = async () => {
     try {
-      const baseUrl = "https://localhost:7035";
+      const baseUrl =
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -189,7 +190,7 @@ export default function BusinessHistoryPage() {
     setOpenJob(jobId);
   };
 
-const confirmComplete = async (freelanceJobId: string) => {
+  const confirmComplete = async (freelanceJobId: string) => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       alert("Bạn chưa đăng nhập hoặc token đã hết hạn.");
@@ -335,9 +336,7 @@ const confirmComplete = async (freelanceJobId: string) => {
                               </div>
                               {sectionKey === "inProgress" && (
                                 <button
-                                  onClick={() =>
-                                    confirmComplete(influ.id)
-                                  }
+                                  onClick={() => confirmComplete(influ.id)}
                                   className="ml-auto text-sm bg-teal text-white px-3 py-1 rounded hover:bg-green-700"
                                 >
                                   Xác nhận hoàn thành
