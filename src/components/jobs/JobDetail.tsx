@@ -61,7 +61,7 @@ export default function JobDetail({ job, onClose }: JobDetailProps) {
     setLoading(true);
     try {
       const res = await fetch(
-        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/freelance-jobs/apply-job",
+        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/apply-job",
         {
           method: "POST",
           headers: {

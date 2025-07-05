@@ -21,7 +21,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
         if (!accessToken) return;
 
         const res = await fetch(
-          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/influencers",
+          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/influencers",
           {
             headers: { Authorization: `Bearer ${accessToken}` },
           }
@@ -33,7 +33,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
 
           const imagePromises = userIds.map(async (userId: string) => {
             const res = await fetch(
-              `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`
+              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`
             );
             const json = await res.json();
             if (json?.isSuccess && json.data?.linkImage) {
@@ -72,7 +72,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
 
     try {
       const res = await fetch(
-        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
@@ -81,7 +81,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
 
       if (res.ok && data?.isSuccess && data?.data) {
         const infoRes = await fetch(
-          `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`
+          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`
         );
         const infoJson = await infoRes.json();
 
@@ -92,7 +92,7 @@ export default function TopInfluencer({ onHighlight }: TopInfluencerProps) {
           let fieldNames: string[] = [];
           try {
             const fieldRes = await fetch(
-              `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influ.influId}`
+              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-influ/${influ.influId}`
             );
             const fieldJson = await fieldRes.json();
             if (fieldJson.isSuccess && Array.isArray(fieldJson.data)) {

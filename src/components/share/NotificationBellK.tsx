@@ -39,12 +39,12 @@ export default function NotificationBellK() {
       try {
         const endpoints = [
           {
-            url: `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/freelance-jobs/influencer/${influId}/jobs/in-progress`,
+            url: `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/influencer/${influId}/jobs/in-progress`,
             status: "in-progress",
             setState: setJobsInProgress,
           },
           {
-            url: `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/freelance-jobs/influencer/${influId}/jobs/cancelled`,
+            url: `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/freelance-jobs/influencer/${influId}/jobs/cancelled`,
             status: "cancelled",
             setState: setJobsCancelled,
           },
@@ -66,7 +66,7 @@ export default function NotificationBellK() {
 
               try {
                 const businessRes = await fetch(
-                  `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${item.job.businessId}`,
+                  `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${item.job.businessId}`,
                   {
                     headers: { Authorization: `Bearer ${accessToken}` },
                   }

@@ -39,7 +39,7 @@ export default function CreateJob({ businessId, onClose, onCreated }: Props) {
     const fetchFields = async () => {
       try {
         const res = await fetch(
-          `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`
+          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`
         );
         const json = await res.json();
 
@@ -87,7 +87,7 @@ export default function CreateJob({ businessId, onClose, onCreated }: Props) {
 
     try {
       const res = await fetch(
-        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/add-job",
+        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/add-job",
         {
           method: "POST",
           headers: {
