@@ -46,7 +46,7 @@ export default function AccountApproval() {
 
       try {
         const res = await fetch(
-          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/unverified",
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/unverified",
           {
             method: "GET",
             headers: {
@@ -83,9 +83,9 @@ export default function AccountApproval() {
       let endpoint = "";
 
       if (roleLower === "freelancer") {
-        endpoint = `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`;
+        endpoint = `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userId}`;
       } else if (roleLower === "business" || roleLower === "doanh nghiệp") {
-        endpoint = `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${userId}`;
+        endpoint = `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${userId}`;
       } else {
         return;
       }
@@ -154,7 +154,7 @@ export default function AccountApproval() {
 
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/admin/users/${userId}/verify-account?isVerified=true`,
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/admin/users/${userId}/verify-account?isVerified=true`,
         {
           method: "PUT",
           headers: {

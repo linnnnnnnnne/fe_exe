@@ -35,19 +35,23 @@ export default function Header() {
     const userIdFromStorage = localStorage.getItem("userId");
     const tokenFromStorage = localStorage.getItem("accessToken");
 
+    // Nếu thiếu bất kỳ thông tin nào → tự động chuyển về login
+    if (!roleFromStorage || !userIdFromStorage || !tokenFromStorage) {
+      window.location.href = "/login";
+      return;
+    }
+
     setRole(roleFromStorage);
     setUserId(userIdFromStorage);
     setAccessToken(tokenFromStorage);
-
-    if (!roleFromStorage || !userIdFromStorage || !tokenFromStorage) return;
 
     const fetchUserData = async () => {
       try {
         let url = "";
         if (roleFromStorage === "Business") {
-          url = `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${userIdFromStorage}`;
+          url = `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${userIdFromStorage}`;
         } else if (roleFromStorage === "Freelancer") {
-          url = `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userIdFromStorage}`;
+          url = `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userIdFromStorage}`;
         } else {
           return;
         }
@@ -57,6 +61,14 @@ export default function Header() {
             Authorization: `Bearer ${tokenFromStorage}`,
           },
         });
+
+        if (res.status === 401) {
+          // Token hết hạn hoặc không hợp lệ → logout
+          localStorage.clear();
+          window.location.href = "/login";
+          return;
+        }
+
         const data = await res.json();
 
         if (roleFromStorage === "Business") {
@@ -68,6 +80,7 @@ export default function Header() {
         }
       } catch (err) {
         console.error("Lỗi khi lấy dữ liệu user:", err);
+        window.location.href = "/login"; // fallback nếu có lỗi
       }
     };
 

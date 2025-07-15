@@ -5,6 +5,7 @@ import Footer from "../../../components/share/Footer";
 import UpdateJob from "../../../components/profile/bs/UpdateJob";
 import CreateJob from "../../../components/profile/bs/CreateJob";
 import JobList from "../../../components/profile/bs/JobList";
+import FileUploadAvatar from "../../../components/share/FileUploadAvatar";
 import ActivityStats from "../../../components/share/ActivityStats";
 import {
   Mail,
@@ -63,6 +64,11 @@ export default function ProfileBusinessPage() {
   );
   const [isVerified, setIsVerified] = useState(false);
   const [currentType, setCurrentType] = useState<number | null>(null);
+  const [fieldNames, setFieldNames] = useState<string[]>([]);
+  const [allFields, setAllFields] = useState<{ id: string; name: string }[]>(
+    []
+  );
+  const [selectedFieldIds, setSelectedFieldIds] = useState<string[]>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
@@ -79,6 +85,27 @@ export default function ProfileBusinessPage() {
     setIsEditingBusiness(true);
     setEditedBusiness({ ...business! });
     setEditedRepresentative({ ...representative! });
+
+    // Gọi danh sách lĩnh vực
+    fetch("https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.isSuccess) {
+          setAllFields(data.data || []);
+        }
+      });
+
+    // Gán danh sách field đang dùng của doanh nghiệp
+    fetch(
+      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${business?.id}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.isSuccess && Array.isArray(data.data)) {
+          const ids = data.data.map((f: any) => f.fieldId);
+          setSelectedFieldIds(ids);
+        }
+      });
   };
 
   const [reviews, setReviews] = useState<any[]>([]);
@@ -87,14 +114,11 @@ export default function ProfileBusinessPage() {
     const accessToken = localStorage.getItem("accessToken");
 
     if (userId && accessToken) {
-      fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/review-of-business/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
+      fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/review/review-of-business/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
           if (data.isSuccess) setReviews(data.data || []);
@@ -113,7 +137,7 @@ export default function ProfileBusinessPage() {
         influIds.map(async (id) => {
           try {
             const res = await fetch(
-              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-id/${id}`,
+              `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-id/${id}`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               }
@@ -153,7 +177,8 @@ export default function ProfileBusinessPage() {
         description: editedBusiness?.description || "",
         address: editedBusiness?.address || "",
         logo: editedBusiness?.logo || "",
-        fieldIds: [],
+        fieldIds: selectedFieldIds,
+
         representativeName: editedRepresentative?.representativeName || "",
         role: editedRepresentative?.role || "",
         representativeEmail: editedRepresentative?.representativeEmail || "",
@@ -162,7 +187,7 @@ export default function ProfileBusinessPage() {
       };
 
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/update-by-user/${id}`,
+        `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/update-by-user/${id}`,
         {
           method: "PUT",
           headers: {
@@ -179,6 +204,10 @@ export default function ProfileBusinessPage() {
         setBusiness(editedBusiness);
         setRepresentative(editedRepresentative);
         setIsEditingBusiness(false);
+        const selectedNames = allFields
+          .filter((f) => selectedFieldIds.includes(f.id))
+          .map((f) => f.name);
+        setFieldNames(selectedNames);
       } else {
         toast.error(json.message || "Cập nhật thất bại!");
       }
@@ -208,9 +237,7 @@ export default function ProfileBusinessPage() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(
-      `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${id}`
-    )
+    fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${id}`)
       .then((res) => res.json())
       .then((data) => {
         const businessData = data?.data;
@@ -220,12 +247,9 @@ export default function ProfileBusinessPage() {
         const userId = localStorage.getItem("userId");
         const token = localStorage.getItem("accessToken");
         if (userId && token) {
-          fetch(
-            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
+          fetch(`https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
             .then((res) => res.json())
             .then((mem) => {
               const userData = mem?.data?.user;
@@ -238,13 +262,13 @@ export default function ProfileBusinessPage() {
         const businessId = businessData?.id;
         if (businessId) {
           fetch(
-            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/${businessId}/representative`
+            `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/${businessId}/representative`
           )
             .then((res) => res.json())
             .then((repData) => setRepresentative(repData?.data));
 
           fetch(
-            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${businessId}`
+            `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${businessId}`
           )
             .then((res) => res.json())
             .then(async (jobData) => {
@@ -261,7 +285,7 @@ export default function ProfileBusinessPage() {
                 fieldIds.map(async (fieldId) => {
                   try {
                     const res = await fetch(
-                      `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-by-id/${fieldId}`
+                      `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-by-id/${fieldId}`
                     );
                     const data = await res.json();
                     if (data?.data?.name) fieldMap[fieldId] = data.data.name;
@@ -280,6 +304,21 @@ export default function ProfileBusinessPage() {
 
               setJobs(jobsWithField);
             });
+
+          //  Thêm đoạn fetch fieldName này
+          fetch(
+            `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              if (data?.isSuccess && Array.isArray(data.data)) {
+                const names = data.data.map((field: any) => field.fieldName);
+                setFieldNames(names);
+              }
+            })
+            .catch((err) =>
+              console.error("Lỗi lấy field của doanh nghiệp:", err)
+            );
         }
       });
   }, [id]);
@@ -293,51 +332,58 @@ export default function ProfileBusinessPage() {
 
       <div className="bg-white shadow py-10 px-2 md:px-[200px] flex flex-col md:flex-row items-center justify-between gap-4 ">
         <div className="flex items-center gap-4">
-          {business.logo ? (
-            <div className="flex items-center gap-4">
-              <div
-                className="relative w-[104px] h-[104px] rounded-full bg-white p-[2px]"
-                style={{ boxShadow: "0 0 0 3px #3b82f6" }}
-              >
-                <img
-                  src={business.logo}
-                  alt="logo"
-                  className="w-full h-full rounded-full object-cover"
-                />
-                {isVerified && currentType !== null && currentType > 0 && (
-                  <div
-                    className="absolute bottom-1 right-0.5 w-6 h-6 rounded-full bg-[#3b82f6] border-2 border-white flex items-center justify-center"
-                    title={
-                      currentType === 1
-                        ? "Gói 1 Tháng"
-                        : currentType === 2
-                        ? "Gói 1 Năm"
-                        : "Gói Free"
-                    }
+          {isEditingBusiness ? (
+            <FileUploadAvatar
+              imageUrl={editedBusiness?.logo}
+              onUploaded={(url) =>
+                setEditedBusiness((prev) =>
+                  prev ? { ...prev, logo: url } : prev
+                )
+              }
+            />
+          ) : business.logo ? (
+            <div
+              className="relative w-[104px] h-[104px] rounded-full bg-white p-[2px]"
+              style={{ boxShadow: "0 0 0 3px #3b82f6" }}
+            >
+              <img
+                src={business.logo}
+                alt="logo"
+                className="w-full h-full rounded-full object-cover"
+              />
+              {isVerified && currentType !== null && currentType > 0 && (
+                <div
+                  className="absolute bottom-1 right-0.5 w-6 h-6 rounded-full bg-[#3b82f6] border-2 border-white flex items-center justify-center"
+                  title={
+                    currentType === 1
+                      ? "Gói 1 Tháng"
+                      : currentType === 2
+                      ? "Gói 1 Năm"
+                      : "Gói Free"
+                  }
+                >
+                  <svg
+                    className="w-4 h-4 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
                   >
-                    {" "}
-                    <svg
-                      className="w-4 h-4 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+              )}
             </div>
           ) : (
             <div className="w-[100px] h-[100px] rounded-full bg-[#E0F2FE] flex items-center justify-center text-2xl font-bold text-[#0066CC]">
               {business.name?.charAt(0) || "B"}
             </div>
           )}
+
           {isEditingBusiness ? (
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
@@ -411,7 +457,9 @@ export default function ProfileBusinessPage() {
             {representative && (
               <div className="text-sm space-y-2 mb-4">
                 <div className="flex items-center gap-2">
-                  <span className="w-32">Người đại diện:</span>
+                  <span className="w-27 text-sm font-medium">
+                    Người đại diện:
+                  </span>
                   {isEditingBusiness ? (
                     <input
                       value={editedRepresentative?.representativeName || ""}
@@ -429,7 +477,7 @@ export default function ProfileBusinessPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="w-32">Chức vụ:</span>
+                  <span className="w-20 text-sm font-medium">Chức vụ:</span>
                   {isEditingBusiness ? (
                     <input
                       value={editedRepresentative?.role || ""}
@@ -481,6 +529,43 @@ export default function ProfileBusinessPage() {
                     />
                   ) : (
                     <span>{representative.representativePhoneNumber}</span>
+                  )}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm font-medium">Lĩnh vực:</span>
+                  {isEditingBusiness ? (
+                    <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+                      {allFields.map((field) => (
+                        <label
+                          key={field.id}
+                          className="flex items-center gap-1 text-sm"
+                        >
+                          <input
+                            type="checkbox"
+                            value={field.id}
+                            checked={selectedFieldIds.includes(field.id)}
+                            onChange={(e) => {
+                              const checked = e.target.checked;
+                              setSelectedFieldIds((prev) =>
+                                checked
+                                  ? [...prev, field.id]
+                                  : prev.filter((id) => id !== field.id)
+                              );
+                            }}
+                          />
+                          {field.name}
+                        </label>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-1 text-sm">
+                      {fieldNames.map((name, index) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <span className="text-[#4B5563]">•</span>
+                          <span>{name}</span>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
@@ -568,7 +653,7 @@ export default function ProfileBusinessPage() {
             }
 
             const res = await fetch(
-              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/update-job/${updatedJob.id}`,
+              `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/update-job/${updatedJob.id}`,
               {
                 method: "PUT",
                 headers: {

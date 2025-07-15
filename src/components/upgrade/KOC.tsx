@@ -60,7 +60,7 @@ export default function PlanKOC() {
     const fetchPlans = async () => {
       try {
         const res = await fetch(
-          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/MembershipType/Get-all-membershiptype-kol"
+          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/MembershipType/Get-all-membershiptype-kol"
         );
         const data: Membership[] = await res.json();
 
@@ -99,7 +99,7 @@ export default function PlanKOC() {
 
       try {
         const res = await fetch(
-          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
+          `https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -137,7 +137,7 @@ export default function PlanKOC() {
     try {
       setIsSubmitting(true);
       const res = await fetch(
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/MembershipRegistration/register-membership",
+        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/MembershipRegistration/register-membership",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

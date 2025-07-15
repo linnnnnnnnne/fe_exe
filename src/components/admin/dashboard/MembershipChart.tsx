@@ -60,13 +60,13 @@ export default function MembershipChart() {
 
         const [resBusiness, resFreelancer] = await Promise.all([
           fetch(
-            "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/businesses",
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/businesses",
             {
               headers,
             }
           ),
           fetch(
-            "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/influencers",
+            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/influencers",
             {
               headers,
             }
