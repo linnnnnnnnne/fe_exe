@@ -5,6 +5,7 @@ interface FileUploadProps {
   label: string;
   onUploaded: (url: string) => void;
   error?: string;
+  disabled?: boolean;
 }
 
 export default function FileUpload({

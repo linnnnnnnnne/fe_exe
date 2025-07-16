@@ -10,6 +10,7 @@ interface Props {
   selected: string[];
   onChange: (updated: string[]) => void;
   showError?: boolean;
+  disabled?: boolean;
 }
 
 export default function FieldCheckboxGroup({

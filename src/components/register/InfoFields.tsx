@@ -16,12 +16,14 @@ export default function InfoFields({
   formData,
   setFormData,
   showErrors,
+  disabled,
 }: {
   today: string;
   fields: any[];
   formData: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
   showErrors: boolean;
+  disabled?: boolean;
 }) {
   const handleChange =
     (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,10 +53,11 @@ export default function InfoFields({
                 : !/^[^\s@]+@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com|[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(
                     formData.email
                   )
-                ? "Email không hợp lệ. Vui lòng dùng Gmail, Yahoo, Hotmail, Outlook hoặc tên miền công ty"
+                ? "Email không hợp lệ!"
                 : ""
               : ""
           }
+          disabled={disabled}
         />
 
         <Input
@@ -72,6 +75,7 @@ export default function InfoFields({
                 : ""
               : ""
           }
+          disabled={disabled}
         />
 
         <Input
@@ -91,6 +95,7 @@ export default function InfoFields({
               ? "Vui lòng xác nhận mật khẩu"
               : ""
           }
+          disabled={disabled}
         />
       </div>
 
@@ -107,6 +112,7 @@ export default function InfoFields({
               ? "Vui lòng nhập CCCD hoặc hộ chiếu"
               : ""
           }
+          disabled={disabled}
         />
         <Input
           label="Họ và tên *"
@@ -114,6 +120,7 @@ export default function InfoFields({
           value={formData.name}
           onChange={handleChange("name")}
           error={showErrors && !formData.name ? "Vui lòng nhập họ và tên" : ""}
+          disabled={disabled}
         />
         <Input
           label="Nickname *"
@@ -123,11 +130,13 @@ export default function InfoFields({
           error={
             showErrors && !formData.nickName ? "Vui lòng nhập nickname" : ""
           }
+          disabled={disabled}
         />
         <Input
           label="Bio (Mô tả ngắn)"
           value={formData.bio}
           onChange={handleChange("bio")}
+          disabled={disabled}
         />
         <Input
           label="Ngày sinh *"
@@ -139,6 +148,7 @@ export default function InfoFields({
           error={
             showErrors && !formData.dateOfBirth ? "Vui lòng nhập ngày sinh" : ""
           }
+          disabled={disabled}
         />
 
         <div className="mb-4">
@@ -160,6 +170,7 @@ export default function InfoFields({
               borderColor:
                 showErrors && !formData.gender ? "#ef4444" : "#d1d5db",
             }}
+            disabled={disabled}
           >
             <option value="">-- Chọn giới tính --</option>
             <option value="male">Nam</option>
@@ -187,12 +198,14 @@ export default function InfoFields({
                 : ""
               : ""
           }
+          disabled={disabled}
         />
         <Input
           label="Nơi sinh sống"
           placeholder="VD: TP.HCM, Hà Nội..."
           value={formData.area}
           onChange={handleChange("area")}
+          disabled={disabled}
         />
 
         <FieldCheckbox
@@ -200,6 +213,7 @@ export default function InfoFields({
           selected={formData.fieldIds}
           onChange={(newIds) => setFormData({ ...formData, fieldIds: newIds })}
           showError={showErrors}
+          disabled={disabled}
         />
 
         <Input
@@ -208,6 +222,7 @@ export default function InfoFields({
           placeholder="VD: 10000"
           value={formData.follower}
           onChange={handleChange("follower")}
+          disabled={disabled}
         />
 
         <div className="max-w-[832px]">
@@ -235,6 +250,7 @@ export default function InfoFields({
               icon={FaFacebook}
               value={formData.facebook}
               onChange={handleChange("facebook")}
+              disabled={disabled}
             />
             <Input
               label="Instagram"
@@ -242,6 +258,7 @@ export default function InfoFields({
               icon={FaInstagram}
               value={formData.instagram}
               onChange={handleChange("instagram")}
+              disabled={disabled}
             />
             <Input
               label="TikTok"
@@ -249,6 +266,7 @@ export default function InfoFields({
               icon={FaTiktok}
               value={formData.tiktok}
               onChange={handleChange("tiktok")}
+              disabled={disabled}
             />
             <Input
               label="YouTube"
@@ -256,6 +274,7 @@ export default function InfoFields({
               icon={FaYoutube}
               value={formData.youtube}
               onChange={handleChange("youtube")}
+              disabled={disabled}
             />
             <Input
               label="WhatsApp"
@@ -263,6 +282,7 @@ export default function InfoFields({
               icon={FaWhatsapp}
               value={formData.whatsapp}
               onChange={handleChange("whatsapp")}
+              disabled={disabled}
             />
           </div>
         </div>
@@ -273,6 +293,7 @@ export default function InfoFields({
           error={
             showErrors && !formData.linkImage ? "Vui lòng tải lên ảnh" : ""
           }
+          disabled={disabled}
         />
 
         <Input
@@ -285,6 +306,7 @@ export default function InfoFields({
               ? "Vui lòng nhập link portfolio"
               : ""
           }
+          disabled={disabled}
         />
       </div>
     </>

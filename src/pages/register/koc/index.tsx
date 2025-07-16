@@ -37,13 +37,12 @@ export default function RegisterKOCForm() {
   const [fields, setFields] = useState([]);
   const [formData, setFormData] = useState(initialForm);
   const [showErrors, setShowErrors] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    fetch(
-      "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all"
-    )
+    fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all")
       .then((res) => res.json())
       .then((data) => setFields(data.data))
       .catch((err) => console.error("Failed to fetch fields:", err));
@@ -88,18 +87,18 @@ export default function RegisterKOCForm() {
   };
 
   const handleSubmit = useCallback(async () => {
+    if (isSubmitting) return; // Nếu đang submit thì không làm gì cả
     if (!isValidForm()) {
-      console.log("Form không hợp lệ", formData);
       setShowErrors(true);
-
       toast.warning("Vui lòng kiểm tra lại các thông tin đã nhập!", {
         position: "top-right",
         autoClose: 5000,
         closeOnClick: true,
       });
-
       return;
     }
+
+    setIsSubmitting(true); // Bắt đầu submit
 
     try {
       const payload = {
@@ -131,11 +130,13 @@ export default function RegisterKOCForm() {
 
       setTimeout(() => {
         window.location.href = "/login";
-      }, 5000);
+      }, 2000);
     } catch (err: any) {
       toast.error(err.message || "Đăng ký thất bại, vui lòng thử lại!");
+    } finally {
+      setIsSubmitting(false); // Kết thúc submit
     }
-  }, [formData]);
+  }, [formData, isSubmitting]);
 
   return (
     <div className="bg-lightgray min-h-screen px-4 py-10">
@@ -158,6 +159,7 @@ export default function RegisterKOCForm() {
           formData={formData}
           setFormData={setFormData}
           showErrors={showErrors}
+          disabled={isSubmitting}
         />
 
         <div className="mb-6 flex items-center gap-3">
@@ -174,10 +176,10 @@ export default function RegisterKOCForm() {
 
         <button
           className="w-full bg-teal text-white text-lg font-semibold py-3 rounded-xl disabled:opacity-50"
-          disabled={!agree}
+          disabled={!agree || isSubmitting}
           onClick={handleSubmit}
         >
-          Đăng kí
+          {isSubmitting ? "Đang đăng kí..." : "Đăng kí"}
         </button>
 
         {/* Toast container */}

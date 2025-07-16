@@ -35,9 +35,7 @@ export default function RegisterBusinessForm() {
   const [showErrors, setShowErrors] = useState(false);
 
   useEffect(() => {
-    fetch(
-      "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all"
-    )
+    fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all")
       .then((res) => res.json())
       .then((res) => {
         if (Array.isArray(res.data)) {
@@ -58,8 +56,9 @@ export default function RegisterBusinessForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const getError = (field: string) => {
-    if (!showErrors) return "";
+  const getError = (field: string, alwaysCheck = false) => {
+    if (!showErrors && !alwaysCheck) return "";
+
     switch (field) {
       case "email":
         if (!formData.email) return "Vui lòng nhập email";
@@ -109,7 +108,6 @@ export default function RegisterBusinessForm() {
   const handleSubmit = async () => {
     if (isSubmitting) return; // chặn bấm nhiều lần
 
-    setIsSubmitting(true);
     setShowErrors(true);
 
     const hasError = [
@@ -123,7 +121,7 @@ export default function RegisterBusinessForm() {
       "representativePhoneNumber",
       "businessLicense",
       "logo",
-    ].some((field) => getError(field) !== "");
+    ].some((field) => getError(field, true) !== "");
 
     const isValid =
       formData.logo &&
@@ -138,15 +136,13 @@ export default function RegisterBusinessForm() {
       return;
     }
 
+    setIsSubmitting(true);
     try {
-      const res = await fetch(
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/create",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const res = await fetch("https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
       const result = await res.json();
 
@@ -161,7 +157,7 @@ export default function RegisterBusinessForm() {
 
         setTimeout(() => {
           window.location.href = "/login";
-        }, 5000);
+        }, 2000);
       } else {
         toast.error(result.message || "Đăng ký thất bại. Vui lòng thử lại!");
       }
@@ -199,6 +195,7 @@ export default function RegisterBusinessForm() {
             value={formData.email}
             onChange={handleChange}
             error={getError("email")}
+            disabled={isSubmitting}
           />
           <Input
             label="Mật khẩu *"
@@ -207,6 +204,7 @@ export default function RegisterBusinessForm() {
             value={formData.password}
             onChange={handleChange}
             error={getError("password")}
+            disabled={isSubmitting} 
           />
           <Input
             label="Xác nhận mật khẩu *"
@@ -215,6 +213,7 @@ export default function RegisterBusinessForm() {
             value={formData.confirmPassword}
             onChange={handleChange}
             error={getError("confirmPassword")}
+            disabled={isSubmitting} 
           />
         </div>
 
@@ -228,12 +227,14 @@ export default function RegisterBusinessForm() {
             value={formData.name}
             onChange={handleChange}
             error={getError("name")}
+            disabled={isSubmitting} 
           />
           <Input
             label="Mô tả về doanh nghiệp"
             name="description"
             value={formData.description}
             onChange={handleChange}
+            disabled={isSubmitting} 
           />
           <Input
             label="Địa chỉ trụ sở *"
@@ -241,6 +242,7 @@ export default function RegisterBusinessForm() {
             value={formData.address}
             onChange={handleChange}
             error={getError("address")}
+            disabled={isSubmitting} 
           />
           <FieldCheckbox
             fields={fields}
@@ -249,6 +251,7 @@ export default function RegisterBusinessForm() {
               setFormData((prev) => ({ ...prev, fieldIds: newIds }))
             }
             showError={showErrors && formData.fieldIds.length === 0}
+            disabled={isSubmitting} 
           />
         </div>
 
@@ -262,12 +265,14 @@ export default function RegisterBusinessForm() {
             value={formData.representativeName}
             onChange={handleChange}
             error={getError("representativeName")}
+            disabled={isSubmitting} 
           />
           <Input
             label="Chức danh người đại diện "
             name="role"
             value={formData.role}
             onChange={handleChange}
+            disabled={isSubmitting} 
           />
           <Input
             label="Email liên hệ *"
@@ -276,6 +281,7 @@ export default function RegisterBusinessForm() {
             value={formData.representativeEmail}
             onChange={handleChange}
             error={getError("representativeEmail")}
+            disabled={isSubmitting} 
           />
           <Input
             label="Số điện thoại liên hệ *"
@@ -283,6 +289,7 @@ export default function RegisterBusinessForm() {
             value={formData.representativePhoneNumber}
             onChange={handleChange}
             error={getError("representativePhoneNumber")}
+            disabled={isSubmitting} 
           />
 
           <FileUpload
@@ -291,6 +298,7 @@ export default function RegisterBusinessForm() {
               setFormData((prev) => ({ ...prev, businessLicense: url }))
             }
             error={getError("businessLicense")}
+            disabled={isSubmitting} 
           />
 
           <FileUpload
@@ -299,6 +307,7 @@ export default function RegisterBusinessForm() {
               setFormData((prev) => ({ ...prev, logo: url }))
             }
             error={getError("logo")}
+            disabled={isSubmitting} 
           />
         </div>
 
@@ -308,6 +317,7 @@ export default function RegisterBusinessForm() {
             checked={agree}
             onChange={() => setAgree(!agree)}
             className="w-5 h-5 border border-gray-300"
+            disabled={isSubmitting} 
           />
           <span className="text-sm">
             Tôi đồng ý với [Điều khoản sử dụng] và [Chính sách bảo mật]
