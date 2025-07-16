@@ -71,15 +71,15 @@ export default function Dashboard() {
       try {
         const [influRes, businessRes, jobsRes] = await Promise.all([
           fetch(
-            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/influ/all",
+            "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/all",
             { headers }
           ),
           fetch(
-            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/business/all",
+            "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/all",
             { headers }
           ),
           fetch(
-            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/jobs/get-all",
+            "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all",
             { headers }
           ),
         ]);
@@ -95,7 +95,7 @@ export default function Dashboard() {
 
         try {
           const membershipRes = await fetch(
-            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/membership/all",
+            "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/all",
             { headers }
           );
           if (checkTokenExpired(membershipRes)) return;
@@ -111,7 +111,7 @@ export default function Dashboard() {
 
         try {
           const userRes = await fetch(
-            "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net/api/user/all",
+            "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/all",
             {
               headers,
             }
