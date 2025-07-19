@@ -40,7 +40,7 @@ export default function AdminLayout() {
 
     try {
       const res = await fetch(
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/logout",
+        "https://localhost:7035/api/user/logout",
         {
           method: "POST",
           headers: {

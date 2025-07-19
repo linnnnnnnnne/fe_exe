@@ -35,10 +35,10 @@ export default function MessageList() {
     try {
       const [resBusiness, resInflu] = await Promise.all([
         fetch(
-          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/all"
+          "https://localhost:7035/api/business/all"
         ),
         fetch(
-          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/all"
+          "https://localhost:7035/api/influ/all"
         ),
       ]);
       const businessData = await resBusiness.json();
@@ -61,7 +61,7 @@ export default function MessageList() {
       const currentName = currentUser?.name;
 
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/conversation/user_conversations?userId=${userId}`
+        `https://localhost:7035/api/conversation/user_conversations?userId=${userId}`
       );
       if (!res.ok) {
         console.error("Lỗi gọi API user_conversations:", res.status);
@@ -78,7 +78,7 @@ export default function MessageList() {
             let lastMsgContent = "";
             try {
               const msgRes = await fetch(
-                `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/message/conversation_messages?conversationId=${conv.conversationID}&pageNumber=1&pageSize=1`
+                `https://localhost:7035/api/message/conversation_messages?conversationId=${conv.conversationID}&pageNumber=1&pageSize=1`
               );
               const msgData = await msgRes.json();
               const lastMsg = msgData?.data?.items?.[0];
@@ -146,7 +146,7 @@ export default function MessageList() {
   const openChat = async (conv: Conversation) => {
     try {
       const res = await fetch(
-        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/message/conversation_messages?conversationId=${conv.id}&pageNumber=1&pageSize=50`
+        `https://localhost:7035/api/message/conversation_messages?conversationId=${conv.id}&pageNumber=1&pageSize=50`
       );
       if (!res.ok) {
         console.error("Lỗi gọi API conversation_messages:", res.status);

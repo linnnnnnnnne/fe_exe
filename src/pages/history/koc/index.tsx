@@ -168,7 +168,7 @@ export default function InfluencerHistoryPage() {
   const fetchReviewedJobs = async () => {
     try {
       const res = await fetch(
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/rating-of-business",
+        "https://localhost:7035/api/review/rating-of-business",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

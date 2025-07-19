@@ -300,7 +300,7 @@ Hãy phân tích yêu cầu và GỢI Ý MỘT KOL/KOC CỤ THỂ từ danh sác
     try {
       const apiBaseUrl =
         import.meta.env.VITE_API_BASE_URL ||
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api";
+        "https://localhost:7035/api";
 
       const [influencersRes, jobsRes, businessRes] = await Promise.all([
         fetch(`${apiBaseUrl}/influ/all`),
@@ -364,7 +364,7 @@ Hãy phân tích yêu cầu và GỢI Ý MỘT KOL/KOC CỤ THỂ từ danh sác
         localStorage.getItem("role") || localStorage.getItem("userRole");
       const token = localStorage.getItem("accessToken");
       const apiBase =
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api";
+        "https://localhost:7035/api";
       if (!userId || !role) return null;
 
       if (role === "Business" || role === "business") {

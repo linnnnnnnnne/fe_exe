@@ -45,7 +45,7 @@ const KOCCard: React.FC<KOCCardProps> = ({
       try {
         setLoading(true);
         const apiBase =
-          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api";
+          "https://localhost:7035/api";
 
         // Fetch full influencer data by userId
         const res = await fetch(
@@ -97,7 +97,7 @@ const KOCCard: React.FC<KOCCardProps> = ({
 
     try {
       const apiBase =
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api";
+        "https://localhost:7035/api";
 
       // Fetch jobs data for the influencer
       const [completed, inProgress] = await Promise.all([

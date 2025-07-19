@@ -35,8 +35,8 @@ export default function ReviewPopup({
 
     const endpoint =
       type === "business"
-        ? "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/influ-review-business"
-        : "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/business-review-influ";
+        ? "https://localhost:7035/api/review/influ-review-business"
+        : "https://localhost:7035/api/review/business-review-influ";
 
     const body =
       type === "business"

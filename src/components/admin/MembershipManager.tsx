@@ -39,13 +39,13 @@ export default function MembershipManager() {
       try {
         const [transRes, userRes] = await Promise.all([
           fetch(
-            "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/transaction/all",
+            "https://localhost:7035/api/transaction/all",
             {
               headers: { Authorization: `Bearer ${accessToken}` },
             }
           ),
           fetch(
-            "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/all",
+            "https://localhost:7035/api/user/all",
             {
               headers: { Authorization: `Bearer ${accessToken}` },
             }

@@ -52,14 +52,13 @@ export default function PlanBS() {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [paymentImage, setPaymentImage] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
   const [currentType, setCurrentType] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchPlans = async () => {
       try {
         const res = await fetch(
-          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/MembershipType/Get-all-membershiptype-business"
+          "https://localhost:7035/api/MembershipType/Get-all-membershiptype-business"
         );
         const data: Membership[] = await res.json();
 
@@ -97,15 +96,13 @@ export default function PlanBS() {
 
       try {
         const res = await fetch(
-          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${userId}`,
+          `https://localhost:7035/api/membership/user/${userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
         const json = await res.json();
-        const userData = json.data?.user;
-        setIsVerified(userData?.isVerified || false);
 
         if (!json.data) {
           // Người dùng chưa đăng ký -> gói Free
@@ -140,7 +137,7 @@ export default function PlanBS() {
     try {
       setIsSubmitting(true);
       const res = await fetch(
-        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/MembershipRegistration/register-membership",
+        "https://localhost:7035/api/MembershipRegistration/register-membership",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

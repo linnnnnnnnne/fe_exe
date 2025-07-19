@@ -49,9 +49,9 @@ export default function Header() {
       try {
         let url = "";
         if (roleFromStorage === "Business") {
-          url = `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${userIdFromStorage}`;
+          url = `https://localhost:7035/api/business/get-business-by-user-id/${userIdFromStorage}`;
         } else if (roleFromStorage === "Freelancer") {
-          url = `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-userId/${userIdFromStorage}`;
+          url = `https://localhost:7035/api/influ/get-influ-by-userId/${userIdFromStorage}`;
         } else {
           return;
         }
