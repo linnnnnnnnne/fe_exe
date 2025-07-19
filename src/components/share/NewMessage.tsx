@@ -29,13 +29,13 @@ export default function NewMessage({ onClose, onSelect }: NewMessageProps) {
       const [resBusiness, resInflu] = await Promise.all([
         fetch(
           query
-            ? `https://localhost:7035/api/business/search-by-name?name=${query}`
-            : `https://localhost:7035/api/business/all`
+            ? `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/search-by-name?name=${query}`
+            : `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/all`
         ),
         fetch(
           query
-            ? `https://localhost:7035/api/influ/search-by-name?keyword=${query}`
-            : `https://localhost:7035/api/influ/all`
+            ? `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/search-by-name?keyword=${query}`
+            : `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/all`
         ),
       ]);
 
@@ -79,7 +79,7 @@ export default function NewMessage({ onClose, onSelect }: NewMessageProps) {
     // B1: Kiểm tra hội thoại đã tồn tại chưa
     try {
       const resCheck = await fetch(
-        `https://localhost:7035/api/conversation/user_conversations?userId=${creatorId}`
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/conversation/user_conversations?userId=${creatorId}`
       );
       const dataCheck = await resCheck.json();
       const existed = dataCheck?.data?.find(
@@ -90,7 +90,7 @@ export default function NewMessage({ onClose, onSelect }: NewMessageProps) {
         // Nếu đã tồn tại (lấy tin nhắn cũ)
         try {
           const msgRes = await fetch(
-            `https://localhost:7035/api/message/conversation_messages?conversationId=${existed.conversationID}&pageNumber=1&pageSize=50`
+            `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/message/conversation_messages?conversationId=${existed.conversationID}&pageNumber=1&pageSize=50`
           );
           const msgData = await msgRes.json();
           const rawMessages = msgData?.data?.items || [];
@@ -127,7 +127,7 @@ export default function NewMessage({ onClose, onSelect }: NewMessageProps) {
     // B2: Nếu chưa có / Tạo mới
     try {
       const res = await fetch(
-        `https://localhost:7035/api/conversation/create?creatorId=${creatorId}&name=${conversationName}&isGroup=false`,
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/conversation/create?creatorId=${creatorId}&name=${conversationName}&isGroup=false`,
         {
           method: "POST",
           headers: {

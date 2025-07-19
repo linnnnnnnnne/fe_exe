@@ -41,7 +41,7 @@ export function LoginForm() {
     setLoading(true);
     try {
       const res = await fetch(
-        "https://localhost:7035/api/user/login",
+        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

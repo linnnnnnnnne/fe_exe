@@ -40,7 +40,7 @@ export default function InfluDetail() {
     if (!viewerId || !token) return;
 
     fetch(
-      `https://localhost:7035/api/membership/user/${viewerId}`,
+      `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${viewerId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -56,7 +56,7 @@ export default function InfluDetail() {
     if (!data?.influId || !token) return;
 
     fetch(
-      `https://localhost:7035/api/review/review-of-influ/${viewerId}`,
+      `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/review-of-influ/${viewerId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -80,7 +80,7 @@ export default function InfluDetail() {
           await Promise.all(
             uniqueBusinessIds.map(async (bid: string) => {
               const jobRes = await fetch(
-                `https://localhost:7035/api/jobs/get-job/by-business-id/${bid}`
+                `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${bid}`
               );
               const jobJson = await jobRes.json();
               if (jobJson?.isSuccess && Array.isArray(jobJson.data)) {

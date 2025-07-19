@@ -54,7 +54,7 @@ const BusinessCard: React.FC<BusinessCardProps> = ({ jobId, matchScore }) => {
       try {
         setLoading(true);
         const apiBase =
-          "https://localhost:7035/api";
+          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api";
 
         // Fetch all jobs and find the specific job by ID
         const res = await fetch(`${apiBase}/jobs/get-all`);

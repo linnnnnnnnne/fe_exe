@@ -21,7 +21,7 @@ export default function ResetPassword({ onClose }: { onClose: () => void }) {
     setIsSubmitting(true);
     try {
       const res = await fetch(
-        "https://localhost:7035/api/user/forgot-password",
+        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/forgot-password",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -72,7 +72,7 @@ export default function ResetPassword({ onClose }: { onClose: () => void }) {
     setLoading(true);
     try {
       const res = await fetch(
-        "https://localhost:7035/api/user/reset-password",
+        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/reset-password",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -99,7 +99,7 @@ export default function ResetPassword({ onClose }: { onClose: () => void }) {
     setResending(true);
     // Gửi lại dùng lại forgot-password
     fetch(
-      "https://localhost:7035/api/user/forgot-password",
+      "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/user/forgot-password",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

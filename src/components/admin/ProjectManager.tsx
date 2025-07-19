@@ -49,7 +49,7 @@ export default function ProjectManager() {
     setLoading(true);
     try {
       const res = await fetch(
-        "https://localhost:7035/api/jobs/get-all",
+        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-all",
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
@@ -71,7 +71,7 @@ export default function ProjectManager() {
         uniqueBusinessIds.map(async (businessId) => {
           try {
             const res = await fetch(
-              `https://localhost:7035/api/field/get-all-field-of-business/${businessId}`,
+              `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-all-field-of-business/${businessId}`,
               {
                 headers: { Authorization: `Bearer ${accessToken}` },
               }

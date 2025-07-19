@@ -70,7 +70,7 @@ export default function BusinessDetail() {
     if (!businessId) return;
 
     fetch(
-      `https://localhost:7035/api/business/${businessId}/representative`
+      `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/${businessId}/representative`
     )
       .then((res) => res.json())
       .then((rep) => {
@@ -79,7 +79,7 @@ export default function BusinessDetail() {
 
     if (businessUserId) {
       fetch(
-        `https://localhost:7035/api/business/get-business-by-user-id/${businessUserId}`
+        `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/business/get-business-by-user-id/${businessUserId}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -88,7 +88,7 @@ export default function BusinessDetail() {
     }
 
     fetch(
-      `https://localhost:7035/api/jobs/get-job/by-business-id/${businessId}`
+      `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/jobs/get-job/by-business-id/${businessId}`
     )
       .then((res) => res.json())
       .then(async (jobRes) => {
@@ -106,7 +106,7 @@ export default function BusinessDetail() {
           fieldIds.map(async (fieldId) => {
             try {
               const res = await fetch(
-                `https://localhost:7035/api/field/get-by-id/${fieldId}`
+                `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/field/get-by-id/${fieldId}`
               );
               const data = await res.json();
               if (data?.data?.name) fieldMap[fieldId] = data.data.name;
@@ -133,7 +133,7 @@ export default function BusinessDetail() {
     if (!token || !viewerId) return;
 
     fetch(
-      `https://localhost:7035/api/membership/user/${viewerId}`,
+      `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/membership/user/${viewerId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -157,7 +157,7 @@ export default function BusinessDetail() {
 
       try {
         const res = await fetch(
-          `https://localhost:7035/api/review/review-of-business/${viewerId}`,
+          `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/review/review-of-business/${viewerId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -176,7 +176,7 @@ export default function BusinessDetail() {
           await Promise.all(
             influIds.map(async (id) => {
               const r = await fetch(
-                `https://localhost:7035/api/influ/get-influ-by-id/${id}`,
+                `https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/api/influ/get-influ-by-id/${id}`,
                 {
                   headers: { Authorization: `Bearer ${token}` },
                 }
