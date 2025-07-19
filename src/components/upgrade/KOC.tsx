@@ -108,8 +108,15 @@ export default function PlanKOC() {
         );
 
         const json = await res.json();
+
         setIsVerified(json.data?.user?.isVerified || false);
-        setCurrentType(json.data?.membershipType?.type ?? null);
+
+        if (!json.data) {
+          // Người dùng chưa có Membership => coi là gói Free
+          setCurrentType(0);
+        } else {
+          setCurrentType(json.data.membershipType?.type ?? null);
+        }
       } catch (error) {
         console.error("Lỗi khi lấy Membership:", error);
       }
@@ -175,11 +182,9 @@ export default function PlanKOC() {
         {plans.map((plan) => (
           <div
             key={plan.id}
-            className={`
-              flex-1 bg-white rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.10)] p-6 flex flex-col justify-between
+            className={`flex-1 bg-white rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.10)] p-6 flex flex-col justify-between
               transition-transform duration-300 hover:scale-[1.15] hover:shadow-[0_8px_24px_rgba(0,0,0,0.20)]
-              ${plan.type === 1 ? "scale-[1.05] shadow-lg" : ""}
-            `}
+              ${plan.type === 1 ? "scale-[1.05] shadow-lg" : ""}`}
           >
             <div>
               <div className="text-center">
@@ -204,7 +209,7 @@ export default function PlanKOC() {
               </ul>
             </div>
 
-            {isVerified && plan.type === currentType ? (
+            {plan.type === currentType ? (
               <button
                 className="mt-2 mb-2 bg-lightgreen text-gray-600 text-[15px] py-3 rounded-md cursor-not-allowed"
                 disabled

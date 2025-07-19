@@ -16,7 +16,7 @@ const FooterLink: React.FC<FooterLinkProps> = ({
   return (
     <a
       href={href}
-      className={`text-base no-underline text-zinc-500 hover:text-zinc-300 transition-colors ${className}`}
+      className={`text-base no-underline text-zinc-400 hover:text-zinc-300 transition-colors ${className}`}
     >
       {children}
     </a>

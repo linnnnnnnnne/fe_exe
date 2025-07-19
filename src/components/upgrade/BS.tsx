@@ -106,7 +106,13 @@ export default function PlanBS() {
         const json = await res.json();
         const userData = json.data?.user;
         setIsVerified(userData?.isVerified || false);
-        setCurrentType(json.data?.membershipType?.type ?? null);
+
+        if (!json.data) {
+          // Người dùng chưa đăng ký -> gói Free
+          setCurrentType(0);
+        } else {
+          setCurrentType(json.data.membershipType?.type ?? null);
+        }
       } catch (err) {
         console.error("Lỗi khi lấy membership:", err);
       }
@@ -169,11 +175,9 @@ export default function PlanBS() {
         {plans.map((plan) => (
           <div
             key={plan.id}
-            className={`
-              flex-1 bg-white rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.10)] p-6 flex flex-col justify-between
+            className={`flex-1 bg-white rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.10)] p-6 flex flex-col justify-between
               transition-transform duration-300 hover:scale-[1.15] hover:shadow-[0_8px_24px_rgba(0,0,0,0.20)]
-              ${plan.type === 1 ? "scale-[1.05] shadow-lg" : ""}
-            `}
+              ${plan.type === 1 ? "scale-[1.05] shadow-lg" : ""}`}
           >
             <div>
               <div className="text-center">
@@ -198,7 +202,7 @@ export default function PlanBS() {
               </ul>
             </div>
 
-            {isVerified && plan.type === currentType ? (
+            {plan.type === currentType ? (
               <button
                 className="mt-2 mb-2 bg-lightgreen text-gray-600 text-[15px] py-3 rounded-md cursor-not-allowed"
                 disabled
@@ -217,7 +221,6 @@ export default function PlanBS() {
         ))}
       </div>
 
-      {/* Modal hiển thị khi chọn gói */}
       {selectedPlan && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl w-full max-w-6xl h-[80vh] flex shadow-xl overflow-hidden relative">
