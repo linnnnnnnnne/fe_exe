@@ -15,7 +15,7 @@ const jobs = [
   {
     title: "Live Stream",
     image:
-      "https://livestream.com.vn/wp-content/uploads/2023/03/livestream-settop2.jpg",
+      "https://onthefly-blog.s3.ap-south-1.amazonaws.com/blog/wp-content/uploads/2024/03/Benefits-of-Live-Streaming-1.png",
   },
   {
     title: "Chỉnh Sửa Video",
