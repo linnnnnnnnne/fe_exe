@@ -84,10 +84,10 @@ export default function InfluencerHistoryPage() {
 
   const getBusinessInfo = async (id: string) => {
     const baseUrl =
-      "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
+      "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/";
     try {
       const res = await fetch(
-        `${baseUrl}/api/business/get-business-by-id/${id}`,
+        `${baseUrl}api/business/get-business-by-id/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -110,17 +110,17 @@ export default function InfluencerHistoryPage() {
     const fetchJobs = async () => {
       try {
         const baseUrl =
-          "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
+          "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/";
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         };
 
         const urls = [
-          `${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/in-progress`,
-          `${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/completed`,
-          `${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/cancelled`,
-          `${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/pending`,
+          `${baseUrl}api/freelance-jobs/influencer/${influId}/jobs/in-progress`,
+          `${baseUrl}api/freelance-jobs/influencer/${influId}/jobs/completed`,
+          `${baseUrl}api/freelance-jobs/influencer/${influId}/jobs/cancelled`,
+          `${baseUrl}api/freelance-jobs/influencer/${influId}/jobs/pending`,
         ];
 
         const responses = await Promise.all(

@@ -302,10 +302,10 @@ export default function ProfileKOC() {
     if (!influId) return;
 
     const baseUrl =
-      "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
+      "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/";
 
     // Jobs hoàn thành
-    fetch(`${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/completed`)
+    fetch(`${baseUrl}api/freelance-jobs/influencer/${influId}/jobs/completed`)
       .then((res) => res.json())
       .then((data) => {
         if (data?.isSuccess && Array.isArray(data.data)) {
@@ -317,7 +317,7 @@ export default function ProfileKOC() {
 
     // Jobs đang thực hiện
     fetch(
-      `${baseUrl}/api/freelance-jobs/influencer/${influId}/jobs/in-progress`
+      `${baseUrl}api/freelance-jobs/influencer/${influId}/jobs/in-progress`
     )
       .then((res) => res.json())
       .then((data) => {

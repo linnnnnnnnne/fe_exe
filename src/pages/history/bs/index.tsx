@@ -86,7 +86,7 @@ export default function BusinessHistoryPage() {
   const fetchJobs = async () => {
     try {
       const baseUrl =
-        "https://influencerhub1-g8dshgbwhgb9djfd.southeastasia-01.azurewebsites.net";
+        "https://influencerhub-ftdqh8c2fagcgygt.southeastasia-01.azurewebsites.net/";
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -94,17 +94,17 @@ export default function BusinessHistoryPage() {
 
       const [res1, res2, res3, res4] = await Promise.all([
         fetch(
-          `${baseUrl}/api/job-status/in-progress/by-business/${businessId}`,
+          `${baseUrl}api/job-status/in-progress/by-business/${businessId}`,
           { headers }
         ),
-        fetch(`${baseUrl}/api/job-status/complete/by-business/${businessId}`, {
+        fetch(`${baseUrl}api/job-status/complete/by-business/${businessId}`, {
           headers,
         }),
-        fetch(`${baseUrl}/api/job-status/cancel/by-business/${businessId}`, {
+        fetch(`${baseUrl}api/job-status/cancel/by-business/${businessId}`, {
           headers,
         }),
         fetch(
-          `${baseUrl}/api/job-status/registration-expired/by-business/${businessId}`,
+          `${baseUrl}api/job-status/registration-expired/by-business/${businessId}`,
           { headers }
         ),
       ]);
